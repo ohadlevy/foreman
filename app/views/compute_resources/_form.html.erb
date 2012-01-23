@@ -1,0 +1,14 @@
+<%= form_for(@compute_resource) do |f| %>
+  <%= base_errors_for @compute_resource %>
+
+  <%= selectable_f f, :provider, ComputeResource::PROVIDERS, { :include_blank => "Choose a provider"} %>
+ 
+  <%= text_f f, :name %>
+  <%= textarea_f f, :description, :rows => 3 %>
+  <%= text_f f, :url, :label => "URL", :class => "xlarge" %>
+  <%= text_f f, :user %>
+  <%= password_f f, :password %>
+  <%= text_f f, :uuid, :disabled => true, :label => "UUID" %>
+
+  <%= submit_or_cancel f %>
+<% end %>

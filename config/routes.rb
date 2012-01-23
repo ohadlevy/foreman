@@ -222,6 +222,17 @@ Foreman::Application.routes.draw do
       end
     end
 
+    resources :compute_resources do
+      resources :vms, :controller => "ComputeResources::Vms" do
+        member do
+          put 'power'
+        end
+      end
+      collection do
+        get 'auto_complete_search'
+      end
+    end
+
     resources :subnets, :except => [:show] do
       collection do
         get 'auto_complete_search'
