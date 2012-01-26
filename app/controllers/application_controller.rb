@@ -176,6 +176,14 @@ class ApplicationController < ActionController::Base
     redirect_to login_users_path
   end
 
+  def ajax?
+    request.xhr?
+  end
+
+  def ajax_request
+    return head(:method_not_allowed) unless ajax?
+  end
+
   private
   def detect_notices
     @notices = current_user.notices

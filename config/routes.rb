@@ -59,6 +59,7 @@ Foreman::Application.routes.draw do
         post 'os_selected'
         post 'domain_selected'
         post 'use_image_selected'
+        post 'compute_resource_selected'
       end
 
       constraints(:host_id => /[^\/]+/) do
@@ -223,6 +224,10 @@ Foreman::Application.routes.draw do
     end
 
     resources :compute_resources do
+      member do
+        post 'hardware_profile_selected'
+        post 'cluster_selected'
+      end
       resources :vms, :controller => "ComputeResources::Vms" do
         member do
           put 'power'

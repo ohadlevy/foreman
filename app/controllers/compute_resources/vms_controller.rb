@@ -18,7 +18,7 @@ class ComputeResources::VmsController < ApplicationController
     if @compute_resource.create_vm params[:vm]
       process_success :success_redirect => compute_resource_vms_path(@compute_resource)
     else
-      process_error :redirect => new_compute_resource_vm_path(@compute_resource)
+      process_error :redirect => new_compute_resource_vm_path(@compute_resource), :object => @compute_resource
     end
   end
 

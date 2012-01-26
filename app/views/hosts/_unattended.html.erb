@@ -2,6 +2,10 @@
   <%= render('common/hypervisor', :item => @host) if @host.new_record? and !Hypervisor.first.nil? and authorized_for("Hypervisors::Guests", :create) %>
 </div>
 
+<div id="compute_resource">
+  <%= render :partial => 'compute', :compute_resource => @host.compute_resource if @host.compute_resource %>
+</div>
+
 <div id="network">
   <span id="mac_address">
     <%= render 'mac', :item => @host unless @hypervisor -%>

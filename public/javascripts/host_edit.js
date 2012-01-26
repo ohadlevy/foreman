@@ -1,3 +1,16 @@
+function computeResourceSelected(item){
+  var compute = $(item).val();
+  var url = $(item).attr('data-url');
+  $.ajax({
+    type:'post',
+    url: url,
+    data:'compute_resource_id=' + compute,
+    success: function(result){
+       $('#compute_resource').html(result);
+    }
+  })
+}
+
 function add_puppet_class(item){
   var id = $(item).attr('data-class-id');
   var type = $(item).attr('data-type');

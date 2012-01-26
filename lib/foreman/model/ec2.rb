@@ -1,12 +1,14 @@
 module Foreman::Model
   class EC2 < ComputeResource
 
-    def create_vm args = {}
-      client.servers.create args
-    end
-
     def class
       ComputeResource
+    end
+
+    def vm_instance_defaults
+      {
+        :flavor_id => "m1.small",
+      }
     end
 
     protected

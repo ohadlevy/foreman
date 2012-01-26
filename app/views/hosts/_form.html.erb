@@ -1,4 +1,4 @@
-<%= javascript 'host_edit' %>
+<%= javascript 'host_edit', 'compute_resource' %>
 <%= form_for @host do |f| %>
   <%= base_errors_for @host %>
 
@@ -10,6 +10,7 @@
       <li><a href="#os">Operating System</a></li>
       <% if @host.new_record? and !Hypervisor.first.nil? and authorized_for("Hypervisors::Guests", :create) -%>
         <li><a href="#virtual_machine">Virtual Machine</a></li>
+        <li><a href="#compute_resource">Compute</a></li>
       <% end -%>
     <% end -%>
     <li><a href="#params">Parameters</a></li>
@@ -20,6 +21,7 @@
 
     <div class="active" id="primary">
       <%= text_f f, :name, :class => "xlarge", :value => name_field(@host) %>
+      <%= select_f f, :compute_resource_id, ComputeResource.all, :id, :to_label, { :include_blank => true }, {:'data-url' => compute_resource_selected_hosts_path , :onchange => 'computeResourceSelected(this);'} %>
       <%= select_f f, :hostgroup_id, accessible_hostgroups, :id, :to_label,
         { :include_blank => true},
         { :onchange => 'hostgroup_changed(this);', :'data-host-id' => @host.id, "data-type" => controller_name,

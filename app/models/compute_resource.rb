@@ -1,6 +1,9 @@
 class ComputeResource < ActiveRecord::Base
   PROVIDERS = %w[ Libvirt Ovirt EC2 ]
 
+  # to STI avoid namespace issues when loading the class, we append Foreman::Model in our database type column
+  STI_PREFIX= "Foreman::Model"
+
   include Authorization
   validates_format_of :name, :with => /\A(\S+)\Z/, :message => "can't be blank or contain white spaces."
   validates_uniqueness_of :name
@@ -8,29 +11,25 @@ class ComputeResource < ActiveRecord::Base
   validates_presence_of :url
   scoped_search :on => :name, :complete_value => :true
   before_save :sanitize_url
+  has_many :hosts
 
+  # allows to create a specific compute class based on the provider.
   def self.new_provider args
-    provider = args[:provider]
-
-    case provider.downcase
-    when "ovirt"
-      Foreman::Model::Ovirt.new(args)
-    when "libvirt"
-      Foreman::Model::Libvirt.new(args)
-    when "EC2"
-      Foreman::Model::EC2.new(args)
-    else
-      ComputeResource.new(args)
+    raise "must provider a provider" unless provider = args[:provider]
+    PROVIDERS.each do |p|
+      return eval("#{STI_PREFIX}::#{p}").new(args) if p.downcase == provider.downcase
     end
+    raise "unknown Provider"
   end
 
   def to_param
     "#{id}-#{name.parameterize}"
   end
 
-   def new_vm
-      client.servers.new vm_instance_defaults
-   end
+  # retuns a new fog server instance
+  def new_vm
+    client.servers.new vm_instance_defaults
+  end
 
   # return a list of virtual machines
   def vms
@@ -51,24 +50,43 @@ class ComputeResource < ActiveRecord::Base
 
   def create_vm args = {}
     client.servers.create vm_instance_defaults.merge(args.to_hash)
+  rescue Fog::Errors::Error => e
+    errors.add(:base, e.to_s)
+    false
   end
 
   def destroy_vm uuid
     find_vm_by_uuid(uuid).destroy
   end
 
-  # to STI avoid namespace issues, we append Foreman::Model in our database type column
   def provider
-    read_attribute(:type).to_s.gsub("Foreman::Model::","")
+    read_attribute(:type).to_s.gsub("#{STI_PREFIX}::","")
   end
 
   def provider=(value)
-    self.type = "Foreman::Model::#{value}"
+    if PROVIDERS.include? value
+      self.type = "#{STI_PREFIX}::#{value}"
+    else
+      raise "Invalid Provider"
+    end
+  end
+
+  def vm_instance_defaults
+    {
+      :name => "foreman_#{Time.now.to_i}",
+    }
+  end
+
+  def hardware_profiles
+  end
+
+  def hardware_profile(id)
   end
 
   protected
 
   def client
+    raise "Not implemented"
   end
 
   def sanitize_url

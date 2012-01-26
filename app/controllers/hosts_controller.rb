@@ -6,13 +6,14 @@ class HostsController < ApplicationController
 
   # actions which don't require authentication and are always treated as the admin user
   ANONYMOUS_ACTIONS=[ :externalNodes, :lookup ]
-  SEARCHABLE_ACTIONS= %w[index active errors out_of_sync pending disabled ]
+  AJAX_REQUESTS=%w{compute_resource_selected hostgroup_or_environment_selected}
   skip_before_filter :require_login, :only => ANONYMOUS_ACTIONS
   skip_before_filter :require_ssl, :only => ANONYMOUS_ACTIONS
   skip_before_filter :authorize, :only => ANONYMOUS_ACTIONS
   skip_before_filter :session_expiry, :update_activity_time, :only => ANONYMOUS_ACTIONS
   before_filter :set_admin_user, :only => ANONYMOUS_ACTIONS
 
+  before_filter :ajax_request, :only => AJAX_REQUESTS
   before_filter :find_multiple, :only => [:update_multiple_parameters, :multiple_build,
     :select_multiple_hostgroup, :select_multiple_environment, :multiple_parameters, :multiple_destroy,
     :multiple_enable, :multiple_disable, :submit_multiple_disable, :submit_multiple_enable, :update_multiple_hostgroup,
@@ -119,6 +120,11 @@ class HostsController < ApplicationController
   end
 
   # form AJAX methods
+  def compute_resource_selected
+    compute = ComputeResource.find(params[:compute_resource_id]) if params[:compute_resource_id].to_i > 0
+    render :partial => "compute", :locals => {:compute_resource => compute} if compute
+  end
+
   def hostgroup_or_environment_selected
     return head(:method_not_allowed) unless request.xhr?
 

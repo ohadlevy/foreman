@@ -28,9 +28,8 @@ gem 'scoped_search', '>= 2.3.6'
   gem "ruby2ruby"
   gem "ruby_parser"
   gem "virt", ">= 0.2.1"
-  gem "rbovirt", :git => "https://github.com/abenari/rbovirt.git"
-  gem "fog", :git => "https://github.com/abenari/fog.git", :branch => "ovirt"
-  #gem "fog", :path => "~/git/fog"
+  gem "rbovirt", ">= 0.0.5"
+  gem "fog", :git => "https://github.com/fog/fog.git"
 #end
 
 group :authentication do

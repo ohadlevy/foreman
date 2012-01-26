@@ -1,4 +1,5 @@
 module ComputeResourcesHelper
+
   def vm_state s
     s ? "Off" : " On"
   end
@@ -15,8 +16,10 @@ module ComputeResourcesHelper
   end
 
   def memory_options max_memory
-    max = max_memory / 1024 / 1024
-    mem_opts = (1..max).to_a.map {|n| [number_to_human_size(2**n*1024*128), n]}
+    gb = 1024*1024*1024
+    opts = [0.25, 0.5, 0.75, 1, 2, 4, 8, 16]
+    max = (max_memory / gb)
+    mem_opts = opts.map{|n| [number_to_human_size(n*gb), n*gb] unless n > max}
     options_for_select mem_opts
   end
 end

@@ -1,0 +1,10 @@
+<%= text_f f, :name if controller_name != "hosts" %>
+
+<%= select_f f, :template, compute_resource.hardware_profiles, :id, :name ,{:include_blank => true},{:'data-url' => hardware_profile_selected_compute_resource_path(compute_resource), :onchange=>'ovirt_hwpSelected(this);'}%>
+<%= select_f f, :cluster, compute_resource.clusters, :id, :name ,{},{:'data-url' => cluster_selected_compute_resource_path(compute_resource), :onchange=>'ovirt_clusterSelected(this);'} %>
+<div class='hardware_profile'>
+  <%= selectable_f f, :cores, 1..compute_resource.max_cpu_count, {}, :class => "mini" %>
+  <%= selectable_f f, :memory,[ memory_options(compute_resource.max_memory)] %>
+  <%#= select_f f, :network, compute_resource.networks, :id, :name %>
+  <%#= checkbox_f f, :preallocate %>
+</div>

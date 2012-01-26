@@ -1,6 +1,8 @@
 class ComputeResourcesController < ApplicationController
   include Foreman::Controller::AutoCompleteSearch
-  before_filter :find_by_id, :only => %w{show edit update destroy}
+  AJAX_REQUESTS = %w{hardware_profile_selected cluster_selected}
+  before_filter :ajax_request, :only => AJAX_REQUESTS
+  before_filter :find_by_id, :only => %w{show edit update destroy} + AJAX_REQUESTS
 
   def index
     values = ComputeResource.search_for(params[:search], :order => params[:order])
@@ -41,6 +43,22 @@ class ComputeResourcesController < ApplicationController
       process_error
     end
   end
+
+  #ajax methods
+  def hardware_profile_selected
+    compute = @compute_resource.hardware_profile(params[:hwp_id])
+    respond_to do |format|
+      format.json { render :json => compute }
+    end
+  end
+
+  def cluster_selected
+    networks = @compute_resource.networks(:cluster_id => params[:cluster_id])
+    respond_to do |format|
+      format.json { render :json => networks }
+    end
+  end
+
   private
 
   def find_by_id

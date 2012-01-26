@@ -4,16 +4,13 @@ module Foreman::Model
 
     validates_format_of :url, :with => URL_REGEXP
 
+    # we default to destroy the VM's stroage as well.
     def destroy_vm uuid, args = {}
       find_vm_by_uuid(uuid).destroy({:destroy_volumes => true}.merge(args))
     end
 
     def self.model_name
       ComputeResource.model_name
-    end
-
-    def new_vm
-      client.servers.new vm_instance_defaults
     end
 
     def vm_instance_defaults
@@ -29,7 +26,6 @@ module Foreman::Model
       }
     end
 
-    #TODO: fixme
     def max_cpu_count
       hypervisor.max_vcpus
     end
