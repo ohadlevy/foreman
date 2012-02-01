@@ -207,7 +207,7 @@ $(function () {
     html: true,
     placement: 'above'
   });
-  $('[rel="twipsy"]').twipsy();
+  $('[rel="twipsy"]').tooltip();
 });
 
 function filter_by_level(level){

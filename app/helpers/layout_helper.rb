@@ -113,4 +113,10 @@ module LayoutHelper
       ), :class => "span6 pagination")
   end
 
+  def icons i
+    content_tag :i, :class => "icon-#{i}" do
+      yield
+    end
+  end
+
 end

@@ -13,7 +13,7 @@
     <%= menu 'audits',     my_bookmarks, hash_for_audits_path %>
     <%= menu 'statistics', my_bookmarks %>
 </ul>
-<ul class="nav secondary-nav" id="menu2">
+<ul class="nav pull-right" id="menu2">
 
   <% if User.current %>
     <%= render "home/settings" -%>
