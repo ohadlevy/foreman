@@ -3,7 +3,7 @@
 </div>
 
 <div id="compute_resource">
-  <%= render :partial => 'compute', :compute_resource => @host.compute_resource if @host.compute_resource %>
+  <%= render 'compute', :compute_resource => @host.compute_resource if @host.compute_resource_id %>
 </div>
 
 <div id="network">

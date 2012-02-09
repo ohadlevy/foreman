@@ -1,14 +1,21 @@
 function computeResourceSelected(item){
   var compute = $(item).val();
-  var url = $(item).attr('data-url');
-  $.ajax({
-    type:'post',
-    url: url,
-    data:'compute_resource_id=' + compute,
-    success: function(result){
-       $('#compute_resource').html(result);
-    }
-  })
+  if(compute=='') { //Bare Metal
+    $('#mac_address').show();
+    $('#compute_resource').empty();
+  }
+  else {
+    $('#mac_address').hide();
+    var url = $(item).attr('data-url');
+    $.ajax({
+      type:'post',
+      url: url,
+      data:'compute_resource_id=' + compute,
+      success: function(result){
+         $('#compute_resource').html(result);
+      }
+    })
+  }
 }
 
 function add_puppet_class(item){

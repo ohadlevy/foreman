@@ -6,6 +6,7 @@ class HostsController < ApplicationController
 
   # actions which don't require authentication and are always treated as the admin user
   ANONYMOUS_ACTIONS=[ :externalNodes, :lookup ]
+  SEARCHABLE_ACTIONS= %w[index active errors out_of_sync pending disabled ]
   AJAX_REQUESTS=%w{compute_resource_selected hostgroup_or_environment_selected}
   skip_before_filter :require_login, :only => ANONYMOUS_ACTIONS
   skip_before_filter :require_ssl, :only => ANONYMOUS_ACTIONS
@@ -439,12 +440,13 @@ class HostsController < ApplicationController
 
   def load_vars_for_ajax
     return unless @host
-    @environment     = @host.environment
-    @architecture    = @host.architecture
-    @domain          = @host.domain
-    @operatingsystem = @host.operatingsystem
-    @medium          = @host.medium
-    @hypervisor      = @host.hypervisor if @host.respond_to?(:hypervisor)
+    @environment             = @host.environment
+    @architecture            = @host.architecture
+    @domain                  = @host.domain
+    @operatingsystem         = @host.operatingsystem
+    @medium                  = @host.medium
+    @hypervisor              = @host.hypervisor if @host.respond_to?(:hypervisor)
+    @host.compute_attributes = @host.compute_resource.find_vm_by_uuid(@host.uuid)
   end
 
   def find_multiple

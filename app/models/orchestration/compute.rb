@@ -13,6 +13,11 @@ module Orchestration::Compute
       compute_resource_id.present? and compute_attributes.present?
     end
 
+    def compute_object
+      return @compute_attributes if @compute_attributes.is_a? Fog::Compute::Server
+      compute_resource.new_vm @compute_attributes if compute_resource_id.present? && @compute_attributes
+    end
+
     protected
     def queue_compute
       return unless compute? and errors.empty?

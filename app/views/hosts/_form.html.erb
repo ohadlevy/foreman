@@ -8,8 +8,10 @@
     <% if SETTINGS[:unattended] and @host.managed -%>
       <li><a href="#network">Network</a></li>
       <li><a href="#os">Operating System</a></li>
-      <% if @host.new_record? and !Hypervisor.first.nil? and authorized_for("Hypervisors::Guests", :create) -%>
-        <li><a href="#virtual_machine">Virtual Machine</a></li>
+      <% if authorized_for("Hypervisors::Guests", :create) -%>
+        <% if @host.new_record? and !Hypervisor.first.nil? -%>
+          <li><a href="#virtual_machine">Virtual Machine</a></li>
+        <% end -%>
         <li><a href="#compute_resource">Compute</a></li>
       <% end -%>
     <% end -%>
@@ -21,7 +23,7 @@
 
     <div class="active" id="primary">
       <%= text_f f, :name, :class => "xlarge", :value => name_field(@host) %>
-      <%= select_f f, :compute_resource_id, ComputeResource.all, :id, :to_label, { :include_blank => true }, {:'data-url' => compute_resource_selected_hosts_path , :onchange => 'computeResourceSelected(this);'} %>
+      <%= select_f f, :compute_resource_id, ComputeResource.all, :id, :to_label, { :include_blank => 'Bare Metal' }, {:disabled => !@host.new_record?, :'data-url' => compute_resource_selected_hosts_path , :onchange => 'computeResourceSelected(this);'} %>
       <%= select_f f, :hostgroup_id, accessible_hostgroups, :id, :to_label,
         { :include_blank => true},
         { :onchange => 'hostgroup_changed(this);', :'data-host-id' => @host.id, "data-type" => controller_name,

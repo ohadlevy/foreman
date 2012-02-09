@@ -16,7 +16,7 @@ module Foreman::Model
     end
 
     def hardware_profiles
-      client.templates.all(:search => 'name=hwp_*')
+      client.templates
     end
 
     def hardware_profile(id)
@@ -39,10 +39,31 @@ module Foreman::Model
     def create_vm args = {}
       #ovirt doesn't accept '.' in vm name.
       args[:name] = args[:name].parameterize
+      # create and run the vm.
+      return bootstrap(args) if args[:start]
+      # create the vm, without running it.
       super args
     end
 
+    def destroy_vm uuid
+      begin
+        find_vm_by_uuid(uuid).destroy
+      rescue OVIRT::OvirtException => e
+        #404 error are ignored on delete.
+        raise e unless e.message =~ /404/
+      end
+      true
+    end
+
     protected
+
+    def bootstrap args
+      client.servers.bootstrap vm_instance_defaults.merge(args.to_hash)
+    rescue Fog::Errors::Error => e
+      errors.add(:base, e.to_s)
+      false
+    end
+
 
     def client
       @client ||= ::Fog::Compute.new(
@@ -69,7 +90,7 @@ module Foreman::Model
           errors.add(:base, "Datacenter #{name} not found")
           false
         else
-          self.uuid = datacenters.first.id
+          self.uuid = datacenters.first[:id]
         end
     rescue => e
       errors.add(:base, e.message)

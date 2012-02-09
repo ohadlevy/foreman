@@ -18,8 +18,6 @@ module ComputeResourcesHelper
   def memory_options max_memory
     gb = 1024*1024*1024
     opts = [0.25, 0.5, 0.75, 1, 2, 4, 8, 16]
-    max = (max_memory / gb)
-    mem_opts = opts.map{|n| [number_to_human_size(n*gb), n*gb] unless n > max}
-    options_for_select mem_opts
+    opts.map{|n| [number_to_human_size(n*gb), (n*gb).to_i] unless n > (max_memory / gb)}
   end
 end
