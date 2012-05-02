@@ -72,6 +72,7 @@ Foreman::Application.routes.draw do
       end
     end
 
+    resources :locations
     resources :bookmarks, :except => [:show]
     resources :lookup_keys, :except => [:new, :create] do
       resources :lookup_values, :only => [:index, :create, :update, :destroy]

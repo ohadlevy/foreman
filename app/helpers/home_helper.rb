@@ -30,6 +30,7 @@ module HomeHelper
 
       choices += [
         [:divider],
+        ['Locations',              :locations],
         ['Architectures',          :architectures],
         ['Domains',                :domains],
         ['Hardware Models',        :models],

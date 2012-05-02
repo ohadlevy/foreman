@@ -1,0 +1,11 @@
+<%= form_for @location do |f| %>
+  <%= base_errors_for @location %>
+  <%= text_f f, :name %>
+  <%= multiple_checkboxes f, :subnets, @location, Subnet %>
+  <%= multiple_checkboxes f, :media, @location, Medium %>
+  <%= multiple_checkboxes f, :smart_proxies, @location, SmartProxy.joins(:features).select('DISTINCT "smart_proxies".*').where(["features.name LIKE ?", "Puppet%"]).unscoped %>
+  <%= multiple_checkboxes f, :compute_resources, @location, ComputeResource %>
+
+  <%= submit_or_cancel f %>
+<% end %>
+

@@ -2,6 +2,8 @@ class Medium < ActiveRecord::Base
   include Authorization
   has_and_belongs_to_many :operatingsystems
   has_many :hosts
+  has_many :location_mediums, :dependent => :destroy
+  has_many :locations, :through => :location_mediums
 
   # We need to include $ in this as $arch, $release, can be in this string
   VALID_NFS_PATH=/^([\w\d\.]+):(\/[\w\d\/\$\.]+)$/

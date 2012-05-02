@@ -9,6 +9,11 @@ class Subnet < ActiveRecord::Base
   belongs_to :dns,  :class_name => "SmartProxy"
   has_many :subnet_domains, :dependent => :destroy
   has_many :domains, :through => :subnet_domains
+
+  # one to one mapping, however, if we decide calling location an OU, it should be many to many
+  has_one :location_subnet, :dependent =>  :destroy
+  has_one :location, :through => :location_subnet
+
   validates_presence_of   :network, :mask, :name
   validates_associated    :subnet_domains
   validates_uniqueness_of :network
@@ -36,7 +41,7 @@ class Subnet < ActiveRecord::Base
   # [+other+] : Subnet object with which to compare ourself
   # +returns+ : Subnet object with higher precedence
   def <=> (other)
-    self.priority <=> other.priority
+    (priority and other.priority) ? self.priority <=> other.priority : 0
   end
 
   # Given an IP returns the subnet that contains that IP

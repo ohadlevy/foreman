@@ -2,6 +2,7 @@ class Architecture < ActiveRecord::Base
   include Authorization
   has_many :hosts
   has_many :images, :dependent => :destroy
+  has_many :os_profiles
   has_and_belongs_to_many :operatingsystems
   validates_uniqueness_of :name
   before_destroy EnsureNotUsedBy.new(:hosts)

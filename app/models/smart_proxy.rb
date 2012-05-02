@@ -8,6 +8,9 @@ class SmartProxy < ActiveRecord::Base
   has_many :hosts,      :foreign_key => "puppet_proxy_id"
   has_many :hostgroups, :foreign_key => "puppet_proxy_id"
 
+  has_many :location_smart_proxies, :dependent => :destroy
+  has_many :locations, :through => :location_smart_proxies
+
   URL_HOSTNAME_MATCH = %r{^(?:http|https):\/\/([^:\/]+)}
   validates_uniqueness_of :name
   validates_presence_of :name, :url

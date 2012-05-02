@@ -15,6 +15,10 @@ class ComputeResource < ActiveRecord::Base
   scoped_search :on => :name, :complete_value => :true
   before_save :sanitize_url
   has_many :hosts
+  has_many :hw_profiles
+
+  has_many :location_compute_resources, :dependent => :destroy
+  has_many :locations, :through => :location_compute_resources
   has_many :images, :dependent => :destroy
 
   # allows to create a specific compute class based on the provider.
