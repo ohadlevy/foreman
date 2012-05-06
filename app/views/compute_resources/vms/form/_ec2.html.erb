@@ -1,3 +1,8 @@
-<%= text_f f, :flavor_id %>
-<%# text_f f, :image_id %>
-
+<%= select_f f, :flavor_id, compute_resource.flavors, :id, :name %>
+<%= text_f f, :image_id %>
+<%= text_f f, :username, :value => "root" %>
+<%= selectable_f f, :key_name, compute_resource.key_pairs, :label => "SSH key" %>
+<%= selectable_f f, :groups, compute_resource.security_groups, :label => "Security Group"  %>
+<%# text_f f, :subnet_id %>
+<%= selectable_f f, :availability_zone, compute_resource.zones %>
+<%= f.hidden_field :use_image, :value => true %>
