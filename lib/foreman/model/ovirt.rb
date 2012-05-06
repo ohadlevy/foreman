@@ -8,6 +8,10 @@ module Foreman::Model
       ComputeResource.model_name
     end
 
+    def provided_attributes
+      super.merge({:mac => :mac})
+    end
+
     #FIXME
     def max_cpu_count
       8

@@ -1,4 +1,6 @@
 Foreman::Application.routes.draw do
+  resources :images
+
   #ENC requests goes here
   match "node/:name" => 'hosts#externalNodes', :constraints => { :name => /[^\.][\w\.-]+/ }
   post "reports/create"

@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Os:</b>
+  <%= @image.os_id %>
+</p>
+
+<p>
+  <b>Compute resource:</b>
+  <%= @image.compute_resource_id %>
+</p>
+
+<p>
+  <b>Uuid:</b>
+  <%= @image.uuid %>
+</p>
+
+<p>
+  <b>Username:</b>
+  <%= @image.username %>
+</p>
+
+
+<%= link_to 'Edit', edit_image_path(@image) %> |
+<%= link_to 'Back', images_path %>

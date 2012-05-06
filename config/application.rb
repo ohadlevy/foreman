@@ -56,7 +56,7 @@ module Foreman
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password, :account_password, :facts, :root_pass, :value, :report, :password_confirmation]
+    config.filter_parameters += [:password, :account_password, :facts, :root_pass, :value, :report, :password_confirmation, :secret]
 
     config.session_store :active_record_store
 

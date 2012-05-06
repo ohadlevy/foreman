@@ -1,0 +1,12 @@
+<%= form_for @image do |f| %>
+  <%= base_errors_for @image %>
+  <%= text_f   f, :name %>
+  <%= select_f f, :compute_resource_id, ComputeResource.all, :id, :to_label %>
+  <%= select_f f, :operatingsystem_id, Operatingsystem.all, :id, :to_label %>
+  <%= select_f f, :architecture_id, Architecture.all, :id, :to_label %>
+  <%= text_f f, :username, :value => @image.username || "root" %>
+  <%= text_f f, :uuid, :label => "Image ID" %>
+
+  <%= submit_or_cancel f %>
+<% end %>
+

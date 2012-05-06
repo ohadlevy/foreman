@@ -46,7 +46,7 @@ module Orchestration::Compute
 
     def queue_compute_destroy
       return unless errors.empty? and compute_resource_id.present? and uuid
-      queue.create(:name   => "Removing compute instance #{self}", :priority => 1,
+      queue.create(:name   => "Removing compute instance #{self}", :priority => 100,
                    :action => [self, :delCompute])
     end
 
@@ -54,15 +54,20 @@ module Orchestration::Compute
       logger.info "Adding Compute instance for #{name}"
       vm = compute_resource.create_vm compute_attributes.merge(:name => name)
 
-      if vm and !(self.mac = vm.mac).empty?
-        # we can't ensure uniqueness of MAC using normal rails validations as the mac gets in a later step in the process
-        # therefore we must validate its not used already in our db.
-        normalize_addresses
-        if other_host = Host.find_by_mac(mac)
-          delCompute
-          return failure("MAC Address #{mac} is already used by #{other_host}")
+      if vm
+        attrs = compute_resource.provided_attributes
+        normalize_addresses if attrs.keys.include?(:mac) or attrs.keys.include?(:ip)
+        attrs.each do |foreman_attr, fog_attr |
+          # we can't ensure uniqueness of #foreman_attr using normal rails validations as that gets in a later step in the process
+          # therefore we must validate its not used already in our db.
+          value = vm.send(fog_attr)
+          self.send("#{foreman_attr}=", value)
+
+          if value.blank? or (other_host = Host.send("find_by_#{foreman_attr}", value))
+            delCompute
+            return failure("#{foreman_attr} #{value} is already used by #{other_host}")
+          end
         end
-        self.uuid = vm.identity
         true
       else
         failure "failed to save virtual machine"

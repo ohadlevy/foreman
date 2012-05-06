@@ -17,6 +17,7 @@ module Orchestration
       include Orchestration::Puppetca
       include Orchestration::Libvirt
       include Orchestration::Compute
+      include Orchestration::SSHProvision
 
       # save handles both creation and update of hosts
       before_save :on_save

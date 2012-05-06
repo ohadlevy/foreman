@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  secret: MyText
+  compute_resource_id: 1
+  name: MyString
+
+two:
+  secret: MyText
+  compute_resource_id: 1
+  name: MyString
