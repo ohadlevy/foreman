@@ -1,4 +1,4 @@
-module Hostext
+module Node
   module Search
     def self.included(base)
       base.class_eval do

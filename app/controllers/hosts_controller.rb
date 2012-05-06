@@ -71,7 +71,7 @@ class HostsController < ApplicationController
   end
 
   def new
-    @host = Host.new :managed => true
+    @host = Node::Provisioned::BareMetal.new
     @host.host_parameters.build
   end
 
@@ -137,7 +137,7 @@ class HostsController < ApplicationController
     @hostgroup   = Hostgroup.find(params[:hostgroup_id])     unless params[:hostgroup_id].empty?
     @host        = Host.find(params[:host_id])               if params[:host_id].to_i > 0
     if @environment or @hostgroup
-      @host ||= Host.new
+      @host ||= Node::Managed.new
       @host.hostgroup   = @hostgroup if @hostgroup
       @host.environment = @environment if @environment
       render :partial => 'puppetclasses/class_selection', :locals => {:obj => (@host)}
@@ -402,7 +402,7 @@ class HostsController < ApplicationController
     @domain          = @hostgroup.domain
     @subnet          = @hostgroup.subnet
 
-    @host = Host.new
+    @host = Node::Managed.new
     @host.hostgroup = @hostgroup
     @host.compute_resource_id = params[:compute_resource_id] if params[:compute_resource_id].present?
     @host.set_hostgroup_defaults

@@ -2,6 +2,7 @@ module Orchestration::Compute
   def self.included(base)
     base.send :include, InstanceMethods
     base.class_eval do
+      belongs_to :compute_resource
       attr_accessor :compute_attributes
       after_validation :queue_compute
       before_destroy :queue_compute_destroy
