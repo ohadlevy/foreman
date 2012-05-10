@@ -19,7 +19,7 @@ class Host < Puppet::Rails::Host
 
   class Jail < ::Safemode::Jail
     allow :name, :diskLayout, :puppetmaster, :puppet_ca_server, :operatingsystem, :os, :environment, :ptable, :hostgroup, :url_for_boot,
-      :params, :hostgroup, :domain, :ip, :mac, :shortname, :architecture, :model
+      :params, :hostgroup, :domain, :ip, :mac, :shortname, :architecture, :model, :certname
   end
 
   attr_reader :cached_host_params, :cached_lookup_keys_params
@@ -154,12 +154,8 @@ class Host < Puppet::Rails::Host
     validates_presence_of :puppet_proxy_id, :if => Proc.new {|h| h.managed? } if SETTINGS[:unattended]
   end
 
-  before_validation :set_hostgroup_defaults, :set_ip_address, :set_default_user, :normalize_addresses, :normalize_hostname
+  before_validation :set_hostgroup_defaults, :set_ip_address, :set_default_user, :normalize_addresses, :normalize_hostname, :set_certname
   after_validation :ensure_assoications
-
-  def set_default_user
-    self.owner ||= User.current
-  end
 
   def to_param
     name
@@ -338,7 +334,9 @@ class Host < Puppet::Rails::Host
     facts = YAML::load yaml
     return false unless facts.is_a?(Puppet::Node::Facts)
 
-    h=find_or_create_by_name(facts.name)
+    h = Host.where(["name = ? or certname = ?", facts.name, facts.name]).first
+    h ||= Host.new :name => facts.name
+
     h.save(:validate => false) if h.new_record?
     h.importFacts(facts)
   end
@@ -378,7 +376,7 @@ class Host < Puppet::Rails::Host
   def populateFieldsFromFacts facts = self.facts_hash
     importer = Facts::Importer.new facts
 
-    set_non_empty_values importer, [:domain, :architecture, :operatingsystem, :model]
+    set_non_empty_values importer, [:domain, :architecture, :operatingsystem, :model, :certname]
     set_non_empty_values importer, [:mac, :ip] unless Setting[:ignore_puppet_facts_for_provisioning]
 
     if Setting[:update_environment_from_facts]
@@ -605,6 +603,11 @@ class Host < Puppet::Rails::Host
     built client.deploy!
   end
 
+  # if certname does not exist, use hostname instead
+  def certname
+    super || name
+  end
+
   private
   # align common mac and ip address input
   def normalize_addresses
@@ -711,6 +714,14 @@ class Host < Puppet::Rails::Host
       value = importer.send(attr)
       self.send("#{attr}=", value) unless value.blank?
     end
+  end
+
+  def set_default_user
+    self.owner ||= User.current
+  end
+
+  def set_certname
+    self.certname ||= UUIDTools::UUID.random_create if SETTINGS[:unattended] && new_record? && managed?
   end
 
 end
