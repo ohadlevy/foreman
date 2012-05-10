@@ -593,16 +593,6 @@ class Host < Puppet::Rails::Host
     managed? and !compute? or (compute? and !compute_resource.provided_attributes.keys.include?(:ip))
   end
 
-  def image_provision!
-    raise "no compute attributes found" unless compute_attributes.present?
-    image = Image.find_by_uuid(compute_attributes[:image_id])
-    @host = self
-
-    handle_ca
-    client = Foreman::Provision::SSH.new ip, image.username, :template => unattended_render_to_temp_file(configTemplate(:kind => "finish").template), :uuid => uuid
-    built client.deploy!
-  end
-
   # if certname does not exist, use hostname instead
   def certname
     super || name
