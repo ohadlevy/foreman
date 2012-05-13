@@ -50,14 +50,14 @@ module Foreman
     alias_method :pxe_render, :unattended_render
 
     def unattended_render_to_temp_file content, prefix = id, options = {}
-      path = ""
+      file = ""
       Tempfile.open(prefix, Rails.root.join('tmp') ) do |f|
         f.print(unattended_render(content))
         f.flush
         f.chmod options[:mode] if options[:mode]
-        path = f.path
+        file = f
       end
-      path
+      file
     end
 
   end

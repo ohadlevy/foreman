@@ -1,14 +1,17 @@
 require 'fog'
+require 'timeout'
 
 class Foreman::Provision::SSH
-  attr_reader :template, :uuid, :results
+  attr_reader :template, :uuid, :results, :address, :username, :options
 
   def initialize address, username = "root", options = { }
+    @username = username
+    @address  = address
     @template = options.delete(:template) || raise("must provide a template")
-    @uuid     = options.delete(:uuid) || "#{address}-#{username}"
-    options   = defaults.merge(options)
-    @ssh      = ::Fog::SSH.new(address, username, options)
-    @scp      = ::Fog::SCP.new(address, username, options)
+    @uuid     = options.delete(:uuid)     || "#{address}-#{username}"
+    @options  = defaults.merge(options)
+
+    initiate_connection!
   end
 
   def deploy!
@@ -16,30 +19,29 @@ class Foreman::Provision::SSH
     scp.upload(template, remote_script)
     logger.debug "about to execute #{command}"
     @results = ssh.run(command)
-    logger.info stdout
-    logger.debug stderr
+    log_stdout
+    log_stderr
     success?
   end
+
+  private
 
   def success?
     return true if results.empty?
     results.map(&:status).compact == [0]
   end
 
-  def stdout
+  def log_stdout
     results.each do |r|
-      r.display_stdout
+      r.stdout.split("\n").each { |l| logger.debug l }
     end
   end
 
-  def stderr
+  def log_stderr
     results.each do |r|
-      r.display_stderr
+      r.stderr.split("\n").each { |l| logger.warn l }
     end
   end
-
-  private
-  attr_reader :ssh, :scp, :logger
 
   def remote_script
     File.join("/", "tmp", "bootstrap-#{uuid}")
@@ -50,7 +52,7 @@ class Foreman::Provision::SSH
   end
 
   def command
-    "bash -c 'chmod 0701 #{remote_script} && #{remote_script}'"
+    "#{command_prefix} bash -c 'chmod 0701 #{remote_script} && #{command_prefix} #{remote_script}' | tee #{remote_script}.log"
   end
 
   def defaults
@@ -60,12 +62,34 @@ class Foreman::Provision::SSH
       :auth_methods => %w( publickey ),
       :compression  => "zlib",
       :logger       => logger,
-      :verbose      => Rails.configuration.log_level == :debug ? :verbose : :info
     }
   end
 
   def logger
-    @logger ||= Rails.logger
+    Rails.logger
+  end
+
+  def initiate_connection!
+    Timeout::timeout(360) do
+      begin
+        Timeout::timeout(8) do
+          ssh.run('pwd')
+        end
+      rescue Errno::ECONNREFUSED
+        sleep(2)
+        retry
+      rescue Net::SSH::AuthenticationFailed, Timeout::Error
+        retry
+      end
+    end
+  end
+
+  def ssh
+    Fog::SSH.new(address, username, options.merge(:timeout => 4))
+  end
+
+  def scp
+    Fog::SCP.new(address, username, options)
   end
 
 end

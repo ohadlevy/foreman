@@ -11,19 +11,11 @@ module Foreman::Model
     end
 
     def provided_attributes
-      super.merge({ :mac => :mac, :ip => :public_ip_address, :name => :dns_name })
+      super.merge({ :ip => :public_ip_address })
     end
 
     def self.model_name
       ComputeResource.model_name
-    end
-
-    def vm_instance_defaults
-      {
-        :flavor_id => "m1.small",
-        :name      => "foreman-#{Foreman.uuid}",
-        :key_pair  => self.key_pair,
-      }
     end
 
     def find_vm_by_uuid uuid
@@ -33,10 +25,11 @@ module Foreman::Model
     end
 
     def create_vm args = { }
-      args = vm_instance_defaults.merge(args.to_hash)
-      vm   = super(args)
-      client.tags.create :key => "Name", :value => args[:name], :resource_id => vm.identity, :resource_type => "instance" if vm && args[:name]
-      vm
+      args = vm_instance_defaults.merge(args.to_hash.symbolize_keys)
+      if (name = args[:name])
+        args.merge!(:tags => {:Name => name})
+      end
+      super(args)
     end
 
     def security_groups
@@ -97,6 +90,14 @@ module Foreman::Model
       true
     rescue => e
       logger.warn "failed to delete key pair from AWS, you might need to cleanup manually : #{e}"
+    end
+
+    def vm_instance_defaults
+      {
+        :flavor_id => "m1.small",
+        :name      => "foreman-#{Foreman.uuid}",
+        :key_pair  => key_pair,
+      }
     end
   end
 end

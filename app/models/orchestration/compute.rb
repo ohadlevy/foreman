@@ -57,6 +57,10 @@ module Orchestration::Compute
       if vm
         attrs = compute_resource.provided_attributes
         normalize_addresses if attrs.keys.include?(:mac) or attrs.keys.include?(:ip)
+        if attrs.keys.include?(:ip)
+          logger.info "waiting for instance to acquire ip address"
+          vm.wait_for { vm.send(attrs[:ip]) }
+        end
         attrs.each do |foreman_attr, fog_attr |
           # we can't ensure uniqueness of #foreman_attr using normal rails validations as that gets in a later step in the process
           # therefore we must validate its not used already in our db.
