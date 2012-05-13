@@ -3,7 +3,7 @@ require 'test_helper'
 class ImagesControllerTest < ActionController::TestCase
   setup do
     @image = images(:one)
-    @image.uuid = UUIDTools::UUID.random_create.to_s
+    @image.uuid = Foreman.uuid.to_s
   end
 
   test "should get index" do

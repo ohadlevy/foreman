@@ -154,8 +154,9 @@ class Host < Puppet::Rails::Host
     validates_presence_of :puppet_proxy_id, :if => Proc.new {|h| h.managed? } if SETTINGS[:unattended]
   end
 
-  before_validation :set_hostgroup_defaults, :set_ip_address, :set_default_user, :normalize_addresses, :normalize_hostname, :set_certname
+  before_validation :set_hostgroup_defaults, :set_ip_address, :set_default_user, :normalize_addresses, :normalize_hostname
   after_validation :ensure_assoications
+  before_validation :set_certname, :if => Proc.new {|h| h.managed? } if SETTINGS[:unattended]
 
   def to_param
     name
@@ -711,7 +712,7 @@ class Host < Puppet::Rails::Host
   end
 
   def set_certname
-    self.certname ||= UUIDTools::UUID.random_create if SETTINGS[:unattended] && new_record? && managed?
+    self.certname = Foreman.uuid if read_attribute(:certname).blank? or new_record?
   end
 
 end

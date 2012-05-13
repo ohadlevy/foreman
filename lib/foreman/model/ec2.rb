@@ -21,7 +21,7 @@ module Foreman::Model
     def vm_instance_defaults
       {
         :flavor_id => "m1.small",
-        :name      => "foreman-#{UUIDTools::UUID.random_create}",
+        :name      => "foreman-#{Foreman.uuid}",
         :key_pair  => self.key_pair,
       }
     end
@@ -80,7 +80,7 @@ module Foreman::Model
     # this method creates a new key pair for each new ec2 compute resource
     # it should create the key and upload it to AWS
     def setup_key_pair
-      key = client.key_pairs.create :name => "foreman-#{id}#{UUIDTools::UUID.random_create}"
+      key = client.key_pairs.create :name => "foreman-#{id}#{Foreman.uuid}"
       KeyPair.create! :name => key.name, :compute_resource_id => self.id, :secret => key.private_key
     rescue => e
       logger.warn "failed to generate key pair"
