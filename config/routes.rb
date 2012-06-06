@@ -1,3 +1,5 @@
+require 'api_constraints'
+
 Foreman::Application.routes.draw do
   #ENC requests goes here
   match "node/:name" => 'hosts#externalNodes', :constraints => { :name => /[^\.][\w\.-]+/ }
@@ -275,5 +277,17 @@ Foreman::Application.routes.draw do
   match 'unattended/(:action/(:id(.format)))', :controller => 'unattended'
 
   resources :tasks, :only => [:show]
+
+  #### API Namespace from here downwards ####
+  namespace :api, :defaults => {:format => 'json'} do
+    scope :module => :v1, :constraints => ApiConstraints.new(:version => 1, :default => true) do
+      resources :bookmarks, :except => [:new, :edit]
+      match '/', :to => 'home#index'
+      match 'status', :to => 'home#status', :as => "status"
+    end
+#    scope module: :v2, constraints: ApiConstraints.new(version: 2, default: true) do
+#      resources :bookmarks
+#    end
+  end
 
 end

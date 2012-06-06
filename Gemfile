@@ -12,6 +12,7 @@ gem 'scoped_search', '>= 2.3.7'
 gem 'net-ldap'
 gem "safemode", "~> 1.0.1"
 gem 'uuidtools'
+gem 'rabl'
 
 local_gemfile = File.dirname(__FILE__) + "/Gemfile.local.rb"
 if File.file?(local_gemfile)
