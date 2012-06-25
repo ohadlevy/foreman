@@ -8,7 +8,7 @@ Restapi.configure do |config|
   config.doc_base_url = "/apidoc"
   config.use_cache = false #Rails.env.production?
   config.validate = false
-  config.reload_controllers = false
+  config.reload_controllers = true
   config.markup = Restapi::Markup::Markdown.new
 end
 
