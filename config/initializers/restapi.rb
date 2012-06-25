@@ -2,7 +2,7 @@ Restapi.configure do |config|
   config.app_name = "The Foreman"
   config.app_info = "The Foreman is aimed to be a single address for all machines life cycle management."
   config.copyright = ""
-  config.api_base_url = "/api/"
+  config.api_base_url = "/api"
   config.api_controllers_matcher = "#{Rails.root}/app/controllers/api/v1/*.rb"
   config.ignored_by_recorder = %w[]
   config.doc_base_url = "/apidoc"
