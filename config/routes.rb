@@ -1,6 +1,9 @@
 require 'api_constraints'
 
 Foreman::Application.routes.draw do
+
+  restapi
+
   #ENC requests goes here
   match "node/:name" => 'hosts#externalNodes', :constraints => { :name => /[^\.][\w\.-]+/ }
   post "reports/create"
