@@ -1,4 +1,5 @@
 source 'http://rubygems.org'
+source 'http://inecas.fedorapeople.org/rubygems/'
 
 gem 'rails', '3.0.10'
 gem "jquery-rails"
@@ -13,6 +14,8 @@ gem 'net-ldap'
 gem "safemode", "~> 1.0.1"
 gem 'uuidtools'
 gem 'rabl'
+
+gem "restapi", :git => "git://github.com/Katello/rails-restapi.git", :branch => "katello"
 
 local_gemfile = File.dirname(__FILE__) + "/Gemfile.local.rb"
 if File.file?(local_gemfile)
@@ -56,12 +59,15 @@ group :test do
   gem 'shoulda'
   gem 'rr'
   gem 'rake'
+  gem 'redcarpet'
+  gem 'single_test'
 end
 
 group :development do
   # To use debugger
   gem "ruby-debug", :platforms => :ruby_18
   gem "ruby-debug19", :platforms => :ruby_19
+  gem 'redcarpet'
 end
 
 group :console do
