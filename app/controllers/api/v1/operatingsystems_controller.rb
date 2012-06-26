@@ -19,7 +19,7 @@ module Api
 
       api :POST, "/operatingsystems/", "Create an OS."
       param :operatingsystem, Hash, :required => true do
-          param :name, String, :required => true
+          param :name, /\A(\S+)\Z/, :required => true
           param :major, String, :required => true
           param :minor, String, :required => true
       end
@@ -30,7 +30,7 @@ module Api
 
       api :PUT, "/operatingsystems/:id/", "Update an OS."
       param :operatingsystem, Hash, :required => true do
-          param :name, String
+          param :name, /\A(\S+)\Z/
           param :major, String
           param :minor, String
       end
@@ -43,7 +43,7 @@ module Api
         process_response @operatingsystem.destroy
       end
 
-      api :PUT, "/operatingsystems/:id/bootfiles/", "List boot files an OS."
+      api :GET, "/operatingsystems/:id/bootfiles/", "List boot files an OS."
       param :medium, String
       param :architecture, String
       def bootfiles
