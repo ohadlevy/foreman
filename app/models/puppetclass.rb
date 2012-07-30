@@ -15,8 +15,7 @@ class Puppetclass < ActiveRecord::Base
   validates_format_of :name, :with => /\A(\S+\s?)+\Z/, :message => "can't be blank or contain white spaces."
   audited
 
-  before_destroy EnsureNotUsedBy.new(:hosts)
-  before_destroy EnsureNotUsedBy.new(:hostgroups)
+  before_destroy EnsureNotUsedBy.new(:host_classes, :hostgroups)
   default_scope :order => 'LOWER(puppetclasses.name)'
 
   scoped_search :on => :name, :complete_value => :true
