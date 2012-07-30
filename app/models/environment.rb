@@ -21,7 +21,7 @@ class Environment < ActiveRecord::Base
     # returns an hash of all puppet environments and their relative paths
     def puppetEnvs proxy = nil
       #TODO: think of a better way to model multiple puppet proxies
-      url = (proxy || find_import_proxies.first).try(:url)
+      url = (proxy || SmartProxy.puppet_proxies.first).try(:url)
       raise "Can't find a valid Foreman Proxy with a Puppet feature" if url.blank?
       proxy = ProxyAPI::Puppet.new :url => url
       HashWithIndifferentAccess[proxy.environments.map { |e| [e, proxy.classes(e)] }]
@@ -140,10 +140,6 @@ class Environment < ActiveRecord::Base
       end if changed[:obsolete]
 
       @import_errors
-    end
-
-    def find_import_proxies
-      SmartProxy.joins(:features).where(:features => {:name => 'Puppet'})
     end
   end
 
