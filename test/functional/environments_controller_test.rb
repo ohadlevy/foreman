@@ -92,6 +92,8 @@ class EnvironmentsControllerTest < ActionController::TestCase
   end
 
   def setup_import_classes
+    ProxyAPI::Puppet.any_instance.stubs(:environments).returns(%w{env1 env2})
+    ProxyAPI::Puppet.any_instance.stubs(:classes).returns(mocked_classes)
     Puppetclass.delete_all
     Environment.delete_all
     @request.env["HTTP_REFERER"] = environments_url
@@ -106,8 +108,6 @@ class EnvironmentsControllerTest < ActionController::TestCase
     end
     # This is the on-disk status
     # and should result in a disk_tree of {"env1" => ["a", "b", "c"],"env2" => ["a", "b", "c"]}
-    envs = HashWithIndifferentAccess.new(:env1 => %w{a b c}, :env2 => %w{a b c})
-    Environment.expects(:puppetEnvs).returns(envs).at_least_once
   end
 
   test "should handle disk environment containing additional classes" do
@@ -189,24 +189,7 @@ class EnvironmentsControllerTest < ActionController::TestCase
     assert Environment.find_by_name("env1")
   end
 
-  test "should obey config/ignored_environments.yml" do
-    @request.env["HTTP_REFERER"] = environments_url
-    setup_import_classes
-    as_admin do
-      Environment.create :name => "env3"
-      Environment.delete_all(:name => "env1")
-    end
-    #db_tree   of {                         , "env2" => ["a", "b", "c"], "env3" => []}
-    #disk_tree of {"env1" => ["a", "b", "c"], "env2" => ["a", "b", "c"]}
 
-    FileUtils.mv Rails.root.to_s + "/config/ignored_environments.yml", Rails.root.to_s + "/config/ignored_environments.yml.test_bak" if File.exist? Rails.root.to_s + "/config/ignored_environments.yml"
-    FileUtils.cp Rails.root.to_s + "/test/functional/ignored_environments.yml", Rails.root.to_s + "/config/ignored_environments.yml"
-    get :import_environments, {:proxy => smart_proxies(:puppetmaster)}, set_session_user
-    FileUtils.rm_f Rails.root.to_s + "/config/ignored_environments.yml"
-    FileUtils.mv Rails.root.to_s + "/config/ignored_environments.yml.test_bak", Rails.root.to_s + "/config/ignored_environments.yml" if File.exist? Rails.root.to_s + "/config/ignored_environments.yml.test_bak"
-
-    assert flash[:notice] == "No changes to your environments detected"
-  end
 
   def setup_user
     @request.session[:user] = users(:one).id
@@ -223,5 +206,26 @@ class EnvironmentsControllerTest < ActionController::TestCase
     setup_user
     get :index, {}, set_session_user
     assert_response :success
+  end
+
+  private
+  def mocked_classes
+    [{
+       "a" => {
+         "name"   => "a",
+         "params" => { "port" => "80", "version" => "2.0" },
+         "module" => nil
+       },
+       "b" => {
+         "name"   => "b",
+         "params" => {},
+         "module" => nil
+       },
+       "c" => {
+         "name"   => "c",
+         "params" => {},
+         "module" => nil
+       }
+     }]
   end
 end

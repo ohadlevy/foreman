@@ -1,6 +1,4 @@
 ---
-:obsolete:
-  - env3
-:new:
-  - env1
+:ignored:
+  - foreman-testing
 

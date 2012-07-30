@@ -22,22 +22,15 @@ class PuppetClassImporter
     changes
   end
 
-
   def obsolete_and_new changes = { }
-    changes['new'].each do |environment, attrs|
-      env         = find_or_create_env(environment)
-      classes     = Puppetclass.where(:name => attrs['puppetclasses'])
-      new_classes = (attrs['puppetclasses'] - classes.map(&:to_s)).map { |c| { :name => c } }
-      classes     += Puppetclass.create(new_classes)
-      env.puppetclasses << classes
-    end
-    changes['obsolete'].each do |environment, attrs|
-      env     = find_or_create_env(environment)
-      classes = Puppetclass.where(:name => attrs['puppetclasses'])
-
-      env.destroy if attrs['puppetclasses'].include? "_destroy_"
-
-
+    return if changes.empty?
+    changes.values.map(&:keys).flatten.uniq.each do |env_name|
+      if changes['new'] and changes['new'][env_name].try(:any?) # we got new classes
+        add_classes_to_foreman(env_name, changes['new'][env_name])
+      end
+      if changes['obsolete'] and changes['obsolete'][env_name].try(:any?) # we need to remove classes
+        remove_classes_from_foreman(env_name, changes['obsolete'][env_name])
+      end
     end
   end
 
@@ -135,8 +128,49 @@ class PuppetClassImporter
     raise "Invalid Proxy type, expected ProxyAPI::Puppet instance"
   end
 
-  def find_or_create_env name
-    Environment.where(:name => name).first || Environment.create!(:name => name)
+  def load_classes_from_json blob
+    ActiveSupport::JSON.decode blob
+  end
+
+  def add_classes_to_foreman env_name, klasses
+    classes     = find_existing_foreman_classes(klasses)
+    new_classes = klasses - classes.map(&:name)
+    classes     += create_new_puppet_classes_in_foreman(new_classes)
+
+    env = find_or_create_env(env_name)
+    env.puppetclasses << classes
+  end
+
+  def remove_classes_from_foreman env_name, klasses
+    env = find_or_create_env(env_name)
+    classes     = find_existing_foreman_classes(klasses)
+
+    env.puppetclasses.delete classes
+
+    # remove all old classes from hosts
+    HostClass.joins(:host).where(:hosts => {:environment_id => env.id}, :puppetclass_id => classes).destroy_all
+
+    # remove all klasses that have no environment now
+    # need to use LEFT join has its HABTM relationship
+    classes.not_in_any_environment.destroy_all
+
+    if klasses.include? '_destroy_'
+      # we can't guaranty that the env would be removed as it might have hosts attached to it.
+      env.destroy
+    end
+
+  end
+
+  def find_existing_foreman_classes klasses = []
+    Puppetclass.where(:name => klasses)
+  end
+
+  def create_new_puppet_classes_in_foreman klasses = []
+    Puppetclass.create klasses.map { |k| {:name => k} }
+  end
+
+  def find_or_create_env env
+    Environment.where(:name => env).first || Environment.create!(:name => env)
   end
 
 end

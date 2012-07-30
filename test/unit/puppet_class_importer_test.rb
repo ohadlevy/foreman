@@ -3,10 +3,9 @@ require "test_helper"
 class PuppetClassImporterTest < ActiveSupport::TestCase
 
   def setup
-    ProxyAPI::Puppet.any_instance.stubs(:environments).returns(["production"])
+    ProxyAPI::Puppet.any_instance.stubs(:environments).returns(["foreman-testing"])
     ProxyAPI::Puppet.any_instance.stubs(:classes).returns(mocked_classes)
   end
-
 
   test "proxy should be a only allow real proxy object" do
     assert_raise RuntimeError do
@@ -42,6 +41,20 @@ class PuppetClassImporterTest < ActiveSupport::TestCase
   test "should return list of actual puppet classes" do
     importer = get_an_instance
     assert_kind_of Array, importer.actual_classes(importer.actual_environments.first)
+  end
+
+  test "should obey config/ignored_environments.yml" do
+    as_admin do
+      Environment.delete_all
+    end
+
+    FileUtils.mv Rails.root.to_s + "/config/ignored_environments.yml", Rails.root.to_s + "/config/ignored_environments.yml.test_bak" if File.exist? Rails.root.to_s + "/config/ignored_environments.yml"
+    FileUtils.cp Rails.root.to_s + "/test/functional/ignored_environments.yml", Rails.root.to_s + "/config/ignored_environments.yml"
+    importer = get_an_instance
+    assert !importer.actual_environments.include?("foreman-testing")
+    FileUtils.rm_f Rails.root.to_s + "/config/ignored_environments.yml"
+    FileUtils.mv Rails.root.to_s + "/config/ignored_environments.yml.test_bak", Rails.root.to_s + "/config/ignored_environments.yml" if File.exist? Rails.root.to_s + "/config/ignored_environments.yml.test_bak"
+
   end
 
   private
