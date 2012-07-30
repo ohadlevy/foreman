@@ -4,7 +4,9 @@ module Foreman::Controller::Environments
 
   def import_environments
     begin
-      @changed = Environment.importClasses params[:proxy]
+      opts      = params[:proxy].blank? ? { } : { :url => SmartProxy.find(params[:proxy]).try(:url) }
+      @importer = PuppetClassImporter.new(opts)
+      @changed  = @importer.changes
     rescue => e
       if e.message =~ /puppet feature/i
         error "We did not find a foreman proxy that can provide the information, ensure that you have at least one Proxy with the puppet feature turned on."

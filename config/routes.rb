@@ -111,7 +111,7 @@ Foreman::Application.routes.draw do
     collection do
       post 'obsolete_and_new'
       get 'auto_complete_search'
-      get 'import'
+      get 'import_environments'
       post 'create_multiple'
     end
   end
@@ -135,6 +135,7 @@ Foreman::Application.routes.draw do
 
   resources :puppetclasses do
     collection do
+      get 'import_environments'
       post 'obsolete_and_new'
       get 'auto_complete_search'
     end
