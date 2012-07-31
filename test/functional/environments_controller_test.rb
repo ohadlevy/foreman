@@ -106,8 +106,6 @@ class EnvironmentsControllerTest < ActionController::TestCase
         e.puppetclasses += [Puppetclass.find_by_name("a"), Puppetclass.find_by_name("b"), Puppetclass.find_by_name("c")]
       end
     end
-    # This is the on-disk status
-    # and should result in a disk_tree of {"env1" => ["a", "b", "c"],"env2" => ["a", "b", "c"]}
   end
 
   test "should handle disk environment containing additional classes" do

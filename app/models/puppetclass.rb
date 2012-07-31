@@ -23,6 +23,7 @@ class Puppetclass < ActiveRecord::Base
   scoped_search :in => :hostgroups,   :on => :name, :complete_value => :true, :rename => "hostgroup"
   scoped_search :in => :hosts, :on => :name, :complete_value => :true, :rename => "host", :ext_method => :search_by_host, :only_explicit => true
 
+  # need to use LEFT join has its HABTM relationship
   scope :not_in_any_environment, {
     :joins      => "LEFT JOIN environments_puppetclasses ON puppetclasses.id = environments_puppetclasses.puppetclass_id",
     :conditions => "environments_puppetclasses.environment_id IS NULL",

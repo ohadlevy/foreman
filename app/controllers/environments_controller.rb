@@ -1,8 +1,8 @@
 require 'foreman/controller/environments'
 
 class EnvironmentsController < ApplicationController
-  include Foreman::Controller::AutoCompleteSearch
   include Foreman::Controller::Environments
+  include Foreman::Controller::AutoCompleteSearch
 
   before_filter :find_by_name, :only => %w{show edit update destroy}
 
@@ -53,28 +53,6 @@ class EnvironmentsController < ApplicationController
       process_success
     else
       process_error
-    end
-  end
-
-  def import
-    url = SmartProxy.find(params[:smart_proxy_id]).url if params[:smart_proxy_id]
-    @importer      = PuppetClassImporter.new(:url => url)
-    if @importer.new_environments.empty?
-      warning "No new environments were found"
-      redirect_to :environments and return
-    end
-  end
-
-  def create_multiple
-    if params[:environments].empty?
-      return redirect_to environments_path, :notice => "No Environments selected"
-    end
-
-    @environments = Environment.create(params[:environments]).reject { |s| s.errors.empty? }
-    if @environments.empty?
-      process_success(:object => @environments, :success_msg => "Imported Environments")
-    else
-      render :action => "import"
     end
   end
 

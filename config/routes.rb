@@ -109,10 +109,9 @@ Foreman::Application.routes.draw do
   end
   resources :environments do
     collection do
+      get 'import_environments'
       post 'obsolete_and_new'
       get 'auto_complete_search'
-      get 'import_environments'
-      post 'create_multiple'
     end
   end
 

@@ -7,7 +7,7 @@ class PuppetClassImporterTest < ActiveSupport::TestCase
     ProxyAPI::Puppet.any_instance.stubs(:classes).returns(mocked_classes)
   end
 
-  test "proxy should be a only allow real proxy object" do
+  test "the importer should accept a real proxy object" do
     assert_raise RuntimeError do
       PuppetClassImporter.new(:proxy => Object.new)
     end

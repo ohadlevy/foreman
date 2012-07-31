@@ -22,6 +22,14 @@ class PuppetClassImporter
     changes
   end
 
+
+    # Update the environments and puppetclasses based upon the user's selection
+    # It does a best attempt and can fail to perform all operations due to the
+    # user requesting impossible selections. Repeat the operation if errors are
+    # shown, after fixing the request.
+    # +changed+ : Hash with two keys: :new and :obsolete.
+    #               changed[:/new|obsolete/] is and Array of Strings
+    # Returns   : Array of Strings containing all record errors
   def obsolete_and_new changes = { }
     return if changes.empty?
     changes.values.map(&:keys).flatten.uniq.each do |env_name|
@@ -151,7 +159,6 @@ class PuppetClassImporter
     HostClass.joins(:host).where(:hosts => {:environment_id => env.id}, :puppetclass_id => classes).destroy_all
 
     # remove all klasses that have no environment now
-    # need to use LEFT join has its HABTM relationship
     classes.not_in_any_environment.destroy_all
 
     if klasses.include? '_destroy_'
