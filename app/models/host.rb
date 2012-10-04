@@ -434,7 +434,6 @@ class Host < Puppet::Rails::Host
   def setBuild
     clearFacts
     clearReports
-    set_token
 
     self.build = true
     self.save
