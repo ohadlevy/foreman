@@ -64,19 +64,4 @@ class TokenTest < ActiveSupport::TestCase
     assert_equal 0, Token.count
   end
 
-  test "tokens should be removed based on build state" do
-    disable_orchestration
-    h = hosts(:one)
-    as_admin do
-      Setting[:token_duration] = 60
-      assert_difference('Token.count') do
-        h.build = true
-        h.save!
-      end
-      assert_difference('Token.count', -1) do
-        h.build = false
-        h.save!
-      end
-    end
-  end
 end

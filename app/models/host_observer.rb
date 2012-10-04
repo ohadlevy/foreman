@@ -11,6 +11,4 @@ class HostObserver < ActiveRecord::Observer
     end
   end
 
-  def after_destroy(host)
-  end
 end
