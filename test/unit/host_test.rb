@@ -483,7 +483,7 @@ class HostTest < ActiveSupport::TestCase
     h = hosts(:one)
     h.create_token(:value => "aaaaaa", :expires => Time.now)
     assert_equal Token.all.size, 1
-    h.built(false)
+    h.expire_tokens
     assert_equal Token.all.size, 0
   end
 
@@ -492,7 +492,7 @@ class HostTest < ActiveSupport::TestCase
     h = hosts(:one)
     h.create_token(:value => "aaaaaa", :expires => Time.now)
     assert_equal Token.all.size, 1
-    h.built(false)
+    h.expire_tokens
     assert_equal Token.all.size, 0
   end
 
@@ -509,6 +509,13 @@ class HostTest < ActiveSupport::TestCase
     Setting[:token_duration] = 30
     h = hosts(:one)
     assert_equal h.token, nil
+  end
+
+  test "host should have a token when created" do
+    Setting[:token_duration] = 30
+    host = Host.create :name => "foo", :mac => "aabbeeddccff", :ip => "53.45.6.7", :managed => true, :build => true, :architecture_id => 1, :environment_id => 1, :puppet_proxy_id => 1, :domain_id => 1, :operatingsystem_id => 1
+    assert host.valid?
+    assert_equal Token.first, host.token
   end
 
 end

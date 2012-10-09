@@ -1,6 +1,6 @@
 class HostObserver < ActiveRecord::Observer
 
-  def after_save(host)
+  def after_validation(host)
     # new server in build mode
     if host.new_record? and host.build?
       host.set_token
