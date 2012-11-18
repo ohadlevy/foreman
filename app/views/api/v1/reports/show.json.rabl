@@ -1,6 +1,6 @@
 object @report
 
-attributes :id, :reported_at, :status, :metrics, :logs
+attributes :id, :reported_at, :status, :metrics
 
 child :logs do
   child :source do

@@ -13,7 +13,6 @@ child :ptables do
   extends "api/v1/ptables/show"
 end
 
-
 child :config_templates do
   extends "api/v1/config_templates/show"
 end

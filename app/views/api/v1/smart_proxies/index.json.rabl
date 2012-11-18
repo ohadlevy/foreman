@@ -1,3 +1,3 @@
 collection @smart_proxies
 
-extends "api/v1/smart_proxies/show"
+attributes :name, :id, :url, :created_at, :updated_at

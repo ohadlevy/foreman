@@ -1,9 +1,3 @@
 collection @reports
 
-
-
-attributes :id, :reported_at, :host_id, :metrics
-
-node :summary do |report|
-	report.summaryStatus
-  end
+extends "api/v1/reports/show"

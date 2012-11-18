@@ -14,7 +14,10 @@ module Api
       param :page, String, :desc => "paginate results"
 
       def index
-        @operatingsystems = Operatingsystem.search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
+        @operatingsystems = Operatingsystem.
+          includes(:media, :architectures, :ptables, :config_templates, :os_default_templates).
+          search_for(params[:search], :order => params[:order]).
+          paginate(:page => params[:page])
       end
 
       api :GET, "/operatingsystems/:id/", "Show an OS."

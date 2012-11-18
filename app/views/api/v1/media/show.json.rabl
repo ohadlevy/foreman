@@ -1,4 +1,4 @@
 object @medium
 
-# solaris specific only fields: media_path, :config_path, :image_path
-attributes :id, :name, :path, :media_path, :config_path, :image_path
+attributes :id, :name, :path
+attributes :media_path, :config_path, :image_path, :if => lambda { |medium| medium.os_family == 'Solaris'}

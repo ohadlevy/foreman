@@ -1,0 +1,14 @@
+gpxe:
+  name: gpxe
+
+finish:
+  name: finish
+
+script:
+  name: script
+
+pxelinux:
+  name: pxelinux
+
+provision:
+  name: provision

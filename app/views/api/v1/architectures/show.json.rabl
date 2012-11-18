@@ -1,5 +1,3 @@
 object @architecture
 
-attributes :name, :id, :operatingsystem_ids
-
-
+attributes :name, :id, :created_at, :updated_at
