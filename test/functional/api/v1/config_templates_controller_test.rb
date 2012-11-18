@@ -20,7 +20,7 @@ class Api::V1::ConfigTemplatesControllerTest < ActionController::TestCase
     assert_response :success
     template = ActiveSupport::JSON.decode(@response.body)
     assert !template.empty?
-    assert_equal template["name"], ConfigTemplate.first.name
+    assert_equal template["config_template"]["name"], ConfigTemplate.first.name
   end
 
   test "should not create invalid" do
