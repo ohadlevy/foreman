@@ -5,14 +5,17 @@ module Api
 
       api :GET, "/hostgroups/", "List all hostgroups."
       param :search, String, :desc => "filter results"
-      param :order,  String, :desc => "sort results"
-      param :page,  String, :desc => "paginate results"
+      param :order, String, :desc => "sort results"
+      param :page, String, :desc => "paginate results"
+
       def index
-        @hostgroups = Hostgroup.search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
+        @hostgroups = Hostgroup.includes(:hostgroup_classes, :group_parameters).
+          search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
       end
 
       api :GET, "/hostgroups/:id/", "Show a hostgroup."
       param :id, :identifier, :required => true
+
       def show
       end
 
@@ -29,6 +32,7 @@ module Api
         param :domain_id, :number
         param :puppet_proxy_id, :number
       end
+
       def create
         @hostgroup = Hostgroup.new(params[:hostgroup])
         process_response @hostgroup.save
@@ -48,12 +52,14 @@ module Api
         param :domain_id, :number
         param :puppet_proxy_id, :number
       end
+
       def update
         process_response @hostgroup.update_attributes(params[:hostgroup])
       end
 
       api :DELETE, "/hostgroups/:id/", "Delete an hostgroup."
       param :id, :identifier, :required => true
+
       def destroy
         process_response @hostgroup.destroy
       end

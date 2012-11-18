@@ -5,14 +5,16 @@ module Api
 
       api :GET, "/compute_resources/", "List all compute resources."
       param :search, String, :desc => "filter results"
-      param :order,  String, :desc => "sort results"
-      param :page,  String, :desc => "paginate results"
+      param :order, String, :desc => "sort results"
+      param :page, String, :desc => "paginate results"
+
       def index
         @compute_resources = ComputeResource.my_compute_resources.search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
       end
 
       api :GET, "/compute_resources/:id/", "Show an compute resource."
       param :id, :identifier, :required => true
+
       def show
       end
 
@@ -30,6 +32,7 @@ module Api
         param :tenant, String, :desc => "for Openstack only"
         param :server, String, :desc => "for Vmware"
       end
+
       def update
         process_response @compute_resource.update_attributes(params[:compute_resource])
       end

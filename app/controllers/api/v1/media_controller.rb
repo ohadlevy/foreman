@@ -11,26 +11,28 @@ where $arch will be substituted for the host\'s actual OS architecture and $vers
 will be substituted for the version of the operating system.
 
 Solaris and Debian media may also use $release.
-eos
+      eos
 
       OS_FAMILY_INFO = <<-eos
 The family that the operating system belongs to.
 
 Available families:
 
-#{Operatingsystem.families.map{|f| "* " + f}.join("\n")}
-eos
+#{Operatingsystem.families.map { |f| "* " + f }.join("\n")}
+      eos
 
       api :GET, "/media/", "List all media."
       param :search, String, :desc => "filter results", :required => false
       param :order, String, :desc => "sort results", :required => false, :desc => "for example, name ASC, or name DESC"
-      param :page,  String, :desc => "paginate results"
+      param :page, String, :desc => "paginate results"
+
       def index
         @media = Medium.search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
       end
 
       api :GET, "/media/:id/", "Show a medium."
       param :id, :identifier, :required => true
+
       def show
       end
 
@@ -40,6 +42,7 @@ eos
         param :path, String, :required => true, :desc => PATH_INFO
         param :os_family, String, :require => false, :desc => OS_FAMILY_INFO
       end
+
       def create
         @medium = Medium.new(params[:medium])
         process_response @medium.save
@@ -52,12 +55,14 @@ eos
         param :os_family, String, :require => false, :allow_nil => true, :desc => OS_FAMILY_INFO
       end
       api :PUT, "/media/:id/", "Update a medium."
+
       def update
         process_response @medium.update_attributes(params[:medium])
       end
 
       param :id, :identifier, :required => true
       api :DELETE, "/media/:id/", "Delete a medium."
+
       def destroy
         process_response @medium.destroy
       end

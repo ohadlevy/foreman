@@ -6,13 +6,15 @@ module Api
       api :GET, "/environments/", "List all environments."
       param :search, String, :desc => "Filter results"
       param :order, String, :desc => "Sort results"
-      param :page,  String, :desc => "paginate results"
+      param :page, String, :desc => "paginate results"
+
       def index
         @environments = Environment.search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
       end
 
       api :GET, "/environments/:id/", "Show an environment."
       param :id, :identifier, :required => true
+
       def show
       end
 
@@ -20,6 +22,7 @@ module Api
       param :environment, Hash, :required => true do
         param :name, String, :required => true
       end
+
       def create
         @environment = Environment.new(params[:environment])
         process_response @environment.save
@@ -30,12 +33,14 @@ module Api
       param :environment, Hash, :required => true do
         param :name, String
       end
+
       def update
         process_response @environment.update_attributes(params[:environment])
       end
 
       api :DELETE, "/environments/:id/", "Delete an environment."
       param :id, :identifier, :required => true
+
       def destroy
         process_response @environment.destroy
       end

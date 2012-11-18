@@ -4,13 +4,15 @@ module Api
       before_filter :find_resource, :only => [:show, :update, :destroy]
 
       api :GET, "/bookmarks/", "List all bookmarks."
-      param :page,  String, :desc => "paginate results"
+      param :page, String, :desc => "paginate results"
+
       def index
-        @bookmarks = Bookmark.paginate(:page => params[:page])
+        @bookmarks = Bookmark.paginate(:page => params[:page]).includes(:owner)
       end
 
       api :GET, "/bookmarks/:id/", "Show a bookmark."
       param :id, :identifier, :required => true
+
       def show
       end
 
@@ -21,6 +23,7 @@ module Api
         param :query, String, :required => true
         param :public, :bool
       end
+
       def create
         @bookmark = Bookmark.new(params[:bookmark])
         process_response @bookmark.save
@@ -34,12 +37,14 @@ module Api
         param :query, String, :required => true
         param :public, :bool
       end
+
       def update
         process_response @bookmark.update_attributes(params[:bookmark])
       end
 
       api :DELETE, "/bookmarks/:id/", "Delete a bookmark."
       param :id, :identifier, :required => true
+
       def destroy
         process_response @bookmark.destroy
       end

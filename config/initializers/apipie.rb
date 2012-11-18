@@ -45,7 +45,7 @@ class IdentifierValidator < Apipie::Validator::BaseValidator
   end
 
   def description
-    "Must be an identifier, string from 2 to 128 characters containting only alphanumeric characters, " +
+    "Must be an identifier, string from 1 to 128 characters containing only alphanumeric characters, " +
         "space, '_', '-' with no leading or trailing space.."
   end
 end

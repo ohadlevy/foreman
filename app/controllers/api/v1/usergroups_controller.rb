@@ -4,13 +4,15 @@ module Api
       before_filter :find_resource, :only => %w{show update destroy}
 
       api :GET, "/usergroups/", "List all usergroups."
-      param :page,  String, :desc => "paginate results"
+      param :page, String, :desc => "paginate results"
+
       def index
         @usergroups = Usergroup.paginate(:page => params[:page])
       end
 
       api :GET, "/usergroups/:id/", "Show a usergroup."
       param :id, :identifier, :required => true
+
       def show
       end
 
@@ -18,6 +20,7 @@ module Api
       param :usergroup, Hash, :required => true do
         param :name, String, :required => true
       end
+
       def create
         @usergroup = Usergroup.new(params[:usergroup])
         process_response @usergroup.save
@@ -28,12 +31,14 @@ module Api
       param :usergroup, Hash, :required => true do
         param :name, String, :required => true
       end
+
       def update
         process_response @usergroup.update_attributes(params[:usergroup])
       end
 
       api :DELETE, "/usergroups/:id/", "Delete a usergroup."
       param :id, String, :required => true
+
       def destroy
         process_response @usergroup.destroy
       end

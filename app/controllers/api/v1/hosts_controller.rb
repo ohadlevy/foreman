@@ -1,19 +1,20 @@
 module Api
   module V1
     class HostsController < V1::BaseController
-      include Foreman::Controller::HostDetails
       before_filter :find_resource, :only => %w{show update destroy}
 
       api :GET, "/hosts/", "List all hosts."
       param :search, String, :desc => "Filter results"
       param :order, String, :desc => "Sort results"
-      param :page,  String, :desc => "paginate results"
+      param :page, String, :desc => "paginate results"
+
       def index
-        @hosts = Host.my_hosts.search_for(params[:search],:order => params[:order]).paginate(:page => params[:page])
+        @hosts = Host.my_hosts.search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
       end
 
       api :GET, "/hosts/:id/", "Show a host."
       param :id, :identifier, :required => true
+
       def show
       end
 
@@ -38,6 +39,7 @@ module Api
         param :image_id, :number
         param :host_parameters_attributes, Array
       end
+
       def create
         @host = Host.new(params[:host])
         @host.managed = true if params[:host][:managed].nil?
@@ -67,12 +69,14 @@ module Api
         param :image_id, :number
         param :host_parameters_attributes, Array
       end
+
       def update
         process_response @host.update_attributes(params[:host])
       end
 
       api :DELETE, "/hosts/:id/", "Delete an host."
       param :id, :identifier, :required => true
+
       def destroy
         process_response @host.destroy
       end
@@ -83,7 +87,6 @@ module Api
       def forward_request_url
         @host.request_url = request.host_with_port if @host.respond_to?(:request_url)
       end
-
 
     end
   end

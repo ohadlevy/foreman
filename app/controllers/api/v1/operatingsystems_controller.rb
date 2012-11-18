@@ -11,13 +11,15 @@ module Api
       api :GET, "/operatingsystems/", "List all operating systems."
       param :search, String, :desc => "filter results", :required => false
       param :order, String, :desc => "sort results", :required => false, :desc => "for example, name ASC, or name DESC"
-      param :page,  String, :desc => "paginate results"
+      param :page, String, :desc => "paginate results"
+
       def index
         @operatingsystems = Operatingsystem.search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
       end
 
       api :GET, "/operatingsystems/:id/", "Show an OS."
       param :id, String, :required => true
+
       def show
       end
 
@@ -28,7 +30,8 @@ module Api
         param :minor, String, :required => true
         param :family, String
         param :release_name, String
-     end
+      end
+
       def create
         @operatingsystem = Operatingsystem.new(params[:operatingsystem])
         process_response @operatingsystem.save
@@ -43,12 +46,14 @@ module Api
         param :family, String
         param :release_name, String
       end
+
       def update
         process_response @operatingsystem.update_attributes(params[:operatingsystem])
       end
 
       api :DELETE, "/operatingsystems/:id/", "Delete an OS."
       param :id, String, :required => true
+
       def destroy
         process_response @operatingsystem.destroy
       end
@@ -57,6 +62,7 @@ module Api
       param :id, String, :required => true
       param :medium, String
       param :architecture, String
+
       def bootfiles
         medium = Medium.find_by_name(params[:medium])
         arch   = Architecture.find_by_name(params[:architecture])

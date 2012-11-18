@@ -92,10 +92,11 @@ module Api
     # @host = Host.find_resource params[:id]
     def find_resource
       resource = resource_identifying_attributes.find do |key|
+        next if key=='id' and params[:id].to_i == 0
         method = "find_by_#{key}"
         resource_class.respond_to?(method) and
-            (resource = resource_class.send method, params[:id]) and
-            break resource
+          (resource = resource_class.send method, params[:id]) and
+          break resource
       end
 
       if resource

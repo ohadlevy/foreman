@@ -17,13 +17,15 @@ module Api
       api :GET, "/domains/", "List of domains"
       param :search, String, :desc => "Filter results"
       param :order, String, :desc => "Sort results"
-      param :page,  String, :desc => "paginate results"
+      param :page, String, :desc => "paginate results"
+
       def index
         @domains = Domain.search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
       end
 
       api :GET, "/domains/:id/", "Show a domain."
       param :id, :identifier, :required => true, :desc => "May be numerical id or domain name"
+
       def show
       end
 
@@ -39,6 +41,7 @@ module Api
         param :dns_id, :number, :required => false, :allow_nil => true, :desc => "DNS Proxy to use within this domain"
         param :domain_parameters_attributes, Array, :required => false, :desc => "Array of parameters (name, value)"
       end
+
       def create
         @domain = Domain.new(params[:domain])
         process_response @domain.save
@@ -52,12 +55,14 @@ module Api
         param :dns_id, :number, :required => false, :allow_nil => true, :desc => "DNS Proxy to use within this domain"
         param :domain_parameters_attributes, Array, :required => false, :desc => "Array of parameters (name, value)"
       end
+
       def update
         process_response @domain.update_attributes(params[:domain])
       end
 
       api :DELETE, "/domains/:id/", "Delete a domain."
       param :id, :identifier, :required => true
+
       def destroy
         process_response @domain.destroy
       end
