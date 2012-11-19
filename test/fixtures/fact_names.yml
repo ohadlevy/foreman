@@ -1,5 +1,5 @@
-kernalversion:
-  name:        kernalversion
+kernelversion:
+  name:        kernelversion
 
 ipaddress:
   name:        ipaddress

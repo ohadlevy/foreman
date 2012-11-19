@@ -2,7 +2,6 @@
 
 one:
   key: port
-  path: fqdn
   key_type: integer
   validator_type:
   default_value: 80
@@ -10,7 +9,6 @@ one:
 
 two:
   key: ssl_port
-  path: fqdn
   key_type: integer
   validator_type: list
   validator_rule: 443,8443
@@ -19,7 +17,7 @@ two:
 
 three:
   key: ssl
-  key_type: Boolean
+  key_type: boolean
   validator_rule:
   default_value: true
   override: true
