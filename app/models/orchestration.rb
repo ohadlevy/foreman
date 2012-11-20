@@ -10,14 +10,6 @@ module Orchestration
       before_validation :set_queue
       before_validation :setup_clone
 
-      # extend our Host model to know how to handle subsystems
-      include Orchestration::DNS
-      include Orchestration::DHCP
-      include Orchestration::TFTP
-      include Orchestration::Puppetca
-      include Orchestration::Compute
-      include Orchestration::SSHProvision
-
       # save handles both creation and update of hosts
       before_save :on_save
       after_commit :post_commit
@@ -187,7 +179,7 @@ module Orchestration
     end
 
     def update_cache
-      Rails.cache.write(progress_report_id, (queue.all + post_queue.all).to_json,  :expires_in => 5.minutes)
+      Rails.cache.write(progress_report_id, (queue.all + post_queue.all).to_json, :expires_in => 5.minutes)
     end
 
   end

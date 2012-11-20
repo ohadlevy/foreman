@@ -138,6 +138,8 @@ end
 
 class ActiveModel::Errors
   def are_all_conflicts?
-    self[:conflict].count == self.count
+    # this should include all conflict sections + nested attributes conflict sections
+    # e.g. Host.errors['conflict'] + Host.errors['interface.conflict']
+    self.keys.select{|e| e.to_s['conflict']}.count == self.count
   end
 end

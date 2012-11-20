@@ -508,7 +508,19 @@ class HostTest < ActiveSupport::TestCase
     assert host.save!
   end
 
+
+  test "should have only one bootable interface" do
+    h = hosts(:redhat)
+    assert_equal 2, h.interfaces.count
+    assert h.valid?
+    h.interfaces_attributes = [{:name => "dummy-bootable", :ip => "2.3.4.102", :mac => "aa:bb:cd:cd:ee:ff", :subnet => h.subnet, :type => 'Bootable' }]
+    assert !h.valid?
+    assert_equal "Only one bootable interface is allowed", h.errors['interfaces.type'][0]
+    assert_equal 2, h.interfaces.count
+  end
+
   # Token tests
+
   test "built should clean tokens" do
     Setting[:token_duration] = 30
     h = hosts(:one)
@@ -541,4 +553,5 @@ class HostTest < ActiveSupport::TestCase
     h = hosts(:one)
     assert_equal h.token, nil
   end
+
 end

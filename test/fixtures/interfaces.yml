@@ -1,0 +1,105 @@
+one:
+  name: my5name.mydomain.net
+  ip: "2.3.4.1"
+  mac: aabbCCddedee
+  subnet: one
+  type: Bootable
+
+two:
+  name: temp.yourdomain.net
+  ip: "2.3.4.55"
+  mac: "dd:bd:cc:dd:ee:ff"
+  domain: yourdomain
+  subnet: one
+  type: NIC
+  host: redhat
+
+otherfullhost:
+  name: otherfullhost
+  mac: aabbe2ddee11
+  ip: 2.3.4.6
+  domain: mydomain
+  subnet: one
+  type: NIC
+
+anotherfullhost:
+  name: anotherfullhost
+  mac: aa2becddee22
+  ip: 2.3.4.7
+  domain: mydomain
+  subnet: one
+  type: NIC
+
+myfullhost:
+  name: myfullname.mydomain.net
+  ip: 3.3.4.5
+  mac: 1122b3445566
+  subnet: two
+  domain: mydomain
+  type: Bootable
+
+redhat:
+  name: temp01.yourdomain.net
+  ip: 2.3.4.143
+  mac: ad:ab:cc:dd:ee:ff
+  domain: yourdomain
+  subnet: one
+  host: redhat
+  type: Bootable
+
+ubuntu:
+  name: temp-01.yourdomain.net
+  ip: 2.3.4.105
+  mac: ac:bb:6c:dd:ee:ff
+  domain: yourdomain
+  subnet: one
+  type: Bootable
+
+minimal:
+  name: temp-02.useless.net
+  ip: 2.3.4.16
+  mac: ac:bb:3c:aa:ee:ff
+  domain: useless
+  type: NIC
+
+sol10host:
+  name: sol10host
+  ip: 2.3.4.9
+  mac: 44:5a:66:77:88:99
+  subnet: one
+  domain: yourdomain
+  type: Bootable
+
+suse:
+  name: suse01.yourdomain.net
+  ip: 2.3.4.205
+  mac: ad:dc:cc:da:ae:ff
+  domain: yourdomain
+  subnet: one
+  type: Bootable
+
+dhcp:
+  name: dhcp.mydomain.net
+  ip: "2.3.4.110"
+  mac: da:bb:ad:dd:ee:ee
+  subnet: one
+  domain: mydomain
+  type: Bootable
+
+sp_dhcp1:
+  name: sdhcp.mydomain.net
+  ip: "2.3.4.99"
+  mac: da:bb:cc:9d:ee:ae
+  domain: mydomain
+  subnet: one
+  type: Bootable
+
+sp_dhcp2:
+  subnet: one
+  name: dhcp-bmc.mydomain.net
+  ip: 2.3.4.50
+  mac: da:5b:cc:dd:ee:aa
+  domain: mydomain
+  host: sp_dhcp
+  type: BMC
+  attrs: <%= {:provider => 'IPMI'}.to_yaml.inspect %>
