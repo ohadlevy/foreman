@@ -1,9 +1,5 @@
 module Foreman::Model
   class Rackspace < ComputeResource
-   
-    def to_label
-      "#{name} (#{provider_friendly_name})"
-    end
 
     def provided_attributes
       super.merge({ :ip => :public_ip_address })
@@ -24,21 +20,10 @@ module Foreman::Model
     end
 
     def create_vm args = { }
-      args = vm_instance_defaults.merge(args.to_hash.symbolize_keys)
-
-      x=vm_instance_defaults.merge(args.to_hash)
-      vm = client.servers.create x 
-      vm.wait_for { ready? and not vm.public_ip_address.nil?}
-      vm
-
-    rescue Fog::Errors::Error => e
-      logger.debug "Fog error: #{e.class}:#{e.message}\n " + e.backtrace.join("\n ")
-      errors.add(:base, e.message.to_s)
-      false
-    rescue Exception =>e
+      super(args)
+    rescue Exception => e
       logger.debug "Unhandled Rackspace error: #{e.class}:#{e.message}\n " + e.backtrace.join("\n ")
       errors.add(:base, e.message.to_s)
-
       false
     end
 
@@ -47,21 +32,22 @@ module Foreman::Model
     end
 
     def regions
-      ['ORD','DFW','LON']
+      ['ORD', 'DFW', 'LON']
     end
-  
+
     def endpoint region
-	endpoint = case region
-	  when 'ORD' then
-		'https://ord.servers.api.rackspacecloud.com/v2'
-	  when 'DFW' then
-		'https://dfw.servers.api.rackspacecloud.com/v2'
-	  when 'LON' then
-		'https://lon.servers.api.rackspacecloud.com/v2'
-	  else 'https://ord.servers.api.rackspacecloud.com/v2'
-    	end
+      case region
+        when 'ORD' then
+          'https://ord.servers.api.rackspacecloud.com/v2'
+        when 'DFW' then
+          'https://dfw.servers.api.rackspacecloud.com/v2'
+        when 'LON' then
+          'https://lon.servers.api.rackspacecloud.com/v2'
+        else
+          'https://ord.servers.api.rackspacecloud.com/v2'
+      end
     end
-	
+
     def zones
       ["rackspace"]
     end
@@ -78,22 +64,11 @@ module Foreman::Model
     end
 
     def region= value
-       self.uuid = value
+      self.uuid = value
     end
 
     def region
-	uuid
-    end
-
-    def console(uuid)
-      vm = find_vm_by_uuid(uuid)
-      vm.console_output.body
-    end
-
-    def destroy_vm(uuid)
-      vm = find_vm_by_uuid(uuid)
-      vm.destroy if vm
-      true
+      uuid
     end
 
     # not supporting update at the moment
@@ -102,14 +77,14 @@ module Foreman::Model
     end
 
     def provider_friendly_name
-	"Rackspace"
+      "Rackspace"
     end
 
     private
 
     def client
-	    @client = Fog::Compute.new(:provider => "Rackspace", :version => 'v2', :rackspace_api_key => password, :rackspace_username => user, :rackspace_auth_url => url, :rackspace_endpoint => endpoint(region))
-	    return @client
+      @client = Fog::Compute.new(:provider => "Rackspace", :version => 'v2', :rackspace_api_key => password, :rackspace_username => user, :rackspace_auth_url => url, :rackspace_endpoint => endpoint(region))
+      return @client
     end
 
     def vm_instance_defaults

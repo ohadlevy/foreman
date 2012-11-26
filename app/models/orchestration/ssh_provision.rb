@@ -45,14 +45,14 @@ module Orchestration::SSHProvision
 
     def setSSHWaitForResponse
       logger.info "Starting SSH provisioning script - waiting for #{ip} to respond"
-      if compute_resource.respond_to?(:key_pair)
-	      credentials = { :key_data => [compute_resource.key_pair.secret] }
-      elsif vm.respond_to?(:password) and not vm.password.blank?
-	  credentials = { :password => vm.password, :auth_methods => ["password"] }
+      if compute_resource.respond_to?(:key_pair) and compute_resource.key_pair.try(:secret)
+        credentials = { :key_data => [compute_resource.key_pair.secret] }
+      elsif vm.respond_to?(:password) and vm.password.present?
+        credentials = { :password => vm.password, :auth_methods => ["password"] }
       else
-	      raise 'Unable to find proper authentication method'
+        raise 'Unable to find proper authentication method'
       end
-      self.client = Foreman::Provision::SSH.new ip, image.username, {:template => template_file.path, :uuid => uuid}.merge(credentials)
+      self.client = Foreman::Provision::SSH.new ip, image.username, { :template => template_file.path, :uuid => uuid }.merge(credentials)
 
     rescue => e
       failure "Failed to login via SSH to #{name}: #{e}", e.backtrace
