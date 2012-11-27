@@ -1,6 +1,8 @@
 module Foreman::Model
   class Rackspace < ComputeResource
 
+    validates_presence_of :user, :password, :region
+
     def provided_attributes
       super.merge({ :ip => :public_ip_address })
     end
@@ -35,13 +37,11 @@ module Foreman::Model
       ['ORD', 'DFW', 'LON']
     end
 
-    def endpoint region
+    def endpoint
       case region
-        when 'ORD' then
-          'https://ord.servers.api.rackspacecloud.com/v2'
-        when 'DFW' then
+        when 'DFW'
           'https://dfw.servers.api.rackspacecloud.com/v2'
-        when 'LON' then
+        when 'LON'
           'https://lon.servers.api.rackspacecloud.com/v2'
         else
           'https://ord.servers.api.rackspacecloud.com/v2'
@@ -57,8 +57,7 @@ module Foreman::Model
     end
 
     def test_connection
-      super
-      errors[:user].empty? and errors[:password] and regions
+      super and flavors
     rescue Fog::Compute::Rackspace::Error => e
       errors[:base] << e.message
     end
@@ -83,7 +82,7 @@ module Foreman::Model
     private
 
     def client
-      @client = Fog::Compute.new(:provider => "Rackspace", :version => 'v2', :rackspace_api_key => password, :rackspace_username => user, :rackspace_auth_url => url, :rackspace_endpoint => endpoint(region))
+      @client = Fog::Compute.new(:provider => "Rackspace", :version => 'v2', :rackspace_api_key => password, :rackspace_username => user, :rackspace_auth_url => url, :rackspace_endpoint => endpoint)
       return @client
     end
 
