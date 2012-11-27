@@ -80,7 +80,7 @@ class ComputeResource < ActiveRecord::Base
 
   # returns a new fog server instance
   def new_vm attr={}
-    client.servers.new vm_instance_defaults.merge(attr)
+    client.servers.new vm_instance_defaults.merge(attr.to_hash.symbolize_keys)
   end
 
   # return fog new interface ( network adapter )
@@ -106,7 +106,7 @@ class ComputeResource < ActiveRecord::Base
   end
 
   def create_vm args = {}
-    client.servers.create vm_instance_defaults.merge(args.to_hash)
+    client.servers.create vm_instance_defaults.merge(attr.to_hash.symbolize_keys)
   rescue Fog::Errors::Error => e
     logger.debug "Fog error: #{e.message}\n " + e.backtrace.join("\n ")
     errors.add(:base, e.message.to_s)
