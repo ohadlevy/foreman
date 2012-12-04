@@ -3,7 +3,6 @@
 
   <%= selectable_f f, :role, Interface::TYPES %>
   <%= text_f f, :name, :help_inline => "DNS name" %>
-  <%= text_f f, :ip, :label => "IP"  %>
   <%= text_f f, :mac, :label => "MAC" %>
   <%= select_f f, :domain_id, accessible_domains, :id, :to_label,
                { :include_blank => accessible_domains.any? ? true : "No domains"},
@@ -13,6 +12,7 @@
                { :disabled => domain_subnets.empty? ? true : false,
                  :help_inline   => remove_child_link("X", f, { :title => 'remove network interface', :class => 'label label-important' })
                } %>
+  <%= text_f f, :ip, :label => "IP"  %>
   <%# TODO: make this via AJAX %>
   <% if f.object.role == "BMC" %>
     <%= text_f f, :username  %>
