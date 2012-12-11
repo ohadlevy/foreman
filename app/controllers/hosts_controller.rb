@@ -86,6 +86,7 @@ class HostsController < ApplicationController
   end
 
   def create
+    params[:host][:type] ||= "ManagedHost" if params[:host]
     @host = Host.new(params[:host])
     @host.managed = true if (params[:host] && params[:host][:managed].nil?)
     forward_url_options
