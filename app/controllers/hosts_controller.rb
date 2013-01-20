@@ -543,15 +543,6 @@ class HostsController < ApplicationController
     redirect_to(hosts_path)
   end
 
-  # Returns the associations to include when doing a search.
-  # If the user has a fact_filter then we need to include :fact_values
-  # We do not include most associations unless we are processing a html page
-  def included_associations(include = [])
-    include += [:hostgroup, :compute_resource, :operatingsystem, :environment, :model ]
-    include += [:fact_values] if User.current.user_facts.any?
-    include
-  end
-
   # this is required for template generation (such as pxelinux) which is not done via a web request
   def forward_url_options(host = @host)
     host.url_options = url_options if @host.respond_to?(:url_options)
