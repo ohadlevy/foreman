@@ -1,8 +1,10 @@
 require 'foreman/controller/host_details'
+require 'foreman/controller/taxonomy_multiple'
 
 class HostsController < ApplicationController
   include Foreman::Controller::HostDetails
   include Foreman::Controller::AutoCompleteSearch
+  include Foreman::Controller::TaxonomyMultiple
 
   # actions which don't require authentication and are always treated as the admin user
   ANONYMOUS_ACTIONS=[ :externalNodes, :lookup ]
@@ -20,8 +22,7 @@ class HostsController < ApplicationController
     :select_multiple_hostgroup, :select_multiple_environment, :multiple_parameters, :multiple_destroy,
     :multiple_enable, :multiple_disable, :submit_multiple_disable, :submit_multiple_enable, :update_multiple_hostgroup,
     :update_multiple_environment, :submit_multiple_build, :submit_multiple_destroy, :update_multiple_puppetrun,
-    :multiple_puppetrun, :select_multiple_organization, :update_multiple_organization, :select_multiple_location,
-    :update_multiple_location]
+    :multiple_puppetrun]
   before_filter :find_by_name, :only => %w[show edit update destroy puppetrun setBuild cancelBuild
     storeconfig_klasses clone pxe_config toggle_manage power console]
 
@@ -34,7 +35,7 @@ class HostsController < ApplicationController
       error e.to_s
       search = Host.my_hosts.search_for ''
     end
-      respond_to do |format|
+    respond_to do |format|
       format.html do
         @hosts = search.paginate :page => params[:page], :include => included_associations
         # SQL optimizations queries
@@ -372,47 +373,6 @@ class HostsController < ApplicationController
     deny_access unless Setting[:puppetrun]
   end
 
-  def select_multiple_organization
-  end
-
-  def select_multiple_location
-  end
-
-  def update_multiple_organization
-    # simple validations
-    if (params[:organization].nil?) or (id=params[:organization][:id]).nil?
-      error 'No Organization selected!'
-      redirect_to(select_multiple_organization_hosts_path) and return
-    end
-    org = Organization.find(id) rescue nil
-
-    #update the hosts
-    @hosts.each do |host|
-      host.organization = org
-      host.save(:validate => false)
-    end
-
-    notice 'Updated hosts: Changed Organization'
-    redirect_back_or_to hosts_path
-  end
-
-  def update_multiple_location
-    # simple validations
-    if (params[:location].nil?) or (id=params[:location][:id]).nil?
-      error 'No Location selected!'
-      redirect_to(select_multiple_location_hosts_path) and return
-    end
-    location = Location.find(id) rescue nil
-
-    #update the hosts
-    @hosts.each do |host|
-      host.location = location
-      host.save(:validate => false)
-    end
-
-    notice 'Updated hosts: Changed Location'
-    redirect_back_or_to hosts_path
-  end
 
   def update_multiple_puppetrun
     return deny_access unless Setting[:puppetrun]
