@@ -21,6 +21,7 @@ class HostsController < ApplicationController
     :multiple_puppetrun]
   before_filter :find_by_name, :only => %w[show edit update destroy puppetrun setBuild cancelBuild
     storeconfig_klasses clone pxe_config toggle_manage power console]
+  before_filter :set_base_type, :only => %w[current_parameters puppetclass_parameters process_hostgroup hostgroup_or_environment_selected create]
 
   helper :hosts, :reports
 
@@ -69,7 +70,7 @@ class HostsController < ApplicationController
   end
 
   def new
-    @host = Host.new :managed => true
+    @host = Host.new :managed => true, :type => 'Host::Base'
   end
 
   # Clone the host
@@ -137,7 +138,7 @@ class HostsController < ApplicationController
       @hostgroup   = Hostgroup.find(params[:hostgroup_id])     unless params[:hostgroup_id].empty?
       @host        = Host.find(params[:host_id])               if params[:host_id].to_i > 0
       if @environment or @hostgroup
-        @host ||= Host.new
+        @host ||= Host.new :type => params['host']['type']
         @host.hostgroup   = @hostgroup if @hostgroup
         @host.environment = @environment if @environment
         render :partial => 'puppetclasses/class_selection', :locals => {:obj => (@host)}
@@ -419,7 +420,7 @@ class HostsController < ApplicationController
       @domain          = @hostgroup.domain
       @subnet          = @hostgroup.subnet
 
-      @host = Host.new
+      @host = Host.new :type => params['host']['type']
       @host.hostgroup = @hostgroup
       @host.compute_resource_id = params[:compute_resource_id] if params[:compute_resource_id].present?
       @host.set_hostgroup_defaults
@@ -493,6 +494,11 @@ class HostsController < ApplicationController
     return false unless @host
     deny_access and return unless User.current.admin? or Host.my_hosts.include?(@host)
   end
+
+  def set_base_type
+    params['host'] ||= {}
+    params['host']['type'] ||= 'Host::Base'
+  end 
 
   def load_vars_for_ajax
     return unless @host

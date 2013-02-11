@@ -240,7 +240,8 @@ module HostsHelper
                                   :disabled => !Setting[:puppetrun],
                                   :title => "Trigger a puppetrun on a node; requires that puppet run is enabled"),
             link_to_if_authorized("All Puppet Classes", hash_for_storeconfig_klasses_host_path(:id => host).merge(:auth_action => :read),
-                                  :disabled => host.resources.count == 0,
+                                  :disabled => (host.resources.count == 0 rescue false),
+
                                   :title => "Show all host puppet classes, requires storeconfigs")
         ),
         button_group(

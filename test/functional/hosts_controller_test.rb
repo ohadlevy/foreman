@@ -23,13 +23,13 @@ class HostsControllerTest < ActionController::TestCase
   end
 
   def test_create_invalid
-    Host.any_instance.stubs(:valid?).returns(false)
+    Host::Base.any_instance.stubs(:valid?).returns(false)
     post :create, {}, set_session_user
     assert_template 'new'
   end
 
   def test_create_valid
-    Host.any_instance.stubs(:valid?).returns(true)
+    Host::Base.any_instance.stubs(:valid?).returns(true)
     post :create, {:host => {:name => "test"}}, set_session_user
     assert_redirected_to host_url(assigns('host'))
   end
@@ -114,19 +114,19 @@ class HostsControllerTest < ActionController::TestCase
   end
 
   def test_update_invalid
-    Host.any_instance.stubs(:valid?).returns(false)
+    Host::Base.any_instance.stubs(:valid?).returns(false)
     put :update, {:id => Host.first.name}, set_session_user
     assert_template 'edit'
   end
 
   def test_update_valid
-    Host.any_instance.stubs(:valid?).returns(true)
+    Host::Base.any_instance.stubs(:valid?).returns(true)
     put :update, {:id => Host.first.name}, set_session_user
     assert_redirected_to host_url(assigns(:host))
   end
 
   def test_update_valid_json
-    Host.any_instance.stubs(:valid?).returns(true)
+    Host::Base.any_instance.stubs(:valid?).returns(true)
     put :update, {:format => "json", :id => Host.first.name}, set_session_user
     host = ActiveSupport::JSON.decode(@response.body)
     assert_response :ok
@@ -786,6 +786,7 @@ class HostsControllerTest < ActionController::TestCase
     User.current = users(:admin)
     disable_orchestration
     @host = Host.create(:name => "myfullhost",
+                        :type            => 'Host::Base',
                         :mac             => "aabbecddeeff",
                         :ip              => "2.3.4.99",
                         :domain          => domains(:mydomain),
