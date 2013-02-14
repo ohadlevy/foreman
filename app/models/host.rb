@@ -3,10 +3,10 @@ module Host
   def self.method_missing(method, *args, &block)
     super
   rescue NoMethodError
-    if [:create, :new, :create!].includes?(method)
-      args[:type] ||= 'Host::Managed'
+    if [:create, :new, :create!].include?(method)
+      args[0][:type] ||= 'Host::Managed'
     end
-    Host::Base.send(method,*args, &block)
+    Host::Managed.send(method,*args, &block)
   end
 
 end
