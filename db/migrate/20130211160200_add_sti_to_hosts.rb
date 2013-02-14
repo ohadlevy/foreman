@@ -1,7 +1,7 @@
 class AddStiToHosts < ActiveRecord::Migration
   def self.up
     add_column :hosts, :type, :string
-    execute "UPDATE hosts set type='Host::Base'"
+    execute "UPDATE hosts set type='Host::Managed'"
   end
 
   def self.down

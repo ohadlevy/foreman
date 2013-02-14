@@ -23,7 +23,7 @@ class ParameterTest < ActiveSupport::TestCase
     host = Host.create :name => "myfullhost", :mac => "aabbecddeeff", :ip => "123.05.02.03",
     :domain => domain , :operatingsystem => Operatingsystem.first, :hostgroup => hostgroup,
     :architecture => Architecture.first, :environment => Environment.first, :disk => "empty partition",
-    :type => 'Host::Base'
+    :type => 'Host::Managed'
 
     assert_equal "cat", host.host_params["animal"]
 

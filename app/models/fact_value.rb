@@ -1,6 +1,6 @@
 class FactValue < ActiveRecord::Base
   belongs_to :fact_name
-  belongs_to :host, :class_name => 'Host::Base'
+  belongs_to :host, :class_name => 'Host::Managed'
   delegate :name, :to => :fact_name
   has_many :hostgroup, :through => :host
 

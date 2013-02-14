@@ -7,41 +7,41 @@ class HostTest < ActiveSupport::TestCase
   end
 
   test "should not save without a hostname" do
-    host = Host.new :type => 'Host::Base'
+    host = Host.new :type => 'Host::Managed'
     assert !host.save
   end
 
   test "should fix mac address" do
-    host = Host.create :name => "myhost", :mac => "aabbccddeeff", :type => 'Host::Base'
+    host = Host.create :name => "myhost", :mac => "aabbccddeeff", :type => 'Host::Managed'
     assert_equal "aa:bb:cc:dd:ee:ff", host.mac
   end
 
   test "should fix ip address if a leading zero is used" do
-    host = Host.create :name => "myhost", :mac => "aabbccddeeff", :ip => "123.01.02.03", :type => 'Host::Base'
+    host = Host.create :name => "myhost", :mac => "aabbccddeeff", :ip => "123.01.02.03", :type => 'Host::Managed'
     assert_equal "123.1.2.3", host.ip
   end
 
   test "should add domain name to hostname" do
     host = Host.create :name => "myhost", :mac => "aabbccddeeff", :ip => "123.01.02.03",
-      :domain => Domain.find_or_create_by_name("company.com"), :type => 'Host::Base'
+      :domain => Domain.find_or_create_by_name("company.com"), :type => 'Host::Managed'
     assert_equal "myhost.company.com", host.name
   end
 
   test "should not add domain name to hostname if it already include it" do
     host = Host.create :name => "myhost.COMPANY.COM", :mac => "aabbccddeeff", :ip => "123.1.2.3",
-      :domain => Domain.find_or_create_by_name("company.com"), :type => 'Host::Base'
+      :domain => Domain.find_or_create_by_name("company.com"), :type => 'Host::Managed'
     assert_equal "myhost.COMPANY.COM", host.name
   end
 
   test "should add hostname if it contains domain name" do
     host = Host.create :name => "myhost.company.com", :mac => "aabbccddeeff", :ip => "123.01.02.03",
-      :domain => Domain.find_or_create_by_name("company.com"), :type => 'Host::Base'
+      :domain => Domain.find_or_create_by_name("company.com"), :type => 'Host::Managed'
     assert_equal "myhost.company.com", host.name
   end
 
   test "should save hosts with full stop in their name" do
     host = Host.create :name => "my.host.company.com", :mac => "aabbccddeeff", :ip => "123.01.02.03",
-      :domain => Domain.find_or_create_by_name("company.com"), :type => 'Host::Base'
+      :domain => Domain.find_or_create_by_name("company.com"), :type => 'Host::Managed'
     assert_equal "my.host.company.com", host.name
   end
 
@@ -50,13 +50,13 @@ class HostTest < ActiveSupport::TestCase
     host = Host.create :name => "myfullhost", :mac => "aabbecddeeff", :ip => "2.3.4.3",
       :domain => domains(:mydomain), :operatingsystem => operatingsystems(:redhat),
       :subnet => subnets(:one), :architecture => architectures(:x86_64), :puppet_proxy => smart_proxies(:puppetmaster),
-      :environment => environments(:production), :disk => "empty partition", :type => 'Host::Base'
+      :environment => environments(:production), :disk => "empty partition", :type => 'Host::Managed'
     assert host.valid?
     assert !host.new_record?
   end
 
   test "should import facts from yaml stream" do
-    h=Host.new :name => "sinn1636.lan", :type => 'Host::Base'
+    h=Host.new :name => "sinn1636.lan", :type => 'Host::Managed'
     h.disk = "!" # workaround for now
     assert h.importFacts("sinn1636.lan", YAML::load_file(File.expand_path(File.dirname(__FILE__) + "/facts.yml")).values)
   end
@@ -70,7 +70,7 @@ class HostTest < ActiveSupport::TestCase
       host = Host.create :name => "myfullhost", :mac => "aabbecddeeff", :ip => "2.4.4.03",
         :domain => domains(:mydomain), :operatingsystem => Operatingsystem.first, :subnet => subnets(:one),
         :architecture => Architecture.first, :environment => Environment.first, :managed => true,
-        :type => 'Host::Base'
+        :type => 'Host::Managed'
       assert !host.valid?
     end
   end
@@ -78,21 +78,21 @@ class HostTest < ActiveSupport::TestCase
   test "should save if neither ptable or disk are defined when the host is not managed" do
     host = Host.create :name => "myfullhost", :mac => "aabbecddeeff", :ip => "2.3.4.03",
       :domain => domains(:mydomain), :operatingsystem => operatingsystems(:redhat), :subnet => subnets(:one), :puppet_proxy => smart_proxies(:puppetmaster),
-      :subnet => subnets(:one), :architecture => architectures(:x86_64), :environment => environments(:production), :managed => false, :type => 'Host::Base'
+      :subnet => subnets(:one), :architecture => architectures(:x86_64), :environment => environments(:production), :managed => false, :type => 'Host::Managed'
     assert host.valid?
   end
 
   test "should save if ptable is defined" do
     host = Host.create :name => "myfullhost", :mac => "aabbecddeeff", :ip => "2.3.4.03",
       :domain => domains(:mydomain), :operatingsystem => operatingsystems(:redhat), :puppet_proxy => smart_proxies(:puppetmaster),
-      :subnet => subnets(:one), :architecture => architectures(:x86_64), :environment => environments(:production), :ptable => Ptable.first, :type => 'Host::Base'
+      :subnet => subnets(:one), :architecture => architectures(:x86_64), :environment => environments(:production), :ptable => Ptable.first, :type => 'Host::Managed'
     assert !host.new_record?
   end
 
   test "should save if disk is defined" do
     host = Host.create :name => "myfullhost", :mac => "aabbecddeeff", :ip => "2.3.4.03",
       :domain => domains(:mydomain), :operatingsystem => operatingsystems(:redhat), :subnet => subnets(:one),
-      :architecture => architectures(:x86_64), :environment => environments(:production), :disk => "aaa", :puppet_proxy => smart_proxies(:puppetmaster), :type => 'Host::Base'
+      :architecture => architectures(:x86_64), :environment => environments(:production), :disk => "aaa", :puppet_proxy => smart_proxies(:puppetmaster), :type => 'Host::Managed'
     assert !host.new_record?
   end
 
@@ -100,7 +100,7 @@ class HostTest < ActiveSupport::TestCase
     if unattended?
       host = Host.create :name => "myfullhost", :mac => "aabbecddeeff", :ip => "123.05.02.03",
         :domain => domains(:mydomain), :operatingsystem => Operatingsystem.first, :subnet => subnets(:one), :managed => true,
-        :architecture => Architecture.first, :environment => Environment.first, :ptable => Ptable.first, :puppet_proxy => smart_proxies(:puppetmaster), :type => 'Host::Base'
+        :architecture => Architecture.first, :environment => Environment.first, :ptable => Ptable.first, :puppet_proxy => smart_proxies(:puppetmaster), :type => 'Host::Managed'
       assert !host.valid?
     end
   end
@@ -111,7 +111,7 @@ class HostTest < ActiveSupport::TestCase
     host = Host.create :name => "myfullhost", :mac => "aabbacddeeff", :ip => "2.3.4.12",
       :domain => domains(:mydomain), :operatingsystem => operatingsystems(:redhat), :subnet => subnets(:one),
       :architecture => architectures(:x86_64), :environment => environments(:global_puppetmaster), :disk => "aaa",
-      :puppet_proxy => smart_proxies(:puppetmaster), :type => 'Host::Base'
+      :puppet_proxy => smart_proxies(:puppetmaster), :type => 'Host::Managed'
 
     # dummy external node info
     nodeinfo = {"environment" => "global_puppetmaster",
@@ -131,7 +131,7 @@ class HostTest < ActiveSupport::TestCase
   end
 
   test "host can be disabled" do
-    host = Host.create :name => "myhost", :mac => "aabbccddeeff", :type => 'Host::Base', :type => 'Host::Base'
+    host = Host.create :name => "myhost", :mac => "aabbccddeeff", :type => 'Host::Managed', :type => 'Host::Managed'
     host.enabled = false
     host.save
     assert host.disabled?
@@ -195,7 +195,7 @@ class HostTest < ActiveSupport::TestCase
     host = Host.create :name => "blahblah", :mac => "aabbecddee19", :ip => "2.3.4.09",
                        :domain => domains(:mydomain),  :operatingsystem => operatingsystems(:centos5_3),
                        :architecture => architectures(:x86_64), :environment => environments(:production), :puppet_proxy => smart_proxies(:puppetmaster),
-                       :subnet => subnets(:one), :disk => "empty partition", :type => 'Host::Base'
+                       :subnet => subnets(:one), :disk => "empty partition", :type => 'Host::Managed'
     assert host.new_record?
     assert_match /do not have permission/, host.errors.full_messages.join("\n")
   end
@@ -208,7 +208,7 @@ class HostTest < ActiveSupport::TestCase
     host = Host.create :name => "blahblah", :mac => "aabbecddee19", :ip => "2.3.4.11",
                        :domain => domains(:mydomain),  :operatingsystem => operatingsystems(:centos5_3),  :puppet_proxy => smart_proxies(:puppetmaster),
                        :architecture => architectures(:x86_64), :environment => environments(:production),
-                       :subnet => subnets(:one), :disk => "empty partition", :type => 'Host::Base'
+                       :subnet => subnets(:one), :disk => "empty partition", :type => 'Host::Managed'
     assert !host.new_record?
     assert_no_match /do not have permission/, host.errors.full_messages.join("\n")
   end
@@ -222,7 +222,7 @@ class HostTest < ActiveSupport::TestCase
     host = Host.create(:name => "blahblah", :mac => "aabbecddee19", :ip => "2.3.4.4",
                        :domain => domains(:mydomain),  :operatingsystem => operatingsystems(:centos5_3),
                        :architecture => architectures(:x86_64), :environment => environments(:production),
-                       :subnet => subnets(:one), :type => 'Host::Base',
+                       :subnet => subnets(:one), :type => 'Host::Managed',
                        :disk => "empty partition", :hostgroup => hostgroups(:common))
     assert !host.new_record?
     assert_no_match /do not have permission/, host.errors.full_messages.join("\n")
@@ -237,7 +237,7 @@ class HostTest < ActiveSupport::TestCase
     host = Host.create(:name => "blahblah", :mac => "aabbecddee19", :ip => "2.3.4.9",
                        :domain => domains(:mydomain),  :operatingsystem => operatingsystems(:centos5_3),
                        :architecture => architectures(:x86_64), :environment => environments(:production),
-                       :subnet => subnets(:one), :type => 'Host::Base',
+                       :subnet => subnets(:one), :type => 'Host::Managed',
                        :disk => "empty partition", :hostgroup => hostgroups(:common))
     assert host.new_record?
     assert_match /do not have permission/, host.errors.full_messages.join("\n")
@@ -286,7 +286,7 @@ class HostTest < ActiveSupport::TestCase
   test "a fqdn Host should be assigned to a domain if such domain exists" do
     domain = domains(:mydomain)
     host = Host.create :name => "host.mydomain.net", :mac => "aabbccddeaff", :ip => "2.3.04.03",
-      :operatingsystem => operatingsystems(:redhat), :subnet => subnets(:one), :type => 'Host::Base',
+      :operatingsystem => operatingsystems(:redhat), :subnet => subnets(:one), :type => 'Host::Managed',
       :architecture => architectures(:x86_64), :environment => environments(:production), :disk => "aaa"
     host.valid?
     assert_equal domain, host.domain
@@ -295,7 +295,7 @@ class HostTest < ActiveSupport::TestCase
   test "a system should retrieve its gPXE template if it is associated to the correct env and host group" do
     host = Host.create :name => "host.mydomain.net", :mac => "aabbccddeaff", :ip => "2.3.04.03",
       :operatingsystem => Operatingsystem.find_by_name("centos"), :subnet => subnets(:one), :hostgroup => Hostgroup.find_by_name("common"),
-      :architecture => Architecture.first, :environment => Environment.find_by_name("production"), :disk => "aaa", :type => 'Host::Base'
+      :architecture => Architecture.first, :environment => Environment.find_by_name("production"), :disk => "aaa", :type => 'Host::Managed'
 
     assert_equal ConfigTemplate.find_by_name("MyString"), host.configTemplate({:kind => "gPXE"})
   end
@@ -303,7 +303,7 @@ class HostTest < ActiveSupport::TestCase
   test "a system should retrieve its provision template if it is associated to the correct host group only" do
     host = Host.create :name => "host.mydomain.net", :mac => "aabbccddeaff", :ip => "2.3.04.03",
       :operatingsystem => Operatingsystem.find_by_name("centos"), :subnet => subnets(:one), :hostgroup => Hostgroup.find_by_name("common"),
-      :architecture => Architecture.first, :environment => Environment.find_by_name("production"), :disk => "aaa", :type => 'Host::Base'
+      :architecture => Architecture.first, :environment => Environment.find_by_name("production"), :disk => "aaa", :type => 'Host::Managed'
 
     assert_equal ConfigTemplate.find_by_name("MyString2"), host.configTemplate({:kind => "provision"})
   end
@@ -311,7 +311,7 @@ class HostTest < ActiveSupport::TestCase
   test "a system should retrieve its script template if it is associated to the correct OS only" do
     host = Host.create :name => "host.mydomain.net", :mac => "aabbccddeaff", :ip => "2.3.04.03",
       :operatingsystem => Operatingsystem.find_by_name("centos"), :subnet => subnets(:one), :hostgroup => Hostgroup.find_by_name("common"),
-      :architecture => Architecture.first, :environment => Environment.find_by_name("production"), :disk => "aaa", :type => 'Host::Base'
+      :architecture => Architecture.first, :environment => Environment.find_by_name("production"), :disk => "aaa", :type => 'Host::Managed'
 
     assert_equal ConfigTemplate.find_by_name("MyScript"), host.configTemplate({:kind => "script"})
   end
@@ -319,7 +319,7 @@ class HostTest < ActiveSupport::TestCase
  test "a system should retrieve its finish template if it is associated to the correct environment only" do
     host = Host.create :name => "host.mydomain.net", :mac => "aabbccddeaff", :ip => "2.3.04.03",
       :operatingsystem => Operatingsystem.find_by_name("centos"), :subnet => subnets(:one), :hostgroup => Hostgroup.find_by_name("common"),
-      :architecture => Architecture.first, :environment => Environment.find_by_name("production"), :disk => "aaa", :type => 'Host::Base'
+      :architecture => Architecture.first, :environment => Environment.find_by_name("production"), :disk => "aaa", :type => 'Host::Managed'
 
     assert_equal ConfigTemplate.find_by_name("MyFinish"), host.configTemplate({:kind => "finish"})
   end
@@ -352,7 +352,7 @@ class HostTest < ActiveSupport::TestCase
   test "hostgroup should set default values when none exists" do
     # should set os, but not arch
     hg = hostgroups(:common)
-    h  = Host.new :type => 'Host::Base'
+    h  = Host.new :type => 'Host::Managed'
     h.hostgroup = hg
     h.architecture = architectures(:sparc)
     assert !h.valid?
@@ -466,7 +466,7 @@ class HostTest < ActiveSupport::TestCase
 
   test "should save uuid on managed hosts" do
     Setting[:use_uuid_for_certificates] = true
-    host = Host.create :name => "myhost1", :mac => "aabbecddeeff", :ip => "2.3.4.3", :hostgroup => hostgroups(:common), :managed => true, :type => 'Host::Base'
+    host = Host.create :name => "myhost1", :mac => "aabbecddeeff", :ip => "2.3.4.3", :hostgroup => hostgroups(:common), :managed => true, :type => 'Host::Managed'
     assert host.valid?
     assert !host.new_record?
     assert_not_nil host.certname
@@ -475,7 +475,7 @@ class HostTest < ActiveSupport::TestCase
 
   test "should not save uuid on non managed hosts" do
     Setting[:use_uuid_for_certificates] = true
-    host = Host.create :name => "myhost1", :mac => "aabbecddeeff", :ip => "2.3.4.3", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Base'
+    host = Host.create :name => "myhost1", :mac => "aabbecddeeff", :ip => "2.3.4.3", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Managed'
     assert host.valid?
     assert !host.new_record?
     assert_equal host.name, host.certname
@@ -483,21 +483,21 @@ class HostTest < ActiveSupport::TestCase
 
   test "should not save uuid when settings disable it" do
     Setting[:use_uuid_for_certificates] = false
-    host = Host.create :name => "myhost1", :mac => "aabbecddeeff", :ip => "2.3.4.3", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Base'
+    host = Host.create :name => "myhost1", :mac => "aabbecddeeff", :ip => "2.3.4.3", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Managed'
     assert host.valid?
     assert !host.new_record?
     assert_equal host.name, host.certname
   end
 
   test "all whitespace should be removed from hostname" do
-    host = Host.create :name => "my host 1	", :mac => "aabbecddeeff", :ip => "2.3.4.3", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Base'
+    host = Host.create :name => "my host 1	", :mac => "aabbecddeeff", :ip => "2.3.4.3", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Managed'
     assert host.valid?
     assert !host.new_record?
     assert_equal "myhost1.mydomain.net", host.name
   end
 
   test "assign a host to a location" do
-    host = Host.create :name => "host 1", :mac => "aabbecddeeff", :ip => "5.5.5.5", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Base'
+    host = Host.create :name => "host 1", :mac => "aabbecddeeff", :ip => "5.5.5.5", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Managed'
     location = Location.create :name => "New York"
 
     host.location_id = location.id
@@ -505,7 +505,7 @@ class HostTest < ActiveSupport::TestCase
   end
 
   test "update a host's location" do
-    host = Host.create :name => "host 1", :mac => "aabbccddee", :ip => "5.5.5.5", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Base'
+    host = Host.create :name => "host 1", :mac => "aabbccddee", :ip => "5.5.5.5", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Managed'
     original_location = Location.create :name => "New York"
 
     host.location_id = original_location.id
@@ -519,7 +519,7 @@ class HostTest < ActiveSupport::TestCase
   end
 
   test "assign a host to an organization" do
-    host = Host.create :name => "host 1", :mac => "aabbecddeeff", :ip => "5.5.5.5", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Base'
+    host = Host.create :name => "host 1", :mac => "aabbecddeeff", :ip => "5.5.5.5", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Managed'
     organization = Organization.create :name => "Hosting client 1"
 
     host.organization_id = organization.id
@@ -527,7 +527,7 @@ class HostTest < ActiveSupport::TestCase
   end
 
   test "assign a host to both a location and an organization" do
-    host = Host.create :name => "host 1", :mac => "aabbccddeeff", :ip => "5.5.5.5", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Base'
+    host = Host.create :name => "host 1", :mac => "aabbccddeeff", :ip => "5.5.5.5", :hostgroup => hostgroups(:common), :managed => false, :type => 'Host::Managed'
     location = Location.create :name => "Tel Aviv"
     organization = Organization.create :name => "Hosting client 1"
 

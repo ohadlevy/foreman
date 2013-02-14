@@ -1,7 +1,7 @@
 class Report < ActiveRecord::Base
   include Authorization
   include ReportCommon
-  belongs_to :host, :class_name => 'Host::Base'
+  belongs_to :host, :class_name => 'Host::Managed'
   has_many :messages, :through => :logs
   has_many :sources, :through => :logs
   has_many :logs, :dependent => :destroy
@@ -79,7 +79,7 @@ class Report < ActiveRecord::Base
     begin
       host = Host.find_by_certname report.host
       host ||= Host.find_by_name report.host
-      host ||= Host.new :name => report.host, :type => 'Host::Base'
+      host ||= Host.new :name => report.host, :type => 'Host::Managed'
 
       # parse report metrics
       raise "Invalid report: can't find metrics information for #{host} at #{report.id}" if report.metrics.nil?

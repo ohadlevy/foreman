@@ -786,7 +786,7 @@ class HostsControllerTest < ActionController::TestCase
     User.current = users(:admin)
     disable_orchestration
     @host = Host.create(:name => "myfullhost",
-                        :type            => 'Host::Base',
+                        :type            => 'Host::Managed',
                         :mac             => "aabbecddeeff",
                         :ip              => "2.3.4.99",
                         :domain          => domains(:mydomain),

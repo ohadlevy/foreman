@@ -70,7 +70,7 @@ class HostsController < ApplicationController
   end
 
   def new
-    @host = Host.new :managed => true, :type => 'Host::Base'
+    @host = Host.new :managed => true, :type => 'Host::Managed'
   end
 
   # Clone the host
@@ -497,7 +497,7 @@ class HostsController < ApplicationController
 
   def set_base_type
     params['host'] ||= {}
-    params['host']['type'] ||= 'Host::Base'
+    params['host']['type'] ||= 'Host::Managed'
   end 
 
   def load_vars_for_ajax
