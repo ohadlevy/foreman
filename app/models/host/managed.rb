@@ -949,8 +949,8 @@ class Host::Managed < Host::Base
     @tax_organization ||= TaxHost.new(organization, self)
   end
 
-#  def self.model_name
-#    ActiveModel::Name.new(Host)
-#  end
+  def self.model_name
+    ActiveModel::Name.new(Host)
+  end
 
 end
