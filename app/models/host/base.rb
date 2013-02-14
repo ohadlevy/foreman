@@ -1,8 +1,10 @@
 class Host::Base < ActiveRecord::Base
+  include Authorization
   include Foreman::STI
 
+  set_table_name :hosts
+
   require 'facts_importer'
-  include Authorization
   include ReportCommon
   belongs_to :model
   has_many :host_classes, :dependent => :destroy, :foreign_key => :host_id
@@ -951,8 +953,8 @@ class Host::Base < ActiveRecord::Base
     @tax_organization ||= TaxHost.new(organization, self)
   end
 
-  def self.model_name
-    Host.model_name
-  end
+#  def self.model_name
+#    ActiveModel::Name.new(Host)
+#  end
 
 end
