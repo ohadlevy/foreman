@@ -12,7 +12,7 @@
 
 class Token < ActiveRecord::Base
   attr_accessible :value, :expires
-  belongs_to :host
+  belongs_to :host, :class_name => 'Host::Managed'
 
   validates_presence_of :value, :host_id, :expires
 

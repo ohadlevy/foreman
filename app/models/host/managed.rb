@@ -2,6 +2,7 @@ class Host::Managed < Host::Base
   include Authorization
 
   include ReportCommon
+  belongs_to :model
   has_many :host_classes, :dependent => :destroy, :foreign_key => :host_id
   has_many :puppetclasses, :through => :host_classes
   has_many :fact_values, :dependent => :destroy, :foreign_key => :host_id

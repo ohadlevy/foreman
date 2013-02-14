@@ -6,7 +6,7 @@ class Puppetclass < ActiveRecord::Base
   has_many :hostgroup_classes, :dependent => :destroy
   has_many :hostgroups, :through => :hostgroup_classes
   has_many :host_classes, :dependent => :destroy
-  has_many :hosts, :through => :host_classes
+  has_many :hosts, :through => :host_classes, :class_name => "Host::Managed"
 
   has_many :lookup_keys, :inverse_of => :puppetclass
   accepts_nested_attributes_for :lookup_keys, :reject_if => lambda { |a| a[:key].blank? }, :allow_destroy => true

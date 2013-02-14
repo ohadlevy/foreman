@@ -18,7 +18,7 @@ class ComputeResource < ActiveRecord::Base
   validates_presence_of :url
   scoped_search :on => :name, :complete_value => :true
   before_save :sanitize_url
-  has_many :hosts
+  has_many :hosts, :class_name => "Host::Managed"
   has_many :images, :dependent => :destroy
   before_validation :set_attributes_hash
 

@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   has_many :auditable_changes, :class_name => '::Audit', :as => :user
   has_many :usergroup_member, :as => :member, :dependent => :destroy
   has_many :usergroups, :through => :usergroup_member
-  has_many :direct_hosts, :as => :owner, :class_name => "Host"
+  has_many :direct_hosts, :as => :owner, :class_name => "Host::Managed"
   has_and_belongs_to_many :notices, :join_table => 'user_notices'
   has_many :user_roles
   has_many :roles, :through => :user_roles
