@@ -1,9 +1,8 @@
 <%= javascript 'spice/setup', 'spice' %>
 <% title "#{@console[:name]}" %>
-<% user_agent = request.env['HTTP_USER_AGENT'] %>
 <%= title_actions(
         button_group(link_to("Ctrl-Alt-Del", "#", :id => "sendCtrlAltDelButton", :onclick => 'sendCtrlAltDel()', :class => "btn"),
-                     if user_agent =~ /linux/i && user_agent =~ /firefox/i
+                     if supports_spice_xpi?
                        link_to("New window", "#", :id => "disconnect", :class => "btn", :onclick => 'connectXPI()', :title => "Open Spice in a new window")
                      end,
                      if @host
@@ -11,27 +10,11 @@
                      end
         )) %>
 
-<div id='spice-area' data-port='<%= @console[:proxy_port] %>' data-password='<%= @console[:password] %>'>
+<%# TODO: when rails 3.2 merge is done uncomment the following %>
+<%# tag(:div id =>'spice-area' data => spice_data_attributes(@console) %>
+<div id='spice-area' <%= spice_data_attributes(@console).map {|k,v| "data-#{k}=#{v}"}.join(' ') %>>
   <div class="console-status">
     <div id="spice-status" class="span7 label"><%= "Connecting (unencrypted) to: #{@console[:name]}" %></div>
   </div>
-  <div id="spice-screen" class="console-screen">
-  </div>
+  <div id="spice-screen" class="console-screen"> </div>
 </div>
-<script type="text/javascript">
-  function connectXPI() {
-    if ($('#spice-xpi').size() == 0) {
-      $('#spice-area').append('<embed type="application/x-spice" height=0 width=0 id="spice-xpi">');
-    }
-    disconnect();
-    var pluginobj = document.embeds[0];
-    pluginobj.hostIP = String("<%= @console[:address] %>");
-    pluginobj.SecurePort = String("<%= @console[:secure_port] %>");
-    pluginobj.Password = String("<%= @console[:password] %>");
-    pluginobj.TrustStore = String("<%= @console[:ca_cert] %>");
-    pluginobj.SSLChannels = String("all");
-    pluginobj.fullScreen = false;
-    pluginobj.Title = String('<%= "#{@console[:name]} - Press Shift-F12 to release the cursor." %>');
-    pluginobj.connect();
-  }
-</script>

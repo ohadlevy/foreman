@@ -191,7 +191,7 @@ module Foreman::Model
       ca_url.scheme = "http"
       ca_url.port = 8080 if ca_url.port == 8443
       ca_url.port = 80 if ca_url.port == 443
-      Net::HTTP.get(ca_url).to_s.gsub(/\n/, '\\n')
+      Net::HTTP.get(ca_url).to_s
     end
 
     def update_required?(old_attrs, new_attrs)
