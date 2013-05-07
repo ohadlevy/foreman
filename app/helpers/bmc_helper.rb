@@ -27,25 +27,29 @@ module BmcHelper
   def power_actions
     controller_options = { :action => "ipmi_power", :id => @host }
 
+    confirm = _('Are you sure?')
+
     action_buttons(display_link_if_authorized("On", controller_options.merge(:ipmi_action => 'on'),
-                                              :confirm => "Are you sure?", :method => :put),
+                                              :confirm => confirm, :method => :put),
                    display_link_if_authorized("Off", controller_options.merge(:ipmi_action => 'off'),
-                                              :confirm => "Are you sure?", :method => :put),
+                                              :confirm => confirm, :method => :put),
                    display_link_if_authorized("Cycle", controller_options.merge(:ipmi_action => 'cycle'),
-                                              :confirm => "Are you sure?", :method => :put),
-                   display_link_if_authorized("Soft", controller_options.merge(:ipmi_action => 'soft'), :confirm => "Are you sure?", :method => :put))
+                                              :confirm => confirm, :method => :put),
+                   display_link_if_authorized("Soft", controller_options.merge(:ipmi_action => 'soft'), :confirm => confirm, :method => :put))
   end
 
   def boot_actions
     controller_options = { :action => "ipmi_boot", :id => @host }
 
+    confirm = _('Are you sure?')
+
     action_buttons("Select device",
                    display_link_if_authorized("Disk", controller_options.merge(:ipmi_device => 'disk'),
-                                              :confirm => "Are you sure?", :method => :put),
+                                              :confirm => confirm, :method => :put),
                    display_link_if_authorized("Cdrom", controller_options.merge(:ipmi_device => 'cdrom'),
-                                              :confirm => "Are you sure?", :method => :put),
+                                              :confirm => confirm, :method => :put),
                    display_link_if_authorized("Pxe", controller_options.merge(:ipmi_device => 'pxe'),
-                                              :confirm => "Are you sure?", :method => :put),
-                   display_link_if_authorized("Bios", controller_options.merge(:ipmi_device => 'bios'), :confirm => "Are you sure?", :method => :put))
+                                              :confirm => confirm, :method => :put),
+                   display_link_if_authorized("Bios", controller_options.merge(:ipmi_device => 'bios'), :confirm => confirm, :method => :put))
   end
 end
