@@ -732,16 +732,7 @@ class Host::Managed < Host::Base
   end
 
   def bmc_proxy
-    # try to find a bmc proxy in the same subnet as our bmc device
-    interface = bmc_nic
-    if (bmc_subnet_id = interface.subnet_id)
-      url = SmartProxy.bmc_proxies.joins(:subnets).where(['dhcp_id = ? or tftp_id = ?', bmc_subnet_id, bmc_subnet_id])
-    end
-    url ||= SmartProxy.bmc_proxies.first.url
-    ProxyAPI::BMC.new({ :host_ip  => interface.ip,
-                        :url      => url,
-                        :user     => interface.username,
-                        :password => interface.password })
+    @bmc_proxy ||= bmc_nic.proxy
   end
 
   def ipmi_power(action)
