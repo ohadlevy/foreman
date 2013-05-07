@@ -71,7 +71,7 @@ module ProxyAPI
       # get "/bmc/:host/lan/:action"
       case args[:action]
       when "ip", "netmask", "mac", "gateway"
-        parse get(bmc_url_for('lan',args[:action]), args)
+        parse get(bmc_url_for('lan',args[:action]), args)['result']
       else
         raise NoMethodError
       end
