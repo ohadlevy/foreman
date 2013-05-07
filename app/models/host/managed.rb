@@ -656,6 +656,10 @@ class Host::Managed < Host::Base
     new
   end
 
+  def bmc_nic
+    interfaces.bmc.first
+  end
+
   def sp_ip
     bmc_nic.try(:ip)
   end
@@ -758,10 +762,6 @@ class Host::Managed < Host::Base
 
   def lookup_keys_class_params
     Classification.new(:host => self).enc
-  end
-
-  def bmc_nic
-    interfaces.bmc.first
   end
 
   # ensure that host name is fqdn

@@ -20,7 +20,7 @@ class HostsController < ApplicationController
     :update_multiple_environment, :submit_multiple_build, :submit_multiple_destroy, :update_multiple_puppetrun,
     :multiple_puppetrun]
   before_filter :find_by_name, :only => %w[show edit update destroy puppetrun setBuild cancelBuild
-    storeconfig_klasses clone pxe_config toggle_manage power console ipmi_power ipmi_boot]
+    storeconfig_klasses clone pxe_config toggle_manage power console bmc ipmi_power ipmi_boot]
   before_filter :taxonomy_scope, :only => [:hostgroup_or_environment_selected, :process_hostgroup]
   before_filter :set_host_type, :only => [:update]
   helper :hosts, :reports
@@ -214,6 +214,14 @@ class HostsController < ApplicationController
     rescue => e
       process_error :redirect => :back, :error_msg => _("Failed to %{action} %{vm}: %{e}") % { :action => action, :vm => vm, :e => e }
     end
+  end
+
+  def bmc
+    render :partial => 'bmc', :locals => { :host => @host }
+  rescue => e
+    #TODO: hack
+    logger.warn "failed to fetch bmc information: #{e}"
+    render :text => e.to_s
   end
 
   def ipmi_power

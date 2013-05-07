@@ -1,7 +1,7 @@
 module BmcHelper
   def bmc_available?
     ipmi = @host.bmc_nic
-    return false if ipmi.empty?
+    return false if ipmi.nil?
     ipmi.password.present? && ipmi.username.present? && ipmi.provider == 'IPMI'
   end
 

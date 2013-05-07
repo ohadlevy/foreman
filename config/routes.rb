@@ -27,6 +27,7 @@ Foreman::Application.routes.draw do
         post 'environment_selected'
         put 'power'
         get 'console'
+        get 'bmc'
         put 'ipmi_power'
         put 'ipmi_boot'
       end

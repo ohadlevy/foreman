@@ -17,7 +17,7 @@
         <li><a href="#vm" data-toggle="tab"><%= _('VM') %></a></li>
       <% end %>
       <% if bmc_available? %>
-        <li><a href="#bmc" data-toggle="tab">BMC</a></li>
+        <li><a href="#bmc" data-toggle="tab"><%= _('BMC') %></a></li>
       <% end %>
     </ul>
     <div id="myTabContent" class="tab-content">
@@ -41,9 +41,13 @@
         <% end %>
       </div>
       <% if bmc_available? %>
-        <div class="tab-pane" id="bmc">
-         <%= render :partial => "hosts/bmc", :locals => { :host => @host } %>
+        <div id="bmc" class="tab-pane" data-ajax-url=<%= bmc_host_path(@host) %>>
+          <p id="spinner">
+            <%= image_tag '/assets/spinner.gif' %>
+            <%= _('Loading BMC information ...') %>
+          </p>
         </div>
+
       <% end %>
 
     </div>
