@@ -731,7 +731,7 @@ class Host::Managed < Host::Base
     tax_organization.import_missing_ids if organization
   end
 
-  def get_bmc_interface
+  def bmc_proxy
     # try to find a bmc proxy in the same subnet as our bmc device
     interface = bmc_nic
     if (bmc_subnet_id = interface.subnet_id)
@@ -745,11 +745,11 @@ class Host::Managed < Host::Base
   end
 
   def ipmi_power(action)
-    get_bmc_interface.power(:action => action)
+    bmc_proxy.power(:action => action)
   end
 
   def ipmi_boot(booting_device)
-    get_bmc_interface.boot({:function => 'bootdevice', :device => booting_device})
+    bmc_proxy.boot({:function => 'bootdevice', :device => booting_device})
   end
 
   private

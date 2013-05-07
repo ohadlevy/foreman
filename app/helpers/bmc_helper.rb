@@ -8,7 +8,7 @@ module BmcHelper
   def ipmi_available?
     begin
       timeout(15) do
-        @host.get_bmc_interface.providers
+        @host.bmc_proxy.providers
         true
       end
     rescue Timeout::Error

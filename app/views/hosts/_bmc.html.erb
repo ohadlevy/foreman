@@ -4,7 +4,7 @@
   </tr>
   <tr>
     <td>Status</td>
-    <td><%= power_status(@host.get_bmc_interface.power(:action => 'status')['result']) %></td>
+    <td><%= power_status(@host.bmc_proxy.power(:action => 'status')['result']) %></td>
   </tr>
   <tr>
     <td>Power</td>
@@ -22,19 +22,19 @@
   </tr>
   <tr>
     <td>Ip</td>
-    <td><%= @host.get_bmc_interface.lan(:action => 'ip')['result'] %></td>
+    <td><%= @host.bmc_proxy.lan(:action => 'ip')['result'] %></td>
   </tr>
   <tr>
     <td>Netmask</td>
-    <td><%= @host.get_bmc_interface.lan(:action => 'netmask')['result'] %></td>
+    <td><%= @host.bmc_proxy.lan(:action => 'netmask')['result'] %></td>
   </tr>
   <tr>
     <td>MAC</td>
-    <td><%= @host.get_bmc_interface.lan(:action => 'mac')['result'] %></td>
+    <td><%= @host.bmc_proxy.lan(:action => 'mac')['result'] %></td>
   </tr>
   <tr>
     <td>Gateway</td>
-    <td><%= @host.get_bmc_interface.lan(:action => 'gateway')['result'] %></td>
+    <td><%= @host.bmc_proxy.lan(:action => 'gateway')['result'] %></td>
   </tr>
   </tr>
 </table>
