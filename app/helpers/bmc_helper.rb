@@ -5,22 +5,11 @@ module BmcHelper
     ipmi.password.present? && ipmi.username.present? && ipmi.provider == 'IPMI'
   end
 
-  def ipmi_available?
-    begin
-      timeout(15) do
-        @host.bmc_proxy.providers
-        true
-      end
-    rescue Timeout::Error
-      false
-    end
-  end
-
   def power_status s
     if s.downcase == 'on'
-      "<span class='label label-success'>On</span>".html_safe
+      "<span class='label label-success'>#{_('On')}</span>".html_safe
     else
-      "<span class='label'>Off</span>".html_safe
+      "<span class='label'>#{_('Off')}</span>".html_safe
     end
   end
 
@@ -29,13 +18,13 @@ module BmcHelper
 
     confirm = _('Are you sure?')
 
-    action_buttons(display_link_if_authorized("On", controller_options.merge(:ipmi_action => 'on'),
+    action_buttons(display_link_if_authorized(_('On'), controller_options.merge(:ipmi_action => 'on'),
                                               :confirm => confirm, :method => :put),
-                   display_link_if_authorized("Off", controller_options.merge(:ipmi_action => 'off'),
+                   display_link_if_authorized(_('Off'), controller_options.merge(:ipmi_action => 'off'),
                                               :confirm => confirm, :method => :put),
-                   display_link_if_authorized("Cycle", controller_options.merge(:ipmi_action => 'cycle'),
+                   display_link_if_authorized(_('Cycle'), controller_options.merge(:ipmi_action => 'cycle'),
                                               :confirm => confirm, :method => :put),
-                   display_link_if_authorized("Soft", controller_options.merge(:ipmi_action => 'soft'), :confirm => confirm, :method => :put))
+                   display_link_if_authorized(_('Soft'), controller_options.merge(:ipmi_action => 'soft'), :confirm => confirm, :method => :put))
   end
 
   def boot_actions
@@ -44,12 +33,12 @@ module BmcHelper
     confirm = _('Are you sure?')
 
     action_buttons("Select device",
-                   display_link_if_authorized("Disk", controller_options.merge(:ipmi_device => 'disk'),
+                   display_link_if_authorized(_('Disk'), controller_options.merge(:ipmi_device => 'disk'),
                                               :confirm => confirm, :method => :put),
-                   display_link_if_authorized("Cdrom", controller_options.merge(:ipmi_device => 'cdrom'),
+                   display_link_if_authorized(_('CDROM'), controller_options.merge(:ipmi_device => 'cdrom'),
                                               :confirm => confirm, :method => :put),
-                   display_link_if_authorized("Pxe", controller_options.merge(:ipmi_device => 'pxe'),
+                   display_link_if_authorized(_('PXE'), controller_options.merge(:ipmi_device => 'pxe'),
                                               :confirm => confirm, :method => :put),
-                   display_link_if_authorized("Bios", controller_options.merge(:ipmi_device => 'bios'), :confirm => confirm, :method => :put))
+                   display_link_if_authorized(_('BIOS'), controller_options.merge(:ipmi_device => 'bios'), :confirm => confirm, :method => :put))
   end
 end
