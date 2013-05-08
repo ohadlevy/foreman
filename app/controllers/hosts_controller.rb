@@ -20,7 +20,7 @@ class HostsController < ApplicationController
     :update_multiple_environment, :submit_multiple_build, :submit_multiple_destroy, :update_multiple_puppetrun,
     :multiple_puppetrun]
   before_filter :find_by_name, :only => %w[show edit update destroy puppetrun setBuild cancelBuild
-    storeconfig_klasses clone pxe_config toggle_manage power console bmc ipmi_power ipmi_boot]
+    storeconfig_klasses clone pxe_config toggle_manage power console bmc ipmi_boot]
   before_filter :taxonomy_scope, :only => [:hostgroup_or_environment_selected, :process_hostgroup]
   before_filter :set_host_type, :only => [:update]
   helper :hosts, :reports
@@ -196,24 +196,11 @@ class HostsController < ApplicationController
   end
 
   def power
-    return unless @host.compute_resource && params[:power_action]
-    action = case params[:power_action]
-               when 'start'
-                 :start
-               when 'stop'
-                 :stop
-               else
-                 logger.warn "invalid power state #{params[:power_action]}"
-                 invalid_request and return
-             end
-    vm = @host.compute_resource.find_vm_by_uuid(@host.uuid)
-    begin
-      vm.send(action)
-      vm.reload
-      process_success :success_redirect => :back, :success_msg => _("%{vm} is now %{state}") % { :vm => vm, :state => vm.state.capitalize }
-    rescue => e
-      process_error :redirect => :back, :error_msg => _("Failed to %{action} %{vm}: %{e}") % { :action => action, :vm => vm, :e => e }
-    end
+    return invalid_request if powers[:power_action].blank?
+    @host.power.send(params[:power_action].to_sym)
+    process_success :success_redirect => :back, :success_msg => _("%{host} is now %{state}") % { :host => @host, :state => host.power.state.capitalize }
+  rescue => e
+    process_error :redirect => :back, :error_msg => _("Failed to %{action} %{host}: %{e}") % { :action => action, :host => @host, :e => e }
   end
 
   def bmc
@@ -221,18 +208,8 @@ class HostsController < ApplicationController
   rescue => e
     #TODO: hack
     logger.warn "failed to fetch bmc information: #{e}"
+    logger.debug e.backtrace
     render :text => e.to_s
-  end
-
-  def ipmi_power
-    action = params[:ipmi_action]
-    begin
-      @host.ipmi_power(action)
-      process_success :success_redirect => :back, :success_msg => "#{@host.name} is now powered #{action.downcase}"
-    rescue => e
-      process_error :redirect => :back, :error_msg => "Failed to #{action} #{@host}: #{e}"
-    end
-
   end
 
   def ipmi_boot

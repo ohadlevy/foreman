@@ -4,7 +4,7 @@
   </tr>
   <tr>
     <td><%= _('Status') %></td>
-    <td><%= power_status(@host.bmc_proxy.power(:action => 'status')) %></td>
+    <td><%= power_status(@host.power.state) %></td>
   </tr>
   <tr>
     <td><%= _('Power') %></td>

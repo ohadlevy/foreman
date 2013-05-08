@@ -739,9 +739,23 @@ class Host::Managed < Host::Base
     @bmc_proxy ||= bmc_nic.proxy
   end
 
-  def ipmi_power(action)
-    bmc_proxy.power(:action => action)
+  def bmc_available?
+    ipmi = bmc_nic
+    return false if ipmi.nil?
+    ipmi.password.present? && ipmi.username.present? && ipmi.provider == 'IPMI'
   end
+
+  def power
+    opts = {:host => self}
+    if compute_resource_id && uuid
+      VirtPowerManager.new(opts)
+    elsif bmc_available?
+      BMCPowerManager.new(opts)
+    else
+      raise ::Foreman::Exception.new(N_("Unknown Power Management Support - Can't Continue"))
+    end
+  end
+
 
   def ipmi_boot(booting_device)
     bmc_proxy.boot({:function => 'bootdevice', :device => booting_device})

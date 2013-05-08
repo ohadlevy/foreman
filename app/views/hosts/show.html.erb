@@ -16,7 +16,7 @@
       <%  if @vm %>
         <li><a href="#vm" data-toggle="tab"><%= _('VM') %></a></li>
       <% end %>
-      <% if bmc_available? %>
+      <% if @host.bmc_available? %>
         <li><a href="#bmc" data-toggle="tab"><%= _('BMC') %></a></li>
       <% end %>
     </ul>
@@ -40,7 +40,7 @@
           <%= render("compute_resources_vms/show/#{@host.compute_resource.provider.downcase}") rescue nil %>
         <% end %>
       </div>
-      <% if bmc_available? %>
+      <% if @host.bmc_available? %>
         <div id="bmc" class="tab-pane" data-ajax-url=<%= bmc_host_path(@host) %>>
           <p id="spinner">
             <%= image_tag '/assets/spinner.gif' %>
