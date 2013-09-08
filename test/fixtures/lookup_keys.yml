@@ -30,6 +30,7 @@ complex:
   default_value: 'secret'
   override: true
   path: 'organization,location'
+  is_param: true
 
 four:
   key: special_info
@@ -47,3 +48,4 @@ five:
   default_value: 'abcdef'
   path: 'organization,location'
   override: true
+  is_param: true

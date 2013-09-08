@@ -50,21 +50,6 @@ class Api::V2::PuppetclassesControllerTest < ActionController::TestCase
     assert !show_response.empty?
   end
 
-  test "should give error if puppetclass is not in nested host" do
-    get :show, { :host_id => hosts(:one).to_param, :id => puppetclasses(:four).id }
-    assert_response :error
-  end
-
-  test "should give error if puppetclass is not in nested hostgroup" do
-    get :show, { :hostgroup_id => hostgroups(:common).to_param, :id => puppetclasses(:four).id }
-    assert_response :error
-  end
-
-  test "should give error if puppetclass is not in nested environment" do
-    get :show, { :environment_id => environments(:production).to_param, :id => puppetclasses(:four).id }
-    assert_response :error
-  end
-
   # CRUD actions - same test as V1
   test "should get index" do
     get :index, { }

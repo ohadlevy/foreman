@@ -57,6 +57,17 @@ class LookupKey < ActiveRecord::Base
     where(:puppetclass_id => puppetclass_ids)
   }
 
+  scope :smart_variables, lambda { where('lookup_keys.puppetclass_id > 0') }
+  scope :smart_class_parameters, lambda { where(:is_param => true).joins(:environment_classes) }
+
+  def is_smart_variable?
+    puppetclass_id.to_i > 0
+  end
+
+  def is_smart_class_parameter?
+    is_param? && environment_classes.any?
+  end
+
   def to_param
     "#{id}-#{key}"
   end
@@ -111,6 +122,39 @@ class LookupKey < ActiveRecord::Base
         element
       end
     end
+  end
+
+  # getter/setters for API instead of revealing db names
+  def parameter
+    key
+  end
+  def parameter=(value)
+    self.key = value
+  end
+
+  def variable
+    key
+  end
+  def variable=(value)
+    self.key = value
+  end
+
+  def parameter_type
+    key_type
+  end
+  def parameter_type=(value)
+    self.key_type = value
+  end
+
+  def override_value_order
+    path
+  end
+  def override_value_order=(value)
+    self.path = value
+  end
+
+  def override_values_count
+    lookup_values_count
   end
 
   private

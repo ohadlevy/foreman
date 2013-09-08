@@ -146,7 +146,7 @@ class Puppetclass < ActiveRecord::Base
   end
 
   def as_json(options={})
-    super({:only => [:name, :id], :include => [:lookup_keys]})
+    super({:only => [:name, :id]})
   end
 
   def self.search_by_host(key, operator, value)
