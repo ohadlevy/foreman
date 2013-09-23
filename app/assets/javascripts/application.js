@@ -8,6 +8,7 @@
 //= require topbar
 //= require vendor
 //= require about
+//= require toastr
 
 $(function() {
   onContentLoad();
@@ -19,17 +20,17 @@ function onContentLoad(){
   $('.flash.error').each(function(index, item) {
      if ($('.alert-message.alert-error.base').length == 0) {
        if ($('#host-conflicts-modal').length == 0) {
-         $.jnotify($(item).text(), { type: "error", sticky: true });
+         notify('error', $(item).text());
        }
      }
    });
 
    $('.flash.warning').each(function(index, item) {
-     $.jnotify($(item).text(), { type: "warning", sticky: true });
+     notify('warning', $(item).text());
    });
 
    $('.flash.notice').each(function(index, item) {
-     $.jnotify($(item).text(), { type: "success", sticky: false });
+     notify('success', $(item).text());
    });
 
   // adds buttons classes to all links
@@ -186,8 +187,7 @@ $(document).ready(function() {
     },
     onerror     : function(settings, original, xhr) {
       original.reset();
-      var error = $.parseJSON(xhr.responseText)["errors"];
-      $.jnotify(error, { type: "error", sticky: true });
+      notify('error', $.parseJSON(xhr.responseText)["errors"]);
     }
   };
 
@@ -372,4 +372,21 @@ $.fn.indicator_hide = function(){
 function spinner_placeholder(text){
   if (text == undefined) text = "";
   return "<div class='spinner-placeholder'>" + text + "</div>"
+}
+
+function notify(type, text, options) {
+  switch (type) {
+    case 'error':
+      toastr.error(text);
+      break;
+    case 'warning':
+      toastr.warning(text);
+      break;
+    case 'success':
+      toastr.success(text);
+      break;
+    default:
+      toastr.info(text);
+      break;
+  }
 }
