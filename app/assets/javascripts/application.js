@@ -6,6 +6,7 @@
 //= require twitter/bootstrap
 //= require charts
 //= require topbar
+//= require select2
 //= require vendor
 //= require about
 
