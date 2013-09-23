@@ -1,3 +1,4 @@
+<%= javascript "images" %>
 <%= form_for [@compute_resource, @image] do |f| %>
   <%= base_errors_for @image %>
   <%= text_f   f, :name %>
@@ -5,6 +6,7 @@
   <%= select_f f, :operatingsystem_id, Operatingsystem.all, :id, :to_label %>
   <%= select_f f, :architecture_id, Architecture.all, :id, :to_label %>
   <%= text_f f, :username, :value => @image.username || "root", :help_inline => _("The user that is used to ssh into the instance, normally ec2-user, ubuntu, root etc") %>
+  <%= f.hidden_field :uuid %>
   <%= image_field(f) %>
   <% if @compute_resource.provider == 'EC2' %>
     <%# TODO - Get IAM roles from AWS and display in select drop %>

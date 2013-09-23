@@ -60,6 +60,10 @@ module Foreman::Model
       @zones ||= client.describe_availability_zones.body["availabilityZoneInfo"].map { |r| r["zoneName"] if r["regionName"] == region }.compact
     end
 
+    def available_images
+      client.images.all("Owner" => "self")
+    end
+
     def flavors
       client.flavors
     end
