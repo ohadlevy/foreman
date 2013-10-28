@@ -168,9 +168,19 @@ module Foreman #:nodoc:
     # name parameter can be: :top_menu, :admin_menu
     #
     def menu(menu, name, options={})
+      options.merge!(:parent => @parent) if @parent
       Menu::MenuManager.map(menu).item(name, options)
     end
     alias :add_menu_item :menu
+
+    def sub_menu(menu, name, options={}, &block)
+      options.merge!(:parent => @parent) if @parent
+      Menu::MenuManager.map(menu).sub_menu(name, options)
+      current = @parent
+      @parent = name
+      self.instance_eval(&block)
+      @parent = current
+    end
 
     # Removes item from the given menu
     def delete_menu_item(menu, item)
@@ -185,6 +195,7 @@ module Foreman #:nodoc:
 
     # Defines a permission called name for the given controller=>actions
     def permission(name, hash, options={})
+      options.merge!(:security_block => @security_block)
       Foreman::AccessControl.map do |map|
           map.permission name, hash, options
       end

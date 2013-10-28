@@ -80,9 +80,10 @@ module Menu
 
       def sub_menu name, options={}, &block
         push(MenuToggle.new(name, options[:caption]), options)
+        current = @parent
         @parent = name
-        self.instance_eval(&block)
-        @parent = nil
+        self.instance_eval(&block) if block_given?
+        @parent = current
       end
 
       def divider options={}
