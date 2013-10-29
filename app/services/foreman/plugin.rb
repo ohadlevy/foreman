@@ -47,12 +47,19 @@ module Foreman #:nodoc:
         end
       end
     end
-    def_field :name, :description, :url, :author, :author_url, :version, :settings, :directory
+    def_field :name, :description, :url, :author, :author_url, :version
     attr_reader :id
 
     # Plugin constructor
     def self.register(id, &block)
       p = new(id)
+      if (gem = Gem::Specification.find_by_name(id.to_s))
+      p.name gem.name
+      p.author  gem.authors.join(',')
+      p.description gem.description
+      p.url gem.homepage
+      p.version  gem.version
+      end
       p.instance_eval(&block)
 
       registered_plugins[id] = p
@@ -91,81 +98,30 @@ module Foreman #:nodoc:
 
     # Sets a requirement on Foreman version
     # Raises a PluginRequirementError exception if the requirement is not met
-    #
-    # Examples
-    #   # Requires Foreman 0.7.3 or higher
-    #   requires_foreman :version_or_higher => '0.7.3'
-    #   requires_foreman '0.7.3'
-    #
-    #   # Requires Foreman 0.7.x or higher
-    #   requires_foreman '0.7'
-    #
-    #   # Requires a specific Foreman version
-    #   requires_foreman :version => '0.7.3'              # 0.7.3 only
-    #   requires_foreman :version => '0.7'                # 0.7.x
-    #
-    def requires_foreman(arg)
-      arg = { :version_or_higher => arg } unless arg.is_a?(Hash)
-      arg.assert_valid_keys(:version, :version_or_higher)
-
-      current = SETTINGS[:version].sub('-develop','').split('.')
-      arg.each do |k, req|
-        case k
-        when :version_or_higher
-          unless compare_versions(req, current) <= 0
-            raise PluginRequirementError.new("#{id} plugin requires Foreman #{req} or higher but current is #{current.join('.')}")
-          end
-        when :version
-          unless compare_versions(req, current) == 0
-            raise PluginRequirementError.new("#{id} plugin requires one the following Foreman versions: #{req.join(', ')} but current is #{current.join('.')}")
-          end
-        end
+    # matcher format is gem dependency format
+    def requires_foreman(matcher)
+      current = SETTINGS[:version].gsub('-','.')
+      unless Gem::Dependency.new(nil, matcher).match?(nil, current)
+        raise PluginRequirementError.new("#{id} plugin requires Foreman #{matcher} but current is #{current}")
       end
-      true
     end
-
-    def compare_versions(requirement, current)
-      requirement = requirement.split('.').collect(&:to_i)
-      requirement <=> current.slice(0, requirement.size).collect(&:to_i)
-    end
-    private :compare_versions
 
     # Sets a requirement on a Foreman plugin version
     # Raises a PluginRequirementError exception if the requirement is not met
-    #
-    # Examples
-    #   # Requires a plugin named :foo version 0.7.3 or higher
-    #   requires_foreman_plugin :foo, :version_or_higher => '0.7.3'
-    #   requires_foreman_plugin :foo, '0.7.3'
-    #
-    #   # Requires a specific version of a Foreman plugin
-    #   requires_foreman_plugin :foo, :version => '0.7.3'              # 0.7.3 only
-    def requires_foreman_plugin(plugin_name, arg)
-      arg = { :version_or_higher => arg } unless arg.is_a?(Hash)
-      arg.assert_valid_keys(:version, :version_or_higher)
-
+    # matcher format is gem dependency format
+    def requires_foreman_plugin(plugin_name, matcher)
       plugin = Plugin.find(plugin_name)
-
-      arg.each do |k, req|
-        case k
-        when :version_or_higher
-          unless compare_versions( req, plugin.version ) <= 0
-            raise PluginRequirementError.new("#{id} plugin requires the #{plugin_name} plugin #{req} or higher but current is #{plugin.version}")
-          end
-        when :version
-          unless compare_versions( req, plugin.version ) == 0
-            raise PluginRequirementError.new("#{id} plugin requires the #{plugin_name} plugin #{req} but current is #{plugin.version}")
-          end
-        end
+      raise PluginRequirementError.new("#{id} plugin requires the #{plugin_name} plugin, not found") unless plugin
+      unless Gem::Dependency.new(nil, matcher).match?(nil, plugin.version)
+        raise PluginRequirementError.new("#{id} plugin requires the #{plugin_name} plugin #{matcher} but current is #{plugin.version}")
       end
-      true
     end
 
     # Adds an item to the given menu
     # The id parameter is automatically added to the url.
     #   menu :menu_name, :plugin_example, 'menu text', { :controller => :example, :action => :index }
     #
-    # name parameter can be: :top_menu, :admin_menu
+    # name parameter can be: :top_menu or :admin_menu
     #
     def menu(menu, name, options={})
       options.merge!(:parent => @parent) if @parent

@@ -53,8 +53,6 @@ module Menu
 
     # Adds a child at given position
     def add_at(child, position)
-      raise _("Child already added") if !child.is_a?(MenuDivider) && find {|node| node.name == child.name}
-
       @children = @children.insert(position, child)
       child.parent = self
       child
