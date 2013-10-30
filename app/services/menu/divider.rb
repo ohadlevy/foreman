@@ -1,5 +1,5 @@
 module Menu
-  class MenuDivider < MenuNode
+  class Divider < Node
     def authorized?
       true
     end

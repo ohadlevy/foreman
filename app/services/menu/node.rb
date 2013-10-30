@@ -1,6 +1,6 @@
 module Menu
 
-  class MenuNode
+  class Node
     include Enumerable
     attr_accessor :parent
     attr_reader :name

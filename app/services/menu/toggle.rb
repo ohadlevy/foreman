@@ -1,5 +1,5 @@
 module Menu
-  class MenuToggle < MenuNode
+  class Toggle < Node
     def initialize(name, caption)
       @caption = caption
       super name.to_sym

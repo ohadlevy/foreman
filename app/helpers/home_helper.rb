@@ -1,26 +1,26 @@
 module HomeHelper
 
   def top_menu_items
-    Menu::MenuManager.items(:top_menu).authorized_children
+    Menu::Manager.items(:top_menu).authorized_children
   end
 
   def admin_menu
-    Menu::MenuManager.items(:admin_menu).authorized_children
+    Menu::Manager.items(:admin_menu).authorized_children
   end
 
   def authorized_menu_actions(choices)
-    last_item = Menu::MenuDivider.new(:first_div)
-    choices = choices.map do |item|
-      case item
-        when Menu::MenuDivider
-          last_item = item unless last_item.is_a?(Menu::MenuDivider) #prevent adjacent dividers
-        when Menu::MenuItem
-          last_item = item if item.authorized?
-        when Menu::MenuToggle
-          last_item = item if item.authorized_children.size > 0
-      end
+    last_item = Menu::Divider.new(:first_div)
+    choices   = choices.map do |item|
+      last_item = case item
+                    when Menu::Divider
+                      item unless last_item.is_a?(Menu::Divider) #prevent adjacent dividers
+                    when Menu::Item
+                      item if item.authorized?
+                    when Menu::Toggle
+                      item if item.authorized_children.size > 0
+                  end
     end.compact
-    choices.pop if (choices.last.is_a?(Menu::MenuDivider))
+    choices.pop if choices.last.is_a?(Menu::Divider)
     choices
   end
 

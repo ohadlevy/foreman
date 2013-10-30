@@ -46,51 +46,48 @@ module Foreman #:nodoc:
           end
         end
       end
+
+      # Plugin constructor
+      def register(id, &block)
+        plugin = new(id)
+        if (gem = Gem::Specification.find_by_name(id.to_s))
+          plugin.name gem.name
+          plugin.author gem.authors.join(',')
+          plugin.description gem.description
+          plugin.url gem.homepage
+          plugin.version gem.version
+        end
+        plugin.instance_eval(&block)
+
+        registered_plugins[id] = plugin
+      end
+
+      # Returns an array of all registered plugins
+      def all
+        registered_plugins.values.sort
+      end
+
+      # Finds a plugin by its id
+      # Returns a PluginNotFound exception if the plugin doesn't exist
+      def find(id)
+        registered_plugins[id.to_sym] || raise(PluginNotFound)
+      end
+
+      # Checks if a plugin is installed
+      #
+      # @param [String] id name of the plugin
+      def installed?(id)
+        registered_plugins[id.to_sym].present?
+      end
     end
+
     def_field :name, :description, :url, :author, :author_url, :version
     attr_reader :id
-
-    # Plugin constructor
-    def self.register(id, &block)
-      p = new(id)
-      if (gem = Gem::Specification.find_by_name(id.to_s))
-      p.name gem.name
-      p.author  gem.authors.join(',')
-      p.description gem.description
-      p.url gem.homepage
-      p.version  gem.version
-      end
-      p.instance_eval(&block)
-
-      registered_plugins[id] = p
-    end
-
-    # Returns an array of all registered plugins
-    def self.all
-      registered_plugins.values.sort
-    end
-
-    # Finds a plugin by its id
-    # Returns a PluginNotFound exception if the plugin doesn't exist
-    def self.find(id)
-      registered_plugins[id.to_sym] || raise(PluginNotFound)
-    end
-
-    # Checks if a plugin is installed
-    #
-    # @param [String] id name of the plugin
-    def self.installed?(id)
-      registered_plugins[id.to_sym].present?
-    end
 
     def initialize(id)
       @id = id.to_sym
     end
 
-
-    def to_param
-      id
-    end
 
     def <=>(plugin)
       self.id.to_s <=> plugin.id.to_s
@@ -100,7 +97,7 @@ module Foreman #:nodoc:
     # Raises a PluginRequirementError exception if the requirement is not met
     # matcher format is gem dependency format
     def requires_foreman(matcher)
-      current = SETTINGS[:version].gsub('-','.')
+      current = SETTINGS[:version].gsub('-', '.')
       unless Gem::Dependency.new(nil, matcher).match?(nil, current)
         raise PluginRequirementError.new("#{id} plugin requires Foreman #{matcher} but current is #{current}")
       end
@@ -125,13 +122,14 @@ module Foreman #:nodoc:
     #
     def menu(menu, name, options={})
       options.merge!(:parent => @parent) if @parent
-      Menu::MenuManager.map(menu).item(name, options)
+      Menu::Manager.map(menu).item(name, options)
     end
+
     alias :add_menu_item :menu
 
     def sub_menu(menu, name, options={}, &block)
       options.merge!(:parent => @parent) if @parent
-      Menu::MenuManager.map(menu).sub_menu(name, options)
+      Menu::Manager.map(menu).sub_menu(name, options)
       current = @parent
       @parent = name
       self.instance_eval(&block)
@@ -140,7 +138,7 @@ module Foreman #:nodoc:
 
     # Removes item from the given menu
     def delete_menu_item(menu, item)
-      Menu::MenuManager.map(menu).delete(item)
+      Menu::Manager.map(menu).delete(item)
     end
 
     def security_block(name, &block)
@@ -153,7 +151,7 @@ module Foreman #:nodoc:
     def permission(name, hash, options={})
       options.merge!(:security_block => @security_block)
       Foreman::AccessControl.map do |map|
-          map.permission name, hash, options
+        map.permission name, hash, options
       end
     end
 
@@ -163,7 +161,6 @@ module Foreman #:nodoc:
         role = Role.find_or_create_by_name(name)
         role.update_attribute :permissions, permissions if role.permissions.empty?
       end
-      rescue
     end
 
   end

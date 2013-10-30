@@ -1,5 +1,5 @@
 module Menu
-  class MenuItem < MenuNode
+  class Item < Node
     include Rails.application.routes.url_helpers
     attr_reader :name, :param, :condition, :parent, :child_menus, :last
 

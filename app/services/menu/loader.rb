@@ -1,4 +1,4 @@
-Menu::MenuManager.map :admin_menu do |menu|
+Menu::Manager.map :admin_menu do |menu|
   menu.item :locations,           :caption => _('Locations') if SETTINGS[:locations_enabled]
   menu.item :organizations,       :caption => _('Organizations') if SETTINGS[:organizations_enabled]
   menu.divider
@@ -14,7 +14,7 @@ Menu::MenuManager.map :admin_menu do |menu|
   menu.item :about_index,         :caption => _('About')
 end
 
-Menu::MenuManager.map :top_menu do |menu|
+Menu::Manager.map :top_menu do |menu|
   menu.sub_menu :monitor_menu,    :caption => _('Monitor') do
     menu.item :dashboard,         :caption => _('Dashboard')
     menu.item :reports,           :caption => _('Reports'),

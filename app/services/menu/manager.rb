@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 module Menu
-  module MenuManager
+  module Manager
 
     class << self
       def map(menu_name)
@@ -29,7 +29,7 @@ module Menu
       end
 
       def items(menu_name)
-        @items[menu_name.to_sym] || MenuNode.new(:root)
+        @items[menu_name.to_sym] || Node.new(:root)
       end
     end
 
@@ -37,7 +37,7 @@ module Menu
       attr_reader :menu, :menu_items
 
       def initialize(menu, items)
-        items[menu] ||= MenuNode.new(:root)
+        items[menu] ||= Node.new(:root)
         @menu = menu
         @menu_items = items[menu]
       end
@@ -52,7 +52,7 @@ module Menu
       # * before, after: specify where the menu item should be inserted (eg. :after => :activity)
       # * parent: menu item will be added as a child of another named menu (eg. :parent => :issues)
       # * children: a Proc that is called before rendering the item. The Proc should return an array of MenuItems, which will be added as children to this item.
-      #   eg. :children => Proc.new {|project| [Foreman::MenuManager::MenuItem.new(...)] }
+      #   eg. :children => Proc.new {|project| [Foreman::Manager::MenuItem.new(...)] }
       # * last: menu item will stay at the end (eg. :last => true)
       # * html_options: a hash of html options that are passed to link_to
       def push(obj, options={})
@@ -75,11 +75,11 @@ module Menu
       end
 
       def item(name, options={})
-        push(MenuItem.new(name, options), options)
+        push(Item.new(name, options), options)
       end
 
       def sub_menu name, options={}, &block
-        push(MenuToggle.new(name, options[:caption]), options)
+        push(Toggle.new(name, options[:caption]), options)
         current = @parent
         @parent = name
         self.instance_eval(&block) if block_given?
@@ -87,7 +87,7 @@ module Menu
       end
 
       def divider options={}
-        push(MenuDivider.new(:divider), options)
+        push(Divider.new(:divider), options)
       end
 
       # Removes a menu item
