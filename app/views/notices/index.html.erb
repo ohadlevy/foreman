@@ -1,0 +1,10 @@
+<table class="table table-bordered" data-notice-count="<%= @notices.count %>">
+  <th>level</th>
+  <th>message</th>
+  <% @notices.each do |notice| %>
+    <tr>
+      <td><%= notice.level %></td>
+      <td><%= notice %></td>
+    </tr>
+  <% end %>
+</table>

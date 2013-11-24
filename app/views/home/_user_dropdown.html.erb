@@ -1,4 +1,10 @@
-<ul class="nav pull-right ">
+<ul class="nav pull-right">
+  <li class="dropdown">
+    <a id='notification_placeholder' data-url='<%= notices_path %>' href="#" class="dropdown-toggle" data-toggle="dropdown">
+      <div id="notification_bubble" class="badge badge-inverse"> <%= Notice.count %> </div>
+    </a>
+    <ul id="notice_bar" class="dropdown-menu fl" role="menu" aria-labelledby="dLabel">  </ul>
+  </li>
   <li class="dropdown menu_tab_dropdown">
     <%= user_header %>
     <ul class="dropdown-menu pull-right">
@@ -8,4 +14,3 @@
     </ul>
   </li>
 </ul>
-

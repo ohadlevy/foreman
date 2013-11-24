@@ -10,6 +10,7 @@
 //= require vendor
 //= require about
 //= require jquery.extentions
+//= require notices
 
 $(document).on('ContentLoad', function(){onContentLoad()});
 
