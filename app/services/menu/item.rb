@@ -34,7 +34,7 @@ module Menu
 
     def authorized?
       User.current.allowed_to?({
-        :controller => url_hash[:controller].to_s.gsub(/::/, "_").underscore,
+        :controller => url_hash[:controller].to_s.gsub(/::/, "_").gsub('/','').underscore,
         :action => url_hash[:action]
       })
     rescue => error
