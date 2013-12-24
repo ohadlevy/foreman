@@ -220,4 +220,27 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to edit_user_path(User.find_by_login('ares'))
   end
 
+  test 'non admin user should edit itself' do
+    User.current = users(:one)
+    # edit self
+    get :edit, {:id => User.current.id}
+    assert_response :success
+
+    # update self
+    User.current = users(:one)
+    put :update, {:id => User.current.id, :user => { :firstname => 'test'} }
+    assert_response :success
+
+    # try to edit another user
+    User.current = users(:one)
+    get :edit, {:id => users(:two)}
+    assert_equal @response.status, 403
+
+    User.current = users(:one)
+    put :update, {:id => users(:two).id, :user => { :firstname => 'test'} }
+    assert_equal @response.status, 403
+    # admin and edit self
+
+  end
+
 end
