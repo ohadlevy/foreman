@@ -48,7 +48,7 @@ class Api::TestableControllerTest < ActionController::TestCase
   end
 
   context 'errors' do
-   test "top level key is error, no metadata included" do
+    test "top level key is error, no metadata included" do
       get :raise_error
       assert_equal ['error'], ActiveSupport::JSON.decode(@response.body).keys
     end

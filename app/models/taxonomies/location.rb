@@ -10,14 +10,14 @@ class Location < Taxonomy
   scope :completer_scope, lambda { |opts| my_locations }
 
   scope :my_locations, lambda {
-        user = User.current
-        if user.admin?
-          conditions = { }
-        else
-          conditions = sanitize_sql_for_conditions([" (taxonomies.id in (?))", user.location_ids])
-        end
-        where(conditions).reorder('type, name')
-      }
+    user = User.current
+    if user.admin?
+      conditions = { }
+    else
+      conditions = sanitize_sql_for_conditions([" (taxonomies.id in (?))", user.location_ids])
+    end
+    where(conditions).reorder('type, name')
+  }
 
   def dup
     new = super

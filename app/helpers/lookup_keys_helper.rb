@@ -18,7 +18,7 @@ module LookupKeysHelper
     options[:form_builder_attrs] ||= {}
 
     content_tag(:div, :class => "#{association}_fields_template", :style => "display: none;") do
-        form_builder.fields_for(association, options[:object], :child_index => "new_#{association}") do |f|
+      form_builder.fields_for(association, options[:object], :child_index => "new_#{association}") do |f|
         render(:partial => options[:partial], :locals => { options[:form_builder_local] => f }.merge(options[:form_builder_attrs]))
       end
     end
@@ -77,7 +77,7 @@ module LookupKeysHelper
           text_area_tag("value_#{key.key}", original_value, :rows => row_count == 0 ? 1 : row_count,
                         :class => ['col-md-5'], :'data-property' => 'value', :disabled => true) +
           content_tag(:span, :class => "help-block") { diagnostic_helper }
-         end
+    end
   end
 
   def host_key_with_diagnostic host, value_hash, key

@@ -134,14 +134,14 @@ module LayoutHelper
     help_block  = content_tag(:span, options.delete(:help_block), :class => "help-block")
     size_class = options.delete(:size) || "col-md-4"
     content_tag(:div, :class=> "clearfix") do
-    content_tag :div, :class => "form-group #{error.empty? ? "" : 'has-error'}" do
-      label   = options.delete(:label)
-      label ||= ((clazz = f.object.class).respond_to?(:gettext_translation_for_attribute_name) &&
-                  s_(clazz.gettext_translation_for_attribute_name attr)) if f
-      label_tag(attr, label, :class => "col-md-2 control-label") +
-        content_tag(:div, :class => size_class) do
-          yield.html_safe + help_block.html_safe
-        end.html_safe + help_inline.html_safe
+      content_tag :div, :class => "form-group #{error.empty? ? "" : 'has-error'}" do
+        label   = options.delete(:label)
+        label ||= ((clazz = f.object.class).respond_to?(:gettext_translation_for_attribute_name) &&
+                    s_(clazz.gettext_translation_for_attribute_name attr)) if f
+        label_tag(attr, label, :class => "col-md-2 control-label") +
+          content_tag(:div, :class => size_class) do
+            yield.html_safe + help_block.html_safe
+          end.html_safe + help_inline.html_safe
       end.html_safe
     end
   end

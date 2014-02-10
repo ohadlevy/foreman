@@ -58,7 +58,7 @@ class Host::Managed < Host::Base
       conditions[:organization_id] = Array.wrap(org).map(&:id) if org
       conditions[:location_id]     = Array.wrap(loc).map(&:id) if loc
       where(conditions)
-    }
+  }
 
   scope :recent,      lambda { |*args| {:conditions => ["last_report > ?", (args.first || (Setting[:puppet_interval] + 5).minutes.ago)]} }
   scope :out_of_sync, lambda { |*args| {:conditions => ["last_report < ? and enabled != ?", (args.first || (Setting[:puppet_interval] + 5).minutes.ago), false]} }

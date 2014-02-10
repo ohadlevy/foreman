@@ -67,7 +67,7 @@ class UnattendedControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-   test "should support spoof using hostname" do
+  test "should support spoof using hostname" do
     get :provision, {:hostname => hosts(:ubuntu).name}, set_session_user
     assert_response :success
   end
@@ -150,7 +150,7 @@ class UnattendedControllerTest < ActionController::TestCase
     assert_response :not_found
   end
 
- test "requesting a template that does not exist should fail" do
+  test "requesting a template that does not exist should fail" do
     get :template, {:id => "kdsfjlkasjdfkl", :hostgroup => "Common"}
     assert_response :not_found
   end

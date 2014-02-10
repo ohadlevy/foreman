@@ -549,7 +549,7 @@ class HostTest < ActiveSupport::TestCase
     assert_equal ConfigTemplate.find_by_name("MyScript"), host.configTemplate({:kind => "script"})
   end
 
- test "a system should retrieve its finish template if it is associated to the correct environment only" do
+  test "a system should retrieve its finish template if it is associated to the correct environment only" do
     host = Host.create :name => "host.mydomain.net", :mac => "aabbccddeaff", :ip => "2.3.04.03",
       :operatingsystem => Operatingsystem.find_by_name("Redhat"), :subnet => subnets(:one), :hostgroup => Hostgroup.find_by_name("common"),
       :architecture => Architecture.first, :environment => Environment.find_by_name("production"), :disk => "aaa"

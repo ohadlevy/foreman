@@ -16,10 +16,10 @@ class FactValue < ActiveRecord::Base
 
   scope :no_timestamp_facts, lambda {
               includes(:fact_name).where("fact_names.name <> ?",:_timestamp)
-            }
+  }
   scope :timestamp_facts, lambda {
               joins(:fact_name).where("fact_names.name = ?",:_timestamp)
-            }
+  }
   scope :my_facts, lambda {
     unless User.current.admin? and Organization.current.nil? and Location.current.nil?
       #TODO: Remove pluck after upgrade to newer rails as it would be

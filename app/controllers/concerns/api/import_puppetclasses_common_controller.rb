@@ -82,7 +82,7 @@ module Api::ImportPuppetclassesCommonController
     environment_names = (@changed["new"].keys + @changed["obsolete"].keys + @changed["updated"].keys).uniq.sort
     @environments = environment_names.map do |name|
                       OpenStruct.new(:name => name)
-                    end
+    end
 
     render :json => {:message => "No changes to your environments detected"} and return false unless @environments.any?
     @environments.any?

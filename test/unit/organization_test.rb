@@ -27,7 +27,7 @@ class OrganizationTest < ActiveSupport::TestCase
     assert organization.to_s == "organization1"
   end
 
-    test 'organization is invalid without any taxable_taxonomies' do
+  test 'organization is invalid without any taxable_taxonomies' do
     # no taxable_taxonomies in fixtures
     # no ignore_types in fixtures
     organization = taxonomies(:organization1)
