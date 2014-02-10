@@ -45,10 +45,6 @@ AmbiguousRegexpLiteral:
 AndOr:
   Enabled: false
 
-# Offence count: 1
-AsciiComments:
-  Enabled: false
-
 # Offence count: 7
 # Configuration parameters: AllowSafeAssignment.
 AssignmentInCondition:

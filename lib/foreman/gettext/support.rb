@@ -46,6 +46,7 @@ module Foreman::Gettext::Support
     FastGettext.human_available_locales = []
     FastGettext.default_available_locales.sort.each do |locale|
       FastGettext.locale = locale
+      # rubocop:disable AsciiComments
       # TRANSLATORS: Provide locale name in native language (e.g. English, Deutsch or Português)
       human_locale = _("locale_name")
       human_locale = locale if human_locale == "locale_name"
