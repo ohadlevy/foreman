@@ -45,10 +45,6 @@ AmbiguousRegexpLiteral:
 AndOr:
   Enabled: false
 
-# Offence count: 2
-BlockComments:
-  Enabled: false
-
 # Offence count: 6
 BlockNesting:
   Max: 4
