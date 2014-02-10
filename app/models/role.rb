@@ -42,7 +42,7 @@ class Role < ActiveRecord::Base
   scoped_search :on => :name, :complete_value => true
 
   def initialize *args
-    super *args
+    super(*args)
     self.builtin = 0
   end
 

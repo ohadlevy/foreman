@@ -121,7 +121,7 @@ class Report < ActiveRecord::Base
     # as fast as possible without a lot of performance penalties.
     count = 0
     Report.find_in_batches(:conditions => cond, :select => :id) do |reports|
-      report_ids = reports.map &:id
+      report_ids = reports.map(&:id)
       Log.delete_all({:report_id => report_ids})
       count += Report.delete_all({:id => report_ids})
     end

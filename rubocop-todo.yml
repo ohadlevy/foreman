@@ -36,10 +36,6 @@ AlignHash:
 AlignParameters:
   Enabled: false
 
-# Offence count: 4
-AmbiguousOperator:
-  Enabled: false
-
 # Offence count: 38
 AmbiguousRegexpLiteral:
   Enabled: false
