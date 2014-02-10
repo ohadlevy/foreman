@@ -45,11 +45,6 @@ AmbiguousRegexpLiteral:
 AndOr:
   Enabled: false
 
-# Offence count: 7
-# Configuration parameters: AllowSafeAssignment.
-AssignmentInCondition:
-  Enabled: false
-
 # Offence count: 16
 BlockAlignment:
   Enabled: false

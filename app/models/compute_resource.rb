@@ -51,7 +51,7 @@ class ComputeResource < ActiveRecord::Base
 
   # allows to create a specific compute class based on the provider.
   def self.new_provider args
-    raise ::Foreman::Exception.new(N_("must provide a provider")) unless provider = args[:provider]
+    raise ::Foreman::Exception.new(N_("must provide a provider")) unless (provider = args[:provider])
     PROVIDERS.each do |p|
       return "#{STI_PREFIX}::#{p}".constantize.new(args) if p.downcase == provider.downcase
     end

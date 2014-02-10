@@ -60,7 +60,7 @@ module Menu
       def push(obj, options={})
         parent = options[:parent] || @parent
 
-        target_root = (parent && subtree = self.find(parent)) ? subtree : @menu_items.root
+        target_root = (parent && (subtree = self.find(parent))) ? subtree : @menu_items.root
 
         # menu item position
         if options[:first]
@@ -94,7 +94,7 @@ module Menu
 
       # Removes a menu item
       def delete(name)
-        if found = self.find(name)
+        if (found = self.find(name))
           @menu_items.remove!(found)
         end
       end

@@ -214,7 +214,7 @@ module Api
 
     def find_nested_object
       params.keys.each do |param|
-        if md = param.match(/(\w+)_id$/)
+        if (md = param.match(/(\w+)_id$/))
           if allowed_nested_id.include?(param)
             resource_identifying_attributes.each do |key|
               find_method = "find_by_#{key}"
