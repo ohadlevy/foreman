@@ -96,16 +96,17 @@ module Facts
       nil
     end
 
-    EXCLUDED_INTERFACES = %w[lo usb0] unless defined?(EXCLUDED_INTERFACES)
+    EXCLUDED_INTERFACES = /^lo|^usb|^vnet/ unless defined?(EXCLUDED_INTERFACES)
 
     def interfaces
       ifs = facts[:interfaces]
       return {} if ifs.empty? or (ifs=ifs.split(",")).empty?
       interfaces = HashWithIndifferentAccess.new
 
-      (ifs - EXCLUDED_INTERFACES).each do |int|
-        if (ip = facts["ipaddress_#{int}".to_sym]) and (mac = facts["macaddress_#{int}".to_sym])
-          interfaces[int] = { :ip => ip, :mac => mac }
+      (ifs.delete_if{|int| int.match(EXCLUDED_INTERFACES)}).each do |int|
+        interfaces[int] = HashWithIndifferentAccess.new
+        facts.keys.grep(/_#{int}$/).each do |fact|
+          interfaces[int][fact.gsub("_#{int}",'')] = facts[fact]
         end
       end
       interfaces

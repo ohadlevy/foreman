@@ -16,7 +16,7 @@ module Nic
 
     validate :uniq_with_hosts
 
-    validates :host, :presence => true
+    validates :host, :presence => true, :if => Proc.new { |nic| nic.require_host? }
 
     scope :bootable, lambda { where(:type => "Nic::Bootable") }
     scope :bmc, lambda { where(:type => "Nic::BMC") }
@@ -53,6 +53,11 @@ module Nic
 
     def normalize_mac
       self.mac = Net::Validations.normalize_mac(mac)
+    end
+
+    # do we require a host object associate to the interface? defaults to true
+    def require_host?
+      true
     end
   end
 end
