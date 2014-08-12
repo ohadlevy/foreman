@@ -203,11 +203,11 @@ Foreman::Application.routes.draw do
         get 'auto_complete_search'
       end
     end
+
+    resources :user_sessions, :only => [:new, :create, :destroy]
+
     resources :users, :except => [:show] do
       collection do
-        get 'login'
-        post 'login'
-        get 'logout'
         get 'extlogin'
         get 'extlogout'
         get 'auth_source_selected'

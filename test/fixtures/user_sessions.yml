@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user: 
+  accessed_at: 2014-08-10 15:21:42
+  revoked_at: 2014-08-10 15:21:42
+  ip: MyString
+  user_agent: MyString
+  key: MyString
+
+two:
+  user: 
+  accessed_at: 2014-08-10 15:21:42
+  revoked_at: 2014-08-10 15:21:42
+  ip: MyString
+  user_agent: MyString
+  key: MyString

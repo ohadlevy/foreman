@@ -18,7 +18,7 @@ module SSO
 
     # Override this value on SSO objects to redirect your users to a custom auth path
     def login_url
-      controller.main_app.login_users_path
+      controller.main_app.user_sessions_path
     end
 
     # don't forget to implement expiration_url method if your SSO method changes this to true
