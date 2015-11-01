@@ -47,7 +47,10 @@
       <legend><%= _("Prioritize attribute order") %></legend>
       <h6><%= popover("", _("The order in which matchers keys are processed, first match wins.<br> You may use multiple attributes as a matcher key, for example, an order of <code>host group, environment</code> would expect a matcher such as <code>hostgroup = \"web servers\", environment = production</code>"),
                       :title => _("The order in which values are resolved.")).html_safe %> <%= _("Set the order in which values are resolved.") %></h6>
-      <%= textarea_f f, :path, :rows => :auto, :label => _("Order"), :id => 'order', :size => "col-md-8", :onchange => 'fill_in_matchers()', :value => f.object.path, :class => "no-stretch" %>
+      <%= react_component 'LookupKeyOrderList',
+                          {:data => {:order => f.object.path.split,
+                                     :input_name => f.name_for(:path)}},
+                          {:class => "lookup-keys-order"} %>
       <%= checkbox_f(f, :merge_overrides, :onchange => 'mergeOverridesChanged(this)', :table_field => true,
                         :disabled => !f.object.supports_merge?, :size => "col-md-1", :label_size => "col-md-3",
                         :help_inline => popover("", _("Continue to look for matches after first find (only array/hash type)? Note: merging overrides ignores all matchers that use Puppet default."))) %>

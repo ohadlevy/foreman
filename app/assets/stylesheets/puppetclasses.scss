@@ -17,7 +17,22 @@
     margin: 0px;
   }
 
-  input[type=checkbox]{
+  input[type=checkbox] {
     margin-top: 11px;
+  }
+
+}
+.lookup-keys-order {
+  ul {
+    list-style: none;
+    margin:0;
+    padding:0
+  }
+  li {
+    padding: 5px;
+    background:#eee
+  }
+  a {
+    color:grey;
   }
 }

@@ -1,3 +1,7 @@
+//= require react
+//= require react_ujs
+//= require components
+
 //on load
 $(document).on("ContentLoad", function() {
   //select the first tab
@@ -280,4 +284,3 @@ function build_match() {
     match.val(key_value_to_match(matcher_key.val(), matcher_value.val()));
   });
 }
-
