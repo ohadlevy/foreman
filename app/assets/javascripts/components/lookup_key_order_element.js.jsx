@@ -14,8 +14,8 @@ var LookupKeyOrderElement = React.createClass({
     return (
         <li>
           {this.state.name}
-          <a onClick={this.handleUp}> <Icon name='arrow-up'/></a>
-          <a onClick={this.handleDown}> <Icon name='arrow-down'/></a>
+          <a onClick={this.handleUp}> <Glyphicon glyph='arrow-up'/></a>
+          <a onClick={this.handleDown}> <Glyphicon glyph='arrow-down'/></a>
         </li>
     );
   }

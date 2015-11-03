@@ -1,6 +1,9 @@
 //= require react
 //= require react_ujs
 //= require components
+//= require react_bootstrap
+
+var Glyphicon = ReactBootstrap.Glyphicon;
 
 //on load
 $(document).on("ContentLoad", function() {

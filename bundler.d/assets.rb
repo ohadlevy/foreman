@@ -20,4 +20,5 @@ group :assets do
   gem 'select2-rails', '~> 3.5'
   gem 'underscore-rails', '~> 1.8'
   gem 'react-rails', '~> 1.3.0'
+  gem 'react-bootstrap-rails'
 end
