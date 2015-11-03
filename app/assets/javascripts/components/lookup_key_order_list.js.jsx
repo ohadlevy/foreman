@@ -1,6 +1,6 @@
 var LookupKeyOrderList = React.createClass({
   getInitialState: function () {
-    return {order: this.props.data.order, inputName: this.props.data.input_name }
+    return {order: this.props.data.order, inputName: this.props.data.input_name};
   },
   reOrder: function (name, newPosition, oldPosition) {
     console.log('child ' + name + ' has changed position from: ' + oldPosition + ' to: ' + newPosition);
@@ -17,21 +17,35 @@ var LookupKeyOrderList = React.createClass({
 
     this.setState({order: list});
   },
+  addNewElement: function (event) {
+    event.preventDefault();
+
+    newName = 'works';
+    var list = this.state.order;
+    if (list.indexOf(newName) === -1)
+      list = list.concat(newName);
+
+    this.setState({order: list});
+  },
+
   render: function () {
     var self = this;
 
     return (
         <ul>
           {this.state.order.map(function (element, i) {
-            return <LookupKeyOrderElement name={element} position={i} key={element} changeCallback={self.reOrder}/>
-          })}
-          <textarea type="text"
-                    value={this.state.order.join('\n')}
-                    //onChange={fill_in_matchers()}
-                    id='order'
+              return <LookupKeyOrderElement name={element} position={i} key={element} changeCallback={self.reOrder}/>
+              })}
+
+          s
+          <button onClick={this.addNewElement}><Glyphicon glyph='plus'/></button>
+
+          /* adds a text area to keep compatibility with current rails form. */
+          <textarea value={this.state.order.join('\n')}
                     name={this.state.inputName}
-                    readOnly={true}
-                    hidden={true} />
+                    readOnly
+                    hidden
+          />
         </ul>
     );
   }
