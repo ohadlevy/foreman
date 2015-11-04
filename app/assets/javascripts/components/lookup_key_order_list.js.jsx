@@ -30,17 +30,17 @@ var LookupKeyOrderList = React.createClass({
 
   render: function () {
     var self = this;
+    var listLength = this.state.order.length;
 
     return (
         <ul>
           {this.state.order.map(function (element, i) {
-              return <LookupKeyOrderElement name={element} position={i} key={element} changeCallback={self.reOrder}/>
+              return <LookupKeyOrderElement name={element} position={i} key={element} changeCallback={self.reOrder} listLength={listLength}/>
               })}
 
-          s
           <button onClick={this.addNewElement}><Glyphicon glyph='plus'/></button>
 
-          /* adds a text area to keep compatibility with current rails form. */
+          {/* adds a text area to keep compatibility with current rails form. */}
           <textarea value={this.state.order.join('\n')}
                     name={this.state.inputName}
                     readOnly
