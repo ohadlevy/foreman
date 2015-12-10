@@ -94,8 +94,8 @@ class SmartProxiesControllerTest < ActionController::TestCase
   end
 
   test "smart proxy version succeeded" do
-    SmartProxy.any_instance.stubs(:version).returns({:success => true, :message => '1.11'})
-    get :version, { :id => smart_proxies(:one).to_param }, set_session_user
+    SmartProxy.any_instance.stubs(:version).returns('1.11')
+    get :ping, { :id => smart_proxies(:one).to_param }, set_session_user
     assert_response :success
     show_response = ActiveSupport::JSON.decode(@response.body)
     assert_equal('1.11', show_response['message'])
@@ -103,9 +103,24 @@ class SmartProxiesControllerTest < ActionController::TestCase
 
   test "smart proxy version failed" do
     SmartProxy.any_instance.stubs(:version).raises(Foreman::Exception, 'Exception message')
-    get :version, { :id => smart_proxies(:one).to_param }, set_session_user
+    get :ping, { :id => smart_proxies(:one).to_param }, set_session_user
     assert_response :success
     show_response = ActiveSupport::JSON.decode(@response.body)
     assert_match(/Exception message/, show_response['message'])
+  end
+
+  test '#show' do
+    proxy = smart_proxies(:one)
+    get :show, { :id => proxy.id }, set_session_user
+    assert_response :success
+    assert_template 'show'
+  end
+
+  test 'tftp_server should return tftp address' do
+    SmartProxy.any_instance.stubs(:tftp_server).returns('127.13.0.1')
+    get :tftp_server, { :id => smart_proxies(:one).to_param }, set_session_user
+    assert_response :success
+    show_response = ActiveSupport::JSON.decode(@response.body)
+    assert_equal('127.13.0.1', show_response['message'])
   end
 end

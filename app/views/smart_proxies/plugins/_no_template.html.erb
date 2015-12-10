@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <h4><%= _("#{feature.capitalize}") %></h4>
+    </div>
+    <%= render :partial => 'smart_proxies/plugins/plugin_version', :locals => {:feature => feature, :proxy => @smart_proxy } %>
+    <div class="row">
+      <div class="col-md-12"><%= _('Data not available for %s') % feature %></div>
+    </div>
+  </div>
+</div>

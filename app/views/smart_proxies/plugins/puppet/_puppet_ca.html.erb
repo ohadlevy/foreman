@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <h4><%= _('Puppet CA') %></h4>
+    </div>
+    <%= render :partial => 'smart_proxies/plugins/plugin_version', :locals => {:feature => 'puppetca', :proxy => @smart_proxy } %>
+    <div class="row">
+      <div class="col-md-4">
+        <%= _('Hosts count') %>
+      </div>
+      <div class="col-md-8">
+        <%= link_to(@smart_proxy.puppet_ca_hosts.count, hosts_path(:search => "puppet_ca = #{@smart_proxy.name}")) %>
+      </div>
+    </div>
+    <% %w(valid pending revoked).each do |state| %>
+      <div class="row">
+        <div class="col-md-4">
+          <%= _('%s certificates') % state.capitalize %>
+        </div>
+        <div class="col-md-8">
+          <% state_count =  SmartProxies::PuppetCA.find_by_state(@smart_proxy, state).count rescue _('Error getting data for %s certificates') % state %>
+          <%= state_count == _('Error getting data for %s certificates') % state ?
+                state_count :
+                display_link_if_authorized(state_count, hash_for_smart_proxy_puppetca_index_path(:smart_proxy_id => @smart_proxy, :state => state).
+                                                  merge(:auth_object => @smart_proxy, :permission => 'view_smart_proxies_puppetca', :authorizer => authorizer)) %>
+        </div>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="col-md-4">
+        <%= _('Autosign entries') %>
+      </div>
+      <div class="col-md-8">
+        <% autosign = ProxyAPI::Puppetca.new(:url => @smart_proxy.url).autosign.count rescue _('Error') %>
+        <%= autosign == _('Error') ?
+            autosign :
+            display_link_if_authorized(autosign, hash_for_smart_proxy_autosign_index_path(:smart_proxy_id => @smart_proxy).
+                                                merge(:auth_object => @smart_proxy, :permission => 'view_smart_proxies_autosign', :authorizer => authorizer)) %>
+      </div>
+    </div>
+  </div>
+</div>
+

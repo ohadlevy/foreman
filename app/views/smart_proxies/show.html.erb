@@ -1,0 +1,93 @@
+<% javascript('proxy_status') %>
+<% title(_('Smart Proxy: %s') % @smart_proxy.to_label) %>
+<%= smart_proxy_title_actions(@smart_proxy, authorizer) %>
+<% puppet_features_lowered = %w(puppet puppet_ca) %>
+<% service_features = @smart_proxy.features_to_lowercase - puppet_features_lowered %>
+<div class="row proxy-show" data-url="<%= ping_smart_proxy_path(@smart_proxy) %>">
+  <ul id="proxy-tab" class="nav nav-tabs">
+    <li class="active"><a href="#properties" data-toggle="tab"><%= _('Overview') %></a></li>
+    <% if service_features.any? %>
+      <li><a href="#services" data-toggle="tab"><%= _('Services') %></a></li>
+    <% end %>
+    <% if @smart_proxy.has_feature?('Puppet') || @smart_proxy.has_feature?('Puppet CA') %>
+      <li><a href="#puppet" data-toggle="tab"><%= _('Puppet') %></a></li>
+    <% end %>
+  </ul>
+  <div id="proxy-tab-content" class="proxy-content tab-content">
+    <div class="tab-pane active in" id="properties">
+      <div class="col-md-6">
+        <div class="row">
+          <h4><%= _('Details') %></h4>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <%= _('Communication status') %>
+          </div>
+          <div class="col-md-8">
+            <span class="proxy-show-status">
+              <%= spinner %>
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <%= _('URL') %>
+          </div>
+          <div class="col-md-8">
+            <%= @smart_proxy.url %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <%= _('Version') %>
+          </div>
+          <div class="col-md-8">
+            <span class="proxy-version" data-url="<%= ping_smart_proxy_path(@smart_proxy) %>">
+              <%= spinner %>
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <%= _('Features') %>
+            <%= refresh_proxy_icon(@smart_proxy, authorizer) %>
+          </div>
+          <div class="col-md-8">
+            <%= @smart_proxy.features.to_sentence %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <!--place holder for Capsule sync-->
+      </div>
+    </div>
+    <% if service_features.any? %>
+      <div class="tab-pane" id="services">
+        <div class="col-md-6">
+          <% service_features.each do |feature| %>
+            <% feature_erb = "smart_proxies/plugins/#{feature}" %>
+            <% if lookup_context.template_exists?(feature_erb, [], true) %>
+              <%= render :partial => feature_erb, :locals => {:feature => feature} %>
+            <% else %>
+              <%= render :partial => "smart_proxies/plugins/no_template", :locals => {:feature => feature} unless feature.start_with?('puppet') %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <% if @smart_proxy.has_feature?('Puppet') || @smart_proxy.has_feature?('Puppet CA') %>
+      <div class="tab-pane" id="puppet">
+        <div class="col-md-6">
+          <% if @smart_proxy.has_feature?('Puppet') %>
+            <% feature_erb = "puppet" %>
+            <%= render :partial => "smart_proxies/plugins/puppet/#{feature_erb}", :locals => {:feature => feature_erb} %>
+          <% end %>
+          <% if @smart_proxy.has_feature?('Puppet CA') %>
+            <% feature_erb = "puppet_ca" %>
+            <%= render :partial => "smart_proxies/plugins/puppet/#{feature_erb}", :locals => {:feature => feature_erb} %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

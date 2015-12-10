@@ -40,9 +40,6 @@ class SmartProxy < ActiveRecord::Base
 
   scope :with_features, ->(*feature_names) { where(:features => { :name => feature_names }).joins(:features) if feature_names.any? }
 
-  HTTP_ERRORS = [Errno::EINVAL, Errno::ECONNRESET, EOFError, Timeout::Error,
-                 Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError]
-
   def hostname
     URI(url).host
   end
@@ -68,6 +65,7 @@ class SmartProxy < ActiveRecord::Base
   end
 
   def refresh
+    proxy_status.delete_cached_versions
     associate_features
     errors
   end
@@ -88,21 +86,24 @@ class SmartProxy < ActiveRecord::Base
     self.features.any? { |proxy_feature| proxy_feature.name == feature }
   end
 
+  def features_to_lowercase
+    features.pluck("LOWER(REPLACE(name, ' ', '_'))").uniq
+  end
+
   def version
-    result = {}
-    begin
-      Timeout::timeout(20) do
-        version = ProxyAPI::Version.new(:url => url).version
-        result[:success] = true
-        result[:message] = version
-      end
-    rescue *HTTP_ERRORS => exception
-      raise ::Foreman::WrappedException.new exception, N_("Unable to connect to smart proxy")
-    end
-    result
+    proxy_status.proxy_versions
+  end
+
+  def tftp_server
+    raise ::Foreman::Exception.new(N_('No TFTP feature for %s') % to_label) unless has_feature?('TFTP')
+    proxy_status.tftp_server
   end
 
   private
+
+  def proxy_status
+    @proxy_status ||= ProxyStatus.new(id, url)
+  end
 
   def sanitize_url
     self.url.chomp!('/') unless url.empty?
