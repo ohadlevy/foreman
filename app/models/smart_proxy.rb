@@ -65,7 +65,7 @@ class SmartProxy < ActiveRecord::Base
   end
 
   def refresh
-    proxy_status.delete_cached_versions
+    proxy_status.revoke_cache!
     associate_features
     errors
   end
@@ -102,7 +102,7 @@ class SmartProxy < ActiveRecord::Base
   private
 
   def proxy_status
-    @proxy_status ||= ProxyStatus.new(id, url)
+    @proxy_status ||= ProxyStatus.new(self)
   end
 
   def sanitize_url
