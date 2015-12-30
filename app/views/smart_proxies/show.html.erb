@@ -8,6 +8,9 @@
     <% if service_features.any? %>
       <li><a href="#services" data-toggle="tab"><%= _('Services') %></a></li>
     <% end %>
+    <% if @smart_proxy.has_feature?('Puppet') || @smart_proxy.has_feature?('Puppet CA') %>
+      <li><a href="#puppet" data-toggle="tab"><%= _('Puppet') %></a></li>
+    <% end %>
   </ul>
   <div id="proxy-tab-content" class="proxy-content tab-content">
     <div class="tab-pane active in" id="properties">
@@ -66,6 +69,19 @@
             <% else %>
               <%= render :partial => "smart_proxies/plugins/no_template", :locals => {:feature => feature} %>
             <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+    <% if @smart_proxy.has_feature?('Puppet') || @smart_proxy.has_feature?('Puppet CA') %>
+      <div class="tab-pane" id="puppet">
+        <div class="col-md-6">
+          <% if @smart_proxy.has_feature?('Puppet') %>
+            <% feature_erb = "puppet" %>
+            <%= render :partial => "smart_proxies/plugins/puppet/#{feature_erb}", :locals => {:feature => feature_erb} %>
+          <% end %>
+          <% if @smart_proxy.has_feature?('Puppet CA') %>
+            <div data-ajax-url="<%= puppet_ca_smart_proxy_path(@smart_proxy) %>"> </div>
           <% end %>
         </div>
       </div>
