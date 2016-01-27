@@ -1,8 +1,9 @@
 class SmartProxiesController < ApplicationController
   include Foreman::Controller::AutoCompleteSearch
 
-  before_filter :find_resource, :only => [:show, :edit, :update, :refresh, :ping, :tftp_server, :destroy, :puppet_environments, :puppet_dashboard, :log_pane, :failed_modules, :errors_card, :modules_card, :expire_logs]
-  before_filter :find_status, :only => [:ping, :tftp_server, :puppet_environments]
+  STATUS_ROUTES = [:ping, :tftp_server, :puppet_environments, :puppet_dashboard, :subnets, :log_pane, :failed_modules, :errors_card, :modules_card]
+  before_filter :find_resource, :only => [:show, :edit, :update, :refresh, :destroy, :expire_logs] + STATUS_ROUTES
+  before_filter :find_status, :only => STATUS_ROUTES
 
   def index
     @smart_proxies = resource_base.includes(:features).search_for(params[:search], :order => params[:order]).paginate(:page => params[:page])
@@ -50,23 +51,23 @@ class SmartProxiesController < ApplicationController
         @proxy_status[:tftp].server
       end
     else
-      render(:json => {:success => false, :message => _('No TFTP feature')})
+      render(:json => { :success => false, :message => _('No TFTP feature') })
     end
   end
 
   def puppet_environments
-    render :partial => 'smart_proxies/plugins/puppet_envs', :locals => {:envs => @proxy_status[:puppet].environment_stats}
-  rescue Foreman::Exception => exception
-    process_ajax_error exception
+    requested_data_ajax do
+      render :partial => 'smart_proxies/plugins/puppet_envs', :locals => { :envs => @proxy_status[:puppet].environment_stats }
+    end
   end
 
   def puppet_dashboard
-    dashboard = Dashboard::Data.new("puppetmaster = \"#{@smart_proxy.name}\"")
-    @hosts = dashboard.hosts
-    @report = dashboard.report
-    render :partial => 'smart_proxies/plugins/puppet_dashboard', :locals => { :dashboard => dashboard }
-  rescue Foreman::Exception => exception
-    process_ajax_error exception
+    requested_data_ajax do
+      dashboard = Dashboard::Data.new("puppetmaster = \"#{@smart_proxy.name}\"")
+      @hosts    = dashboard.hosts
+      @report   = dashboard.report
+      render :partial => 'smart_proxies/plugins/puppet_dashboard', :locals => { :dashboard => dashboard }
+    end
   end
 
   def update
@@ -130,6 +131,12 @@ class SmartProxiesController < ApplicationController
     process_ajax_error exception
   end
 
+  def subnets
+    requested_data_ajax do
+      render :partial => 'smart_proxies/plugins/dhcp_subnets', :locals => { :subnets => @proxy_status[:dhcp].subnets }
+    end
+  end
+
   private
 
   def find_status
@@ -138,16 +145,22 @@ class SmartProxiesController < ApplicationController
 
   def requested_data
     data = yield
-    render :json => {:success => true, :message => data }
+    render :json => { :success => true, :message => data }
   rescue Foreman::Exception => exception
-    render :json => {:success => false, :message => exception.message} and return
+    render :json => { :success => false, :message => exception.message } and return
+  end
+
+  def requested_data_ajax
+    yield
+  rescue Foreman::Exception => exception
+    process_ajax_error exception
   end
 
   def action_permission
     case params[:action]
       when 'refresh', 'expire_logs'
         :edit
-      when 'ping', 'tftp_server', 'puppet_environments', 'puppet_dashboard', 'log_pane', 'failed_modules', 'errors_card', 'modules_card'
+      when *(STATUS_ROUTES.map(&:to_s))
         :view
       else
         super

@@ -1,5 +1,5 @@
 module SmartProxiesHelper
-  TABBED_FEATURES = ["Puppet", "Puppet CA", "Logs"]
+  TABBED_FEATURES = ["Puppet", "Puppet CA", "Logs", "DHCP"]
 
   def proxy_actions(proxy, authorizer)
     actions = []
@@ -93,5 +93,14 @@ module SmartProxiesHelper
       [[_('ERROR or FATAL'), 'ERROR|FATAL']] +
       [[_('WARNING'), 'WARN']] +
       [[_('INFO or DEBUG'), 'INFO|DEBUG']]), :class => "datatable-filter", :id => "logs-filter"
+  end
+
+  def subnet_label(subnet)
+    foreman_subnet = Subnet.subnet_for(subnet.network)
+    if foreman_subnet
+      foreman_subnet.to_label
+    else
+      subnet.network
+    end
   end
 end

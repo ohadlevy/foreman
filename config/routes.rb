@@ -205,6 +205,7 @@ Foreman::Application.routes.draw do
       get 'errors_card'
       get 'modules_card'
       post 'expire_logs'
+      get 'subnets'
     end
     constraints(:id => /[^\/]+/) do
       resources :puppetca, :only => [:index, :update, :destroy] do
