@@ -15,6 +15,7 @@
 //= require proxy_status
 //= require proxy_status/puppet
 //= require proxy_status/logs
+//= require proxy_status/dhcp
 //= require jquery.extentions
 //= require jquery.multi-select
 //= require settings
@@ -125,7 +126,6 @@ function onContentLoad(){
       if ($(this).data('on-complete')){
         window[$(this).data('on-complete')].call(null, this, status);
       }
-      $(document).trigger('ContentLoad');
     });
   });
 
