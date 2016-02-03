@@ -1,0 +1,3 @@
+<%= render('common/toast/error', :message => flash[:error]) if flash[:error] %>
+<%= render('common/toast/warn', :message => flash[:warning]) if flash[:warning] %>
+<%= render('common/toast/success', :message => flash[:notice]) if flash[:notice] %>
