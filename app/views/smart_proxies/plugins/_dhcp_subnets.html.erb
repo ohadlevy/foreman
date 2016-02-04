@@ -1,7 +1,11 @@
 <ul id="proxy-dhcp-tab" class="nav nav-tabs nav-tabs-pf nav-stacked col-md-3">
   <li class="active"><a href="#dhcp_general"><%= _('General') %></a></li>
   <% subnets.each do |subnet| %>
-    <li><a href="#<%= subnet.network.parameterize %>"><%= subnet_label subnet %></a></li>
+    <li><a href="#<%= subnet.network.parameterize %>"
+           data-placeholder="<%= subnet.network.parameterize %>"
+           data-netmask="<%= subnet.netmask %>"
+           class="subnet-menu"
+           data-url="<%= details_smart_proxy_proxy_subnets_path(@smart_proxy)%>"><%= subnet_label subnet, @smart_proxy %></a></li>
   <% end %>
 </ul>
 <div id="proxy-dhcp-tab-content" class="tab-content col-md-9">
@@ -16,15 +20,15 @@
         <div class="row row-cards-pf">
           <%= render :partial => 'smart_proxies/plugins/dhcp_subnets_card',
                      :locals => { :subnet => subnet,
-                                  :item => 'Reservations',
+                                  :item => 'Domains',
                                   :icon_classes => "fa fa-database",
-                                  :content => subnet.reservations.count} %>
+                                  :content => foreman_subnet(subnet, @smart_proxy).domains.count } %>
 
           <%= render :partial => 'smart_proxies/plugins/dhcp_subnets_card',
                      :locals => { :subnet => subnet,
-                                  :item => 'Leases',
+                                  :item => 'Hosts',
                                   :icon_classes => "fa fa-laptop",
-                                  :content => subnet.leases.count} %>
+                                  :content => foreman_subnet(subnet, @smart_proxy).hosts.count } %>
 
           <% if subnet.options.present? %>
             <div class="col-md-3">
@@ -50,12 +54,15 @@
       <% end %>
     </div>
   </div>
+
   <% subnets.each do |subnet| %>
     <div class="tab-pane" id="<%= subnet.network.parameterize %>">
-      <h3><%= _('Reservations') %></h3>
-      <%= render :partial => 'smart_proxies/plugins/dhcp_reservations', :locals => { :subnet => subnet } %>
-      <h3><%= _('Leases') %></h3>
-      <%= render :partial => 'smart_proxies/plugins/dhcp_leases', :locals => { :subnet => subnet } %>
+      <div class="row">
+        <div class="top-margin subnet-spinner">
+          <div class="spinner spinner-xs spinner-inline"></div>
+        </div>
+        <div id="subnet-placeholder-<%= subnet.network.parameterize %>">
+      </div>
     </div>
   <% end %>
 </div>

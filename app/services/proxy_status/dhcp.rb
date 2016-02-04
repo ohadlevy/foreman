@@ -2,13 +2,17 @@ module ProxyStatus
   class DHCP < Base
 
     def subnets
-      return @subnets if @subnets
-
       fetch_proxy_data do
-        @subnets = api.subnets.map do |subnet|
-          records = api.subnet(subnet['network'])
-          Net::DHCP::Subnet.new subnet.merge(records)
-        end
+        @subnets = api.subnets.map do |s|
+          Net::DHCP::Subnet.new s
+        end.compact
+      end
+    end
+
+    def subnet(dhcp_subnet)
+      fetch_proxy_data "details" do
+        result = api.subnet dhcp_subnet[:network]
+        Net::DHCP::Subnet.new result.merge!(dhcp_subnet)
       end
     end
 

@@ -218,6 +218,11 @@ Foreman::Application.routes.draw do
     collection do
       get 'auto_complete_search'
     end
+    resources :proxy_subnets, :only => [:index, :show] do
+      collection do
+        get 'details'
+      end
+    end
   end
 
   resources :fact_values, :only => [:index] do
