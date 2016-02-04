@@ -95,18 +95,17 @@ module SmartProxiesHelper
       [[_('INFO or DEBUG'), 'INFO|DEBUG']]), :class => "datatable-filter", :id => "logs-filter"
   end
 
-  def subnet_label(subnet)
-    foreman_subnet = Subnet.subnet_for(subnet.network)
-    if foreman_subnet
-      foreman_subnet.to_label
+  def subnet_label(subnet, smart_proxy)
+    f_subnet = foreman_subnet(subnet, smart_proxy)
+    if f_subnet
+      f_subnet.to_label
     else
       subnet.network
     end
   end
 
   def link_to_host(subnet, hostname, smart_proxy)
-    foreman_subnet = Subnet.where(:network => subnet.network, :netmask => subnet.netmask)
-    return hostname unless foreman_subnet
+    return hostname unless foreman_subnet(subnet, smart_proxy)
     hosts = hosts_with_subnet(subnet, smart_proxy)
     host = hosts.find { |h| h.name == hostname }
     host.present? ? link_to(host.to_s, host_path(host)) : hostname
@@ -115,5 +114,9 @@ module SmartProxiesHelper
   def hosts_with_subnet(subnet, smart_proxy)
     subnets = { :subnets => { :dhcp_id => smart_proxy.id, :network => subnet.network } }
     @hosts ||= Host.joins(:interfaces => :subnet).where(subnets)
+  end
+
+  def foreman_subnet(subnet, smart_proxy)
+    Subnet.find_by(:network => subnet.network, :mask => subnet.netmask, :dhcp_id => smart_proxy.id)
   end
 end

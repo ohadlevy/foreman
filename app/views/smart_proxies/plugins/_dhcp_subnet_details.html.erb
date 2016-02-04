@@ -1,0 +1,47 @@
+<div>
+  <h3><%= _('Reservations') %></h3>
+  <table id="<%= @details.network.parameterize %>_reservations" class='<%= table_css_classes %> table-fixed' data-table="inline">
+    <thead>
+      <tr>
+        <th class="col-md-6"><%= _("Hostname") %></th>
+        <th class="col-md-3"><%= _("IP Address") %></th>
+        <th class="col-md-3"><%= _("MAC") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @details.reservations.each do |record| %>
+        <tr>
+          <td class="ellipsis"><%= link_to_host @details, record['hostname'], @smart_proxy %></td>
+          <td><%=record['ip'] %></td>
+          <td><%= record['mac'] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h3><%= _('Leases') %></h3>
+  <table id="<%= @details.network.parameterize %>_leases" class='<%= table_css_classes %> table-fixed' data-table="inline">
+    <thead>
+      <tr>
+        <th class="col-md-3"><%= _("Hostname") %></th>
+        <th class="col-md-2"><%= _("IP Address") %></th>
+        <th class="col-md-2"><%= _("MAC") %></th>
+        <th class="col-md-1"><%= _("State") %></th>
+        <th class="col-md-2"><%= _("Start") %></th>
+        <th class="col-md-2"><%= _("End") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @details.leases.each do |record| %>
+        <tr>
+          <td class="ellipsis"><%= link_to_host @details, record['hostname'], @smart_proxy %></td>
+          <td><%=record['ip'] %></td>
+          <td><%= record['mac'] %></td>
+          <td><%= _(record['state']) %></td>
+          <td><%= record['starts'] %></td>
+          <td><%= record['ends'] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
