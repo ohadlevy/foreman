@@ -6,10 +6,8 @@
       <p class="card-pf-aggregate-status-notifications">
         <div class="<%= icon_classes %>" data-toggle="tooltip" title="<%= _('View %s') % item %>">
         </div>
-        <a href="#<%= subnet.network.parameterize %>_<%= item.downcase %>">
-            <%= content %>
-            <%= _('%s') % item %>
-        </a>
+          <%= content %>
+          <%= _('%s') % item %>
       </p>
     </div>
   </div>
