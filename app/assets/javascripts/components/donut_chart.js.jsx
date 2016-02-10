@@ -29,20 +29,32 @@ var DonutChart = React.createClass({
     };
   },
 
+  getInitialState: function () {
+     return {columns: this.props.columns, groups: this.groups};
+   },
+
   componentDidMount: function() {
     this.generateDonutChart();
   },
 
+  componentDidUpdate: function(prevProps) {
+    if(prevProps.state.columns !== this.state.columns) {
+      this.generateDonutChart();
+    }
+  },
+
+  componentWillUnmount: function() {
+    this._destroyChart();
+  },
   maxPercentage: function(columns) {
-    var values = columns.map(function(subarray) { return subarray[1] });
+    var values = columns.map(function(subarray) { return subarray[1]; });
     var max = Math.max.apply(Math, values);
-    var sum = values.reduce(function(prev, curr) { return prev + curr });
+    var sum = values.reduce(function(prev, curr) { return prev + curr; });
     return Math.round(100 * max / sum);
   },
 
   maxLabel: function(columns) {
-    var original = 0;
-    var values = columns.map(function(subarray) { return subarray[1] });
+    var values = columns.map(function(subarray) { return subarray[1]; });
     var max = Math.max.apply(Math, values);
     return columns[values.indexOf(max)][0].toLowerCase();
   },
@@ -52,8 +64,8 @@ var DonutChart = React.createClass({
     donutChartConfig.bindto = '#' + this.chart_target.id;
     donutChartConfig.data = {
       type: "donut",
-      columns: this.props.columns,
-      groups: this.props.groups,
+      columns: this.state.columns,
+      groups: this.state.groups,
       order: null
     };
     donutChartConfig.color = this.props.colors;
@@ -64,7 +76,7 @@ var DonutChart = React.createClass({
             '</span>';
       }
     };
-    c3.generate(donutChartConfig);
+    this.chart = c3.generate(donutChartConfig);
 
     var donutChartTitle = d3.select(this.chart_target).select('text.c3-chart-arcs-title');
     donutChartTitle.text("");
@@ -74,14 +86,20 @@ var DonutChart = React.createClass({
     .classed('donut-title-small-pf', true).attr('dy', 20).attr('x', 0);
   },
 
+  updateColumns: function(data) {
+    this.setState({columns: data});
+  },
+
+  _destroyChart: function() {
+    this.chart.destroy();
+  },
+
   render: function() {
     return (
-        <div>
-            <div className={this.props.className}
-                 id={this.props.id}
-                 ref={c => this.chart_target = c}
-            />
-        </div>
+        <div className={this.props.className}
+             id={this.props.id}
+             ref={c => this.chart_target = c}
+        />
     );
   },
 });
