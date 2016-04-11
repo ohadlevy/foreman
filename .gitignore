@@ -38,3 +38,7 @@ _build
 zeus.json
 custom_plan.rb
 pkg/
+# Added by webpack-rails
+/node_modules
+/client/node_modules
+/public/webpack

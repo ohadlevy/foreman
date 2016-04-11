@@ -18,6 +18,10 @@
     <%= csrf_meta_tags %>
     <%= javascript_include_tag "locale/#{FastGettext.locale}/app", "data-turbolinks-track" => true %>
     <%= javascript_include_tag 'application', "data-turbolinks-track" => true %>
+    <%= javascript_include_tag *webpack_asset_paths("application") %>
+    <% if Rails.env.development? %>
+      <script src="http://localhost:3808/webpack-dev-server.js"></script>
+    <% end %>
     <%= yield(:javascripts) %>
 
     <script type="text/javascript">

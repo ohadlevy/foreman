@@ -13,9 +13,13 @@
     :enforce     => true,
     :default_src => 'self',
     :frame_src   => 'self',
-    :connect_src => 'self ws: wss:',
+    :connect_src => %w(self ws: wss:),
     :style_src   => 'inline self',
-    :script_src  => 'eval inline self',
-    :img_src     => ['self', '*.gravatar.com']
+    :script_src  => %w(eval inline self),
+    :img_src     => %w(self *.gravatar.com)
   }
+  if Rails.env.development?
+    config.csp[:script_src] << 'http://localhost:3808'
+    config.csp[:connect_src] << 'http://localhost:3808'
+  end
 end
