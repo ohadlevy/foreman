@@ -51,7 +51,7 @@ var config = {
         test: /(\.png|\.gif)$/,
         loader: "url-loader?limit=32767"
       }
-    ],
+    ]
   },
 
   plugins: [
