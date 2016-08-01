@@ -41,9 +41,6 @@ var config = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: "babel-loader",
-        query: {
-          presets: ['es2015']
-        }
       },
       {
         test: /\.css$/,
@@ -53,7 +50,7 @@ var config = {
         test: /(\.png|\.gif)$/,
         loader: "url-loader?limit=32767"
       }
-    ],
+    ]
   },
 
   plugins: [

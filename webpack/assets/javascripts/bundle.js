@@ -4,7 +4,8 @@ require('expose?_!lodash');
 require('expose?jstz!jstz');
 require('jquery.cookie');
 require('./bundle_flot');
+require('script!../../../node_modules/patternfly/dist/js/patternfly.js');
 require('./bundle_select2');
-window.tfm = {
-  tools: require('./foreman_tools')
-};
+window.tfm = window.tfm || {};
+window.tfm.tools = require('./foreman_tools');
+window.tfm.reactMounter = require('./react_app/common/MountingService');
