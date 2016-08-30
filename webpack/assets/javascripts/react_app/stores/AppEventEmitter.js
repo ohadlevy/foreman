@@ -2,8 +2,8 @@ import { EventEmitter } from 'events';
 const CHANGE_EVENT = 'CHANGE';
 
 export default class AppEventEmitter extends EventEmitter {
-  emitChange() {
-    this.emit(CHANGE_EVENT);
+  emitChange(event) {
+    this.emit(CHANGE_EVENT, event);
   }
 
   addChangeListener(callback) {

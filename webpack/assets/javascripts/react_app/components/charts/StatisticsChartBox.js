@@ -41,7 +41,11 @@ export default class StatisticsChartBox extends React.Component {
     StatisticsStore.removeChangeListener(this.onChange);
   }
 
-  onChange() {
+  onChange(event) {
+    if (event.id != this.props.id) {
+      return;
+    }
+
     const statistics = StatisticsStore.getStatisticsData(this.props.id);
 
     this.setState({
@@ -55,6 +59,13 @@ export default class StatisticsChartBox extends React.Component {
       this.openModal();
     }
   }
+
+  componentDidUpdate() {
+    let start = Date.now();
+    this.drawChart()
+    let end = Date.now();
+    console.log(this.props.id + ': took ' + (end - start) + 'ms to render');
+ }
 
   drawChart() {
     statisticsPage.generateChart(this.props, this.state.data);
@@ -88,8 +99,9 @@ export default class StatisticsChartBox extends React.Component {
 
         <PanelBody style={styles.body}>
           <Loader showContent={this.state.isLoaded}>
-            <Chart isLoaded={this.state.isLoaded} {...this.props}
+            <Chart {...this.props}
                    drawChart={this.drawChart}
+                   hasData={this.state.hasData}
                    cssClass="statistics-pie small c3"/>
           </Loader>
 
@@ -103,4 +115,3 @@ export default class StatisticsChartBox extends React.Component {
     );
   }
 }
-

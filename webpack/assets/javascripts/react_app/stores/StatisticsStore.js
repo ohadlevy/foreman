@@ -39,7 +39,7 @@ AppDispatcher.register(action => {
       _statistics[item.id].data = item.data || [];
       _statistics[item.id].isLoaded = true;
 
-      StatisticsStore.emitChange();
+      StatisticsStore.emitChange({id: item.id});
       break;
     }
 
