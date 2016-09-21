@@ -2,3 +2,4 @@
 app/**
 vendor/**
 config/webpack.config.js
+config/webpack.common.config.js

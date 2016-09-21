@@ -30,7 +30,8 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.9.11",
-    "webpack-dev-server": "^1.9.0"
+    "webpack-dev-server": "^1.9.0",
+    "@kadira/storybook": "^2.5.2"
   },
   "dependencies": {
     "c3": "^0.4.11",
@@ -53,6 +54,8 @@
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint -c .eslintrc webpack/assets/**/*.js || exit 0",
+    "storybook": "start-storybook --dont-track -p 6006",
+    "build-storybook": "build-storybook",
     "test": "jest"
   },
   "jest": {

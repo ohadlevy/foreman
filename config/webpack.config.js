@@ -1,18 +1,10 @@
 'use strict';
 
-require( 'es6-promise' ).polyfill(); //needed for compatibility with older node versions
-
 var path = require('path');
-var webpack = require('webpack');
-var StatsPlugin = require('stats-webpack-plugin');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var GlobalConfig = require('../config/webpack.common.config');
 
 // must match config.webpack.dev_server.port
 var devServerPort = 3808;
-
-// set TARGETNODE_ENV=production on the environment to add asset fingerprints
-var production = process.env.RAILS_ENV === 'production' || process.env.NODE_ENV === 'production';
-var bindOn = process.env.BIND || '127.0.0.1';
 
 var config = {
   entry: {
@@ -28,53 +20,14 @@ var config = {
     path: path.join(__dirname, '..', 'public', 'webpack'),
     publicPath: '/webpack/',
 
-    filename: production ? '[name]-[chunkhash].js' : '[name].js'
+    filename: GlobalConfig.production ? '[name]-[chunkhash].js' : '[name].js'
   },
 
-  resolve: {
-    extensions: ['', '.js'],
-    root: path.join(__dirname, '..', 'webpack')
-  },
+}
 
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-      },
-      {
-        test: /(\.png|\.gif)$/,
-        loader: "url-loader?limit=32767"
-      }
-    ]
-  },
+config = Object.assign(GlobalConfig, config);
 
-  plugins: [
-    // must match config.webpack.manifest_filename
-    new StatsPlugin('manifest.json', {
-      // We only need assetsByChunkName
-      chunkModules: false,
-      source: false,
-      chunks: false,
-      modules: false,
-      assets: true
-    }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-    }),
-    new ExtractTextPlugin(production ? '[name]-[chunkhash].css' : '[name].css', {
-            allChunks: true
-    })
-  ]
-};
-
-if (production) {
+if (config.production) {
   config.plugins.push(
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.UglifyJsPlugin({
@@ -89,7 +42,7 @@ if (production) {
   );
 } else {
   config.devServer = {
-    host: bindOn,
+    host: config.bindOn,
     port: devServerPort,
     headers: { 'Access-Control-Allow-Origin': '*' }
   };
