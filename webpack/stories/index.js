@@ -8,6 +8,9 @@ import StatisticsChartsList from
 '../assets/javascripts/react_app/components/charts/StatisticsChartsList';
 import Chart from '../assets/javascripts/react_app/components/charts/Chart';
 import Search from '../assets/javascripts/react_app/components/common/Search';
+import FlashNotifications
+from '../assets/javascripts/react_app/components/notifications/FlashNotifications';
+import Expire from '../assets/javascripts/react_app/components/notifications/Expire';
 import Toast from '../assets/javascripts/react_app/components/notifications/Toast';
 
 storiesOf('Search', module)
@@ -26,14 +29,25 @@ storiesOf('Notifications', module)
   .add('Error', () => (
     <Toast message="Please don't do that again" type="danger"/>
   ))
+  .add('Oops - no close', () => (
+    <Toast message="Please don't do that again" type="danger" close={false}/>
+  ))
   .add('Success with link', () => (
     <Toast title="Payment recieved"
       link="click for details" />
   ))
   .add('Warning', () => (
     <Toast message="I'm not sure you should do that" type="warning"/>
-  )
-);
+  ))
+  .add('With Expiry', () => (
+    <Expire>
+      <Toast message="I'm about to get out of here... " type="warning"/>
+    </Expire>
+  ))
+
+  .add('FlashNotifications', () => (
+    <FlashNotifications sticky={true} flash={{'notice': 'Successfully created ddddd342424.'}} />
+  ));
 
 storiesOf('Statistics', module)
   .add('Initial State', () => (

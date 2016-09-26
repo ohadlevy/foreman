@@ -440,4 +440,10 @@ module ApplicationHelper
     return unless Rails.configuration.webpack.dev_server.enabled
     javascript_include_tag "#{@dev_server}/webpack-dev-server.js"
   end
+
+  def notifications
+    content_tag :div, :id => 'notifications' do
+      mount_react_component('FlashNotifications', '#notifications', flash.to_hash.to_json) if flash.any?
+    end
+  end
 end
