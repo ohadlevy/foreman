@@ -27,5 +27,15 @@ export default {
       .error((jqXHR, textStatus, errorThrown) => {
         ServerActions.hostsRequestError(jqXHR, textStatus, errorThrown);
       });
+  },
+  getNotifications(url) {
+    $.get(url)
+      .success(
+        (response, textStatus, jqXHR) => {
+          ServerActions.receivedNotifications(response, textStatus, jqXHR);
+        })
+      .error((jqXHR, textStatus, errorThrown) => {
+        ServerActions.notificationsRequestError(jqXHR, textStatus, errorThrown);
+      });
   }
 };

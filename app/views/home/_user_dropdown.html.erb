@@ -1,3 +1,5 @@
+<li id='notification_icon' class="drawer-pf-trigger dropdown"> </li>
+<%= mount_react_component('DrawerIcon', '#notification_icon', {:url => user_notifications_path}.to_json ) %>
 <li class="dropdown menu_tab_dropdown">
   <%= user_header %>
   <ul class="dropdown-menu pull-right">
@@ -10,4 +12,6 @@
         <% end %>
     <% end %>
   </ul>
+  <div id='drawer_box' class="drawer-pf drawer-pf-notifications-non-clickable"> </div>
+  <%= mount_react_component('DrawerBox', '#drawer_box', {}) %>
 </li>

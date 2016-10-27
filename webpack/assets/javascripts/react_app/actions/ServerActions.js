@@ -33,5 +33,22 @@ export default {
         errorThrown: errorThrown
       }
     });
+  },
+ receivedNotifications(response, textStatus, jqXHR) {
+    AppDispatcher.dispatch({
+      actionType: ACTIONS.RECEIVED_NOTIFICATIONS,
+      response
+    });
+  },
+
+  notificationsRequestError(jqXHR, textStatus, errorThrown) {
+    AppDispatcher.dispatch({
+      actionType: ACTIONS.NOTIFICATIONSS_REQUEST_ERROR, info: {
+        jqXHR: jqXHR,
+        textStatus: textStatus,
+        errorThrown: errorThrown
+      }
+    });
   }
+
 };
