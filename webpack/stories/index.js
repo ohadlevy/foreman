@@ -11,6 +11,8 @@ import chartService from '../assets/javascripts/services/statisticsChartService'
 import mockData from './data/charts/donutChartMockData';
 import PowerStatus from
   '../assets/javascripts/react_app/components/hosts/PowerStatus';
+import StorageContainer from
+  '../assets/javascripts/react_app/components/hosts/vms/storage/StorageContainer';
 
 addDecorator((story) => (
   <div className="ca" style={{ textAlign: 'center' }}>
@@ -115,3 +117,9 @@ storiesOf('Power Status', module)
       />
     )
   );
+
+storiesOf('VM Storage', module)
+  .add('multiple controllers', () => (
+    <StorageContainer />
+  )
+);
