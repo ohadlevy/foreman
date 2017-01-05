@@ -1,87 +1,71 @@
 import React from 'react';
 import helpers from '../../../../common/helpers';
-import Button from './Button';
+import { Button } from 'react-bootstrap';
 import Controller from './Controller';
-
-const MaxControllers = 4;
-const KeyIndex = 1000;
-const MaxDisksPerController = 15;
+import VMStorageStore from '../../../../stores/VMStorageStore';
+import VMStorageActions from '../../../../actions/VMStorageActions';
+import { VMStorageVMWare } from '../../../../constants';
 
 class StorageContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      controllers: []
-    };
+    this.state = { controllers: VMStorageStore.getControllers() };
     helpers.bindMethods(this, [
-      'addController', 'removeController', 'addDisk', 'removeDisk'
+      'onChange', 'onError',
+      'addController', 'removeController'
     ]);
   }
+  componentDidMount() {
+    VMStorageStore.addChangeListener(this.onChange);
+    VMStorageStore.addErrorListener(this.onError);
+  }
+  componentWillUnmount() {
+    VMStorageStore.removeChangeListener(this.onChange);
+    VMStorageStore.removeErrorListener(this.onError);
+  }
+  onChange(event) {
+    this.setState({ controllers: VMStorageStore.getControllers() });
+  }
+  onError(info) {
+    if (this.props.id === info.id) {
+      this.setState({
+        errorMessage: info.textStatus
+      });
+    }
+  }
   addController(e) {
-    e.preventDefault();
-    let controllers = this.state.controllers;
+    VMStorageActions.addController();
+  }
+  removeController(currentPosition, e) {
+    VMStorageActions.removeController(currentPosition);
+  }
 
-    controllers.push({
-      key: controllers.length,
-      type: this.defaultControllerType(),
-      disks: []
-    });
-    this.setState({controllers: controllers});
-  }
-  removeController(currentPosition,e) {
-    // TODO
-  }
-  defaultControllerType() {
-    return 'default';
-  }
-  defaultDiskAttributes() {
-    return {size: 0, type: this.defaultControllerType()};
-  }
-  addDisk(controllerPosition, e) {
-    e.preventDefault();
-    let controllers = this.state.controllers.map((controller) => {
-      if (this.state.controllers[controllerPosition] === controller &&
-        controller.disks.length < MaxDisksPerController) {
-        let c = controller;
-
-        c.disks.push(this.defaultDiskAttributes());
-        return c;
-      } else {
-        return controller;
-      }
-    });
-    this.setState({controllers: controllers});
-  }
-  removeDisk(controllerPosition,e) {
-    // TODO
-  }
   controllers() {
     return this.state.controllers.map((controller) => {
       return (<Controller
+        key={controller.position}
         {...controller}
-        position={controller.key}
-        maxDisks={MaxDisksPerController}
-        addDisk={this.addDisk} />);
+        />);
       });
     }
     render() {
       return (
         <div className="row">
           <h1>
-            {this.state.controllers.length + '/' + MaxControllers + ' controllers used'}
+            {this.state.controllers.length + '/' + VMStorageVMWare.MaxControllers +
+              ' controllers used'}
           </h1>
           <div className="row">
             {this.controllers()}
           </div>
           <div className="row fr">
             <Button
-              click={this.addController}
-              disabled={this.state.controllers.length >= MaxControllers} >
+              onClick={this.addController}
+              disabled={this.state.controllers.length >= VMStorageVMWare.MaxControllers} >
               Add Controller
             </Button>
           </div>
           <div className="row">
-
             <small>
               <code>
                 JSON:
