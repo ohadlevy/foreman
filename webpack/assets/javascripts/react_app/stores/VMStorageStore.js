@@ -23,8 +23,9 @@ AppDispatcher.register(action => {
     case ACTIONS.CONTROLLER_ADDED: {
 
       if (_vmStorage.controllers.length < VMStorageVMWare.MaxControllers) {
+        let nextPosition = _vmStorage.controllers.length; // TODO: check if a contrlloer was delete
         let attributes = Object.assign(
-          { position: _vmStorage.controllers.length, disks: [] },
+          { position: nextPosition, disks: [] },
             Object.assign({}, VMStorageVMWare.defaultConrollerAttributes));
 
         _vmStorage.controllers.push(attributes);
@@ -39,9 +40,9 @@ AppDispatcher.register(action => {
       break;
     }
     case ACTIONS.CONTROLLER_REMOVED: {
-      const id = action.controllerId;
+      const id = action.id;
 
-      _vmStorage.splice(id);
+      _vmStorage.controllers.splice(id,1);
       VMStorageStore.emitChange({id: id});
       break;
     }

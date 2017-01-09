@@ -2,15 +2,21 @@ import React from 'react';
 import VMStorageActions from '../../../../actions/VMStorageActions';
 import { VMStorageVMWare } from '../../../../constants';
 import { Button } from 'react-bootstrap';
+import Disk from './Disk';
 
 class Controller extends React.Component {
   constructor(props) {
     super(props);
   }
   disks() {
-    return this.props.disks.map((disk) => {
+    return this.props.disks.map((disk, index) => {
       // TODO: add disk component
-      return disk;
+      return (<Disk
+        key={index}
+        id={index}
+        controllerId={this.props.position}
+        {...disk}
+        />);
     });
   }
   addDisk(controllerPosition, e) {
@@ -28,10 +34,12 @@ class Controller extends React.Component {
     VMStorageActions.updateController(this.props.position, attributes);
   }
   selectableTypes() {
-    // TODO consider not using Object.entries
     return Object.entries(VMStorageVMWare.ControllerTypes).map((attribute) => {
       return (<option key={attribute[0]} value={attribute[0]}>{attribute[1]}</option>);
     });
+  }
+  removeController(id, e) {
+    VMStorageActions.removeController(id);
   }
   render() {
     return (
@@ -48,6 +56,11 @@ class Controller extends React.Component {
           disabled={this.props.disks.length >= VMStorageVMWare.MaxDisksPerController}
           onClick={this.addDisk.bind(this, this.props.position)}>
           Create Disk
+        </Button>
+        <Button
+          onClick={this.removeController.bind(this, this.props.position)}
+          bsStyle="warning">
+          Remove Controller
         </Button>
       </div>
     );
