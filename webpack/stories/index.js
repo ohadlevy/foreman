@@ -11,6 +11,10 @@ import chartService from '../assets/javascripts/services/statisticsChartService'
 import mockData from './data/charts/donutChartMockData';
 import PowerStatus from
   '../assets/javascripts/react_app/components/hosts/PowerStatus';
+// import FlashNotifications
+// from '../assets/javascripts/react_app/components/notifications/toast/FlashNotifications';
+import Toast from '../assets/javascripts/react_app/components/notifications/toast/Toast';
+import Alert from '../assets/javascripts/react_app/components/common/Alert';
 
 addDecorator((story) => (
   <div className="ca" style={{ textAlign: 'center' }}>
@@ -115,3 +119,30 @@ storiesOf('Power Status', module)
       />
     )
   );
+
+storiesOf('Notifications', module)
+  .add('Success State', () => (
+    <Toast title="Great Succees!" />
+  ))
+  .add('Error', () => (
+    <Toast message="Please don't do that again" type="error"/>
+  ))
+  .add('Oops - no close', () => (
+    <Toast message="Please don't do that again" type="error" close={false}/>
+  ))
+  .add('Success with link', () => (
+    <Toast title="Payment recieved"
+      link="click for details" />
+  ))
+  .add('Warning', () => (
+    <Toast message="I'm not sure you should do that" type="warning"/>
+  ))
+  .add('With Alert', () => (
+    <Alert dismissable={true}>
+      <p>Hello</p>
+    </Alert>
+  )
+  // .add('FlashNotifications', () => (
+    // <FlashNotifications sticky={true} flash={{'notice': 'Successfully created ddddd342424.'}} />
+  // )
+);

@@ -479,4 +479,10 @@ module ApplicationHelper
     # check if the user set the field explicitly despite setting a hostgroup.
     params[:host] && params[:host][:hostgroup_id] && params[:host][field]
   end
+
+  def notifications
+    content_tag :div, :id => 'notifications', :'data-flash' => flash.to_json.html_safe do
+      mount_react_component('FlashNotifications', '#notifications')
+    end
+  end
 end
