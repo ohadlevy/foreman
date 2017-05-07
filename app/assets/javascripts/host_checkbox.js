@@ -198,7 +198,7 @@ function build_redirect(url) {
 function pagination_metadata() {
   var pagination = $("#pagination");
   var total = pagination.data("count");
-  var per_page = pagination.data("per-page");
+  var per_page = pagination.data("per_page");
   return { total: total, per_page: per_page }
 }
 

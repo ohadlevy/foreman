@@ -1,0 +1,23 @@
+<div class="form-group">
+  <%= select_tag('per_page',
+    options_for_select([5, 10, 15, 25, 50], params[:per_page] || Setting[:entries_per_page].to_i),
+    label: _('per page'),
+    onChange: "$(this).parentsUntil('.form').submit()",
+    style: 'margin-right: 5px;', # TODO: move away.
+    class: "pagination-pf-pagesize without_select2") %>
+  <span><%= _('per page') %></span>
+</div>
+
+<div class="form-group">
+  <span>
+    <span class='pagination-pf-items-current'>
+      <%= "%{from}-%{to}" %
+      { :from => collection.offset + 1, :to => collection.offset + collection.length } %>
+    </span>
+    <%= _('of') %>
+    <span class='pagination-pf-items-total'>
+      <%= collection.total_entries %>
+    </span>
+  </span>
+  <%= will_paginate(collection, options) %>
+</div>

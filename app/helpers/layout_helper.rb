@@ -54,37 +54,20 @@ module LayoutHelper
   end
 
   def will_paginate(collection = nil, options = {})
-    options.merge!(:class=>"col-md-7")
     options[:renderer] ||= "WillPaginate::ActionView::BootstrapLinkRenderer"
-    options[:inner_window] ||= 2
+    options[:inner_window] ||= 0
     options[:outer_window] ||= 0
-    options[:previous_label] ||= _('&laquo;')
-    options[:next_label] ||= _('&raquo;')
+    options[:previous_label] ||= icon_text("angle-left", "",:kind => "fa")
+    options[:next_label] ||= icon_text("angle-right", "",:kind => "fa")
     super collection, options
   end
 
-  def page_entries_info(collection, options = {})
-    html = if collection.total_entries == 0
-             _("No entries found")
-           else
-             if collection.total_pages < 2
-               n_("Displaying <b>%{count}</b> entry", "Displaying <b>all %{count}</b> entries", collection.total_entries) % {:count => collection.total_entries}
-             else
-               _("Displaying entries <b>%{from} - %{to}</b> of <b>%{count}</b> in total") %
-                   { :from => collection.offset + 1, :to => collection.offset + collection.length, :count => collection.total_entries }
-             end
-           end.html_safe
-    html += options[:more].html_safe if options[:more]
-    content_tag(:div, :class => "col-md-5 hidden-xs") do
-      content_tag(:div, html, :class => "pull-left pull-bottom darkgray pagination")
-    end
-  end
-
   def will_paginate_with_info(collection = nil, options = {})
-    content_tag(:div, :id => "pagination", :class => "row",
-                :data => ({'count' => collection.total_entries, 'per-page' => per_page(collection)})) do
-      page_entries_info(collection, options) +
-        will_paginate(collection, options)
+    return if Setting[:entries_per_page] > collection.total_entries
+
+    content_tag(:form, :id => "pagination", :class => "content-view-pf-pagination table-view-pf-pagination clearfix",
+      :data => ({'count' => collection.total_entries, 'per-page' => per_page(collection)})) do
+        render('common/pagination', collection: collection, options: options)
     end
   end
 
