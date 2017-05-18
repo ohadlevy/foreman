@@ -29,7 +29,6 @@ Foreman::Application.routes.draw do
         put 'toggle_manage'
         post 'environment_selected'
         put 'power'
-        get 'power', :to => 'hosts#get_power_state'
         get 'console'
         get 'overview'
         get 'bmc'
@@ -98,6 +97,7 @@ Foreman::Application.routes.draw do
         post 'submit_rebuild_config'
         get 'random_name', :only => :new
         get 'preview_host_collection'
+        get 'power', :to => 'hosts/power_status#index'
       end
 
       constraints(:host_id => /[^\/]+/) do
