@@ -80,3 +80,7 @@ export function initTypeAheadSelect(input) {
     width: '400px'
   });
 }
+
+export function changePerPageNumber() {
+ $('#per_page').parentsUntil('.form').submit();
+}

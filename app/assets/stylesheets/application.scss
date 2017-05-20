@@ -319,12 +319,6 @@ table {
   min-height: 30px;
 }
 
-.pagination {
-  display: table-cell;
-  vertical-align: bottom;
-  float: none;
-}
-
 #interfaceModal {
   .modal-dialog {
     min-width: 1000px;
@@ -617,4 +611,8 @@ code.transparent {
       }
     }
   }
+}
+
+#per_page {
+  margin-right: 5px;
 }

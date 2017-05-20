@@ -56,8 +56,8 @@ class FiltersControllerTest < ActionController::TestCase
     assert_response :success
     refute_empty assigns(:filters)
 
-    pagination_line = css_select('div.pagination').first
-    assert_match "Displaying", pagination_line.children.first.content
+    pagination_line = css_select('#pagination')
+    assert_match "per page", pagination_line.children.first.content
   end
 
   test 'should return data-tables pagination when asked for it' do

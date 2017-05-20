@@ -80,4 +80,17 @@ class ArchitecturesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
   end
+
+  # randomly selected architectures controller for the following test
+  def should_render_pagination_when_needed
+    old = Setting[:entries_per_page]
+    Setting[:entries_per_page] = Architecture.count
+    get :index, {}, set_session_user
+    refute_includes @response.body, 'pagination'
+    FactoryGirl.create(:architecture)
+    get :index, {}, set_session_user
+    assert_includes @response.body, 'pagination'
+  ensure
+    Setting[:entries_per_page] = old
+  end
 end
