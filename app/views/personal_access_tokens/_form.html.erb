@@ -1,0 +1,6 @@
+<%= form_for @personal_access_token, :url => user_personal_access_tokens_path(:user_id => @user) do |f| %>
+  <%= base_errors_for @personal_access_token %>
+  <%= text_f f, :name %>
+  <%= datepicker_f f, :expires_at %>
+  <%= submit_or_cancel f, false, :cancel_path => edit_user_path(@user, :anchor => 'personal_access_token') %>
+<% end %>

@@ -281,6 +281,11 @@ Foreman::Application.routes.draw do
         get 'auto_complete_search'
       end
       resources :ssh_keys, :only => [:new, :create, :destroy]
+      resources :personal_access_tokens, :only => [:new, :create] do
+        member do
+          put :revoke
+        end
+      end
     end
     resources :roles, :except => [:show] do
       member do

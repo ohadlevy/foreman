@@ -10,6 +10,11 @@ class AuthSourceInternal < AuthSource
   end
   alias_method :to_label, :auth_method_name
 
+  def valid_user?(name)
+    return false unless name.present?
+    self.users.unscoped.find_by_login(name).present?
+  end
+
   def can_set_password?
     true
   end

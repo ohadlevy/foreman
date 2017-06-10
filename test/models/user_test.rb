@@ -1050,4 +1050,27 @@ class UserTest < ActiveSupport::TestCase
       assert_equal ['production'], User.current.visible_environments
     end
   end
+
+  context 'personal access token auth' do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:token) { FactoryGirl.create(:personal_access_token, :user => user) }
+    let(:token_value) do
+      token_value = token.generate_token
+      token.save
+      token_value
+    end
+
+    test 'user can api login via personal access token' do
+      assert_equal user, User.try_to_login(user.login, token_value, true)
+    end
+
+    test 'user can not ui login via personal access token' do
+      assert_nil User.try_to_login(user.login, token_value, false)
+    end
+
+    test 'token is validated' do
+      token
+      assert_nil User.try_to_login(user.login, 'invalid', true)
+    end
+  end
 end

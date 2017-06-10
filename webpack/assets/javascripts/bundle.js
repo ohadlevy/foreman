@@ -8,6 +8,7 @@ require('expose-loader?JsDiff!diff');
 require('./bundle_flot');
 require('./bundle_multiselect');
 require('./bundle_select2');
+require('expose-loader?Clipboard!clipboard');
 require('./bundle_datatables');
 
 window.tfm = Object.assign(

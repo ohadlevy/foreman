@@ -1,0 +1,16 @@
+<tr>
+  <td class="ellipsis">
+    <%= token.name %>
+  </td>
+  <td title="<%= token.created_at.to_s(:long) %>"><%= _("%s ago") % time_ago_in_words(token.created_at) %></td>
+  <td title="<%= token.expires? ? token.expires_at.to_date.to_s(:long) : '' %>">
+    <%= relative_date(token.expires_at, :blank => _('Never')) %>
+  </td>
+  <td title="<%= token.used? ? token.last_used_at.to_date.to_s(:long) : '' %>">
+    <%= relative_date(token.last_used_at, :blank => _('Never')) %>
+  </td>
+  <td>
+    <%= action_buttons(
+                       (display_delete_if_authorized(hash_for_revoke_user_personal_access_token_path(:user_id => @user, :id => token).merge({:text => _('Revoke'), :method => :put, :auth_action => :revoke})) if token.active?)
+    ) %>
+</tr>

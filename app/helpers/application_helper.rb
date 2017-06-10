@@ -516,12 +516,26 @@ module ApplicationHelper
   end
 
   def notifications
-    content_tag :div, :id => 'notifications', :'data-flash' => flash.to_json.html_safe do
+    content_tag :div, :id => 'notifications', :'data-flash' => flash.to_a.select {|flash| ['notice', 'success', 'info'].include?(flash.first) }.to_json.html_safe do
       mount_react_component('ToastNotifications', '#notifications')
     end
   end
 
   def current_url_params(permitted: [])
     params.permit(permitted + [:locale, :search, :per_page])
+  end
+
+  def relative_date(date, opts = {})
+    return opts.fetch(:blank, _('N/A')) if date.blank?
+    opts[:tense] ||= :future if Date.today < date
+    opts[:tense] ||= :past if Date.today > date
+
+    if opts[:tense] == :future
+      _('in %s') % (time_ago_in_words date)
+    elsif opts[:tense] == :past
+      _('%s ago') % (time_ago_in_words date)
+    else
+      _('today')
+    end
   end
 end

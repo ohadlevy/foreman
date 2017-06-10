@@ -1,0 +1,56 @@
+<div class="tab-pane" id="personal_access_tokens">
+  <% if flash[:personal_access_token] %>
+  <%=
+    alert(
+      :class => 'alert-success',
+      :header => _('Your New Personal Access Token'),
+      :text => render('personal_access_tokens/token_alert_content', :token => flash[:personal_access_token])
+    )
+  %>
+  <% end %>
+  <div class="row">
+    <div class="col-md-12">
+  <p><%= _("Personal Access Tokens allow you to authenticate API requests without using your password.") %></p>
+  <% if authorized_for(hash_for_new_user_ssh_key_path(:user_id => @user)) %>
+    <p>
+    <%= link_to(_("Create Personal Access Token"),
+                hash_for_new_user_personal_access_token_path(:user_id => @user),
+                { :class => 'btn btn-success'}
+               ) %>
+    </p>
+  <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Active Personal Access Tokens (<%= user.personal_access_tokens.active.length %>)</h3>
+        </div>
+        <div class="panel-body">
+          <% if user.personal_access_tokens.active.any? %>
+            <%= render 'personal_access_tokens/personal_access_tokens_table', :f => f, :tokens => user.personal_access_tokens.active %>
+          <% else %>
+            <p><%= _("This user does not have any active Personal Access Tokens.") %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Inactive Personal Access Tokens (<%= user.personal_access_tokens.inactive.length %>)</h3>
+        </div>
+        <div class="panel-body">
+          <% if user.personal_access_tokens.inactive.any? %>
+            <%= render 'personal_access_tokens/personal_access_tokens_table', :f => f, :tokens => user.personal_access_tokens.inactive %>
+          <% else %>
+            <p><%= _("This user does not have any inactive Personal Access Tokens.") %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -402,6 +402,26 @@ module FormHelper
     end
   end
 
+  def input_group_addon(content, options = {})
+    content_tag :span, class: 'input-group-addon' do
+      content_tag :span, content, options
+    end
+  end
+
+  def datepicker_f(f, attr, options = {})
+    options = {
+      :class => 'bsdatepicker',
+    }.merge(options)
+    javascript 'bootstrap_datepicker'
+    field(f, attr, options) do
+      addClass options, 'form-control'
+      hidden = f.hidden_field(attr)
+      date = f.text_field attr, options.merge(:id => '')
+      addon = input_group_addon('', :class => 'fa fa-calendar')
+      (input_group date, addon) + hidden
+    end
+  end
+
   private
 
   def link_to_add_fields_classes(options = {})

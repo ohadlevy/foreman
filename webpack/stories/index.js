@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { storiesOf, addDecorator } from '@storybook/react';
+import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 require('../assets/javascripts/bundle');
@@ -14,13 +14,9 @@ import Store from '../assets/javascripts/react_app/redux';
 import Toast from '../assets/javascripts/react_app/components/toastNotifications/toastListitem';
 import StorageContainer from '../assets/javascripts/react_app/components/hosts/storage/vmware';
 import * as VMWareData from './data/storage/vmware';
-
-addDecorator(story =>
-  <div className="ca" style={{ textAlign: 'center' }}>
-    {story()}
-    <div id="targetChart" />
-  </div>
-);
+import { Provider } from 'react-redux';
+import PersonalAccessToken
+  from '../assets/javascripts/react_app/components/users/personalAccessTokens';
 
 storiesOf('Charts', module)
   .add('Loading', () =>
@@ -108,3 +104,13 @@ storiesOf('Host VMWare Storage', module)
   .add('without any controllers', () =>
     <StorageContainer store={Store} data={VMWareData.emptyState} />
   );
+
+storiesOf('PersonalAccessTokens', module)
+  .addDecorator((getStory) => (<Provider store={Store}>
+    { getStory() }
+    </Provider>
+  ))
+  .add('Form', () => (
+    <PersonalAccessToken
+    />
+  ));

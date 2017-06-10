@@ -43,6 +43,7 @@ class User < ApplicationRecord
   has_many :cached_usergroup_members
   has_many :widgets, :dependent => :destroy
   has_many :ssh_keys, :dependent => :destroy
+  has_many :personal_access_tokens, :dependent => :destroy
 
   has_many :user_mail_notifications, :dependent => :destroy, :inverse_of => :user
   has_many :mail_notifications, :through => :user_mail_notifications
@@ -207,14 +208,21 @@ class User < ApplicationRecord
   # If the user is not in the DB then try to login the user on each available authentication source
   # If this succeeds then copy the user's details from the authentication source into the User table
   # Returns : User object OR nil
-  def self.try_to_login(login, password)
+  def self.try_to_login(login, password, api_request = false)
     # Make sure no one can sign in with an empty password
     return nil if password.to_s.empty?
 
     # user is already in local database
     if (user = unscoped.find_by_login(login))
       # user has an authentication method and the authentication was successful
-      if user.auth_source && (attrs = user.auth_source.authenticate(login, password))
+      if api_request && user.authenticate_by_personal_access_token(password)
+        logger.debug("Authenticated user #{user.login} with a Personal Access Token.")
+
+        unless user.auth_source.valid_user?(user.login)
+          logger.debug "Failed to find #{user.login} in #{user.auth_source} authentication source"
+          user = nil
+        end
+      elsif user.auth_source && (attrs = user.auth_source.authenticate(login, password))
         logger.debug "Authenticated user #{user.login} against #{user.auth_source} authentication source"
 
         # update with returned attrs, maybe some info changed in LDAP
@@ -382,7 +390,10 @@ class User < ApplicationRecord
       options[:action] =~ /new|create|destroy/ ||
     options[:controller].to_s == 'api/v2/ssh_keys' &&
       options[:action] =~ /show|destroy|index|create/ &&
-      options[:user_id].to_i == self.id
+      options[:user_id].to_i == self.id ||
+    options[:controller].to_s == 'personal_access_tokens' &&
+      options[:user_id].to_i == self.id &&
+      options[:action] =~ /new|create|revoke/
   end
 
   def taxonomy_foreign_conditions
@@ -525,6 +536,10 @@ class User < ApplicationRecord
 
   def to_export
     { login => super }
+  end
+
+  def authenticate_by_personal_access_token(token)
+    PersonalAccessToken.authenticate_user(self, token)
   end
 
   private

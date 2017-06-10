@@ -545,3 +545,22 @@ function clearError(field) {
   var error_block = form_group.children(".help-inline").children(".error-message");
   error_block.remove();
 };
+
+// Make sure the correct tab is displayed when loading the page with an anchor,
+// even if the anchor is to a sub-tab.
+function setTab(){
+  var anchor = document.location.hash.split('?')[0];
+  if (anchor.length) {
+    var parent_tab = $(anchor).parents('.tab-pane');
+    if (parent_tab.exists()){
+      $('.nav-tabs a[href="#'+parent_tab[0].id+'"]').tab('show');
+    }
+    $('.nav-tabs a[href="'+anchor+'"]').tab('show');
+  }
+}
+
+$(window).on('hashchange', setTab); //so buttons that link to an anchor can open that tab
+
+$(document).on('ContentLoad', function() {
+  setTab();
+});

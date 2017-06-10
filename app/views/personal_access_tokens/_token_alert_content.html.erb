@@ -1,0 +1,9 @@
+<br />
+<code id="personal-access-token" style="font-size: 120%;"><%= token %></code>
+&nbsp;
+<a id="personal-access-token-clipboard" data-clipboard-target="#personal-access-token" title="<%= _('Copy to clipboard!') %>">
+  <i class="fa fa-clipboard" aria-hidden="true"></i>
+</a>
+<br/>
+<%= _('Make sure to copy your new personal access token now. You won’t be able to see it again!') %>
+<%= javascript_tag("new Clipboard('#personal-access-token-clipboard');"); %>
