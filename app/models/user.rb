@@ -393,7 +393,10 @@ class User < ApplicationRecord
       options[:user_id].to_i == self.id ||
     options[:controller].to_s == 'api/v2/personal_access_tokens' &&
       options[:action] =~ /show|destroy|index|create/ &&
-      options[:user_id].to_i == self.id
+      options[:user_id].to_i == self.id ||
+    options[:controller].to_s == 'personal_access_tokens' &&
+      options[:user_id].to_i == self.id &&
+      options[:action] =~ /revoke/
   end
 
   def taxonomy_foreign_conditions

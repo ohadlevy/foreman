@@ -65,7 +65,9 @@ export const submitForm = ({ item, url, values, csrfToken = getcsrfToken(), meth
           .json()
           .then(body =>
             dispatch({
-              type: `${item.toUpperCase()}_FORM_SUBMITTED`,
+              // FIXME: add successAction overwrite
+              // type: `${item.toUpperCase()}_FORM_SUBMITTED`,
+              type: 'USERS_PERSONAL_ACCESS_TOKEN_FORM_SUCCESS',
               payload: { item, body }
             })
           )

@@ -61,10 +61,11 @@
       "tabWidth": 2,
       "ignoreTrailingComments": true,
       "ignoreUrls": true,
+      "ignoreStrings": true,
       "ignorePattern": "^\\s*var\\s.+=\\s*require\\s*\\(/"
     }],
     "max-nested-callbacks": ["error", 5],
-    "max-params": ["error", 3],
+    "max-params": ["error", 4],
     "max-statements": ["error", 10, { "ignoreTopLevelFunctions": true }],
     "new-cap": ["error", { "newIsCap": true, "capIsNew": false }],
     "newline-after-var": ["error", "always"],
