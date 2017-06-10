@@ -807,4 +807,13 @@ Foreman::AccessControl.map do |permission_set|
                    :ssh_keys => [:destroy],
                    :"api/v2/ssh_keys" => [:destroy]
   end
+
+  permission_set.security_block :personal_access_tokens do |map|
+    map.permission :view_personal_access_tokens,
+                   :personal_access_tokens => []
+    map.permission :create_personal_access_tokens,
+                   :personal_access_tokens => [:new, :create]
+    map.permission :revoke_personal_access_tokens,
+                   :personal_access_tokens => [:revoke]
+  end
 end

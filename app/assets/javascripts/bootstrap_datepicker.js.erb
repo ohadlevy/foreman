@@ -1,0 +1,16 @@
+//= require bootstrap-datepicker
+
+$(document).on('ContentLoad', function () {
+  $('.bsdatepicker').datepicker({
+    autoclose: true,
+    orientation: "top auto",
+    todayBtn: "linked",
+    todayHighlight: true,
+    language: '<%= I18n.locale %>'
+  });
+
+  $(document).on('changeDate', '.bsdatepicker', function(e) {
+    var rails_date = e.date.getFullYear() + '-' + (`0${e.date.getMonth() + 1}`).slice(-2) + '-' + (`0${e.date.getDate()}`).slice(-2);
+    $(this).parent().next("input[type=hidden]").val(rails_date);
+  });
+});

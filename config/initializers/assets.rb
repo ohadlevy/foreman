@@ -46,6 +46,7 @@ Foreman::Application.configure do |app|
                   password_strength
                   proxy_status
                   about
+                  bootstrap_datepicker
                   parameter_override)
 
   javascript += FastGettext.default_available_locales.map { |loc| "locale/#{loc}/app" }

@@ -20,8 +20,9 @@ class RolesList
                                     :import_puppetclasses, :view_config_reports, :destroy_config_reports,
                                     :view_smart_proxies, :edit_smart_proxies, :view_subnets, :edit_subnets,
                                     :view_statistics, :view_usergroups, :create_usergroups, :edit_usergroups,
+                                    :view_personal_access_tokens, :create_personal_access_tokens, :revoke_personal_access_tokens,
                                     :destroy_usergroups, :view_users, :edit_users, :view_realms, :view_mail_notifications,
-                                    :view_params, :view_ssh_keys]
+                                    :view_params, :view_ssh_keys, :view_personal_access_tokens]
       }
     end
 
