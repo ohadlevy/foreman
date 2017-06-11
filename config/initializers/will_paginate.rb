@@ -15,31 +15,31 @@ module WillPaginate
       end
 
       def back
-        tag :ul, first_page + previous_page, :class => "pagination pagination-pf-back"
+        tag :ul, first_page + previous_page, class: 'pagination pagination-pf-back'
       end
 
       def forward
-        tag :ul, next_page + last_page, :class => "pagination pagination-pf-forward"
+        tag :ul, next_page + last_page, class: 'pagination pagination-pf-forward'
       end
 
       def pages
-        current_page_input = tag(:input, "", :class => "pagination-pf-page", :type => "text", :value => current_page, :id => "pagination1-page")
-        current_page_label = tag(:label, _("Current Page"), :class => "sr-only", :for => "pagination1-page")
-        of_total_pages = tag(:span, _("of ") + tag(:span, total_pages, :class => "pagination-pf-pages"))
+        current_page_input = tag(:input, '', class: 'pagination-pf-page', type: 'text', value: current_page, id: 'pagination1-page')
+        current_page_label = tag(:label, _('Current Page'), class: 'sr-only', for: 'pagination1-page')
+        of_total_pages = tag(:span, _('of ') + tag(:span, total_pages, class: 'pagination-pf-pages'))
         current_page_input + current_page_label + of_total_pages
       end
 
       def first_page
-        previous_or_next_page(current_page == 1 ? nil : 1, @options[:first_label], "first_page")
+        previous_or_next_page(current_page == 1 ? nil : 1, @options[:first_label], 'first_page')
       end
 
       def last_page
-        previous_or_next_page(current_page == total_pages ? nil : total_pages, @options[:last_label], "last_page")
+        previous_or_next_page(current_page == total_pages ? nil : total_pages, @options[:last_label], 'last_page')
       end
 
       def previous_or_next_page(page, text, classname)
         classname = [classname[0..3], classname, ('disabled' unless page)].join(' ')
-        tag :li, link(text, page || '#'), :class => classname
+        tag :li, link(text, page || '#'), class: classname
       end
     end
   end

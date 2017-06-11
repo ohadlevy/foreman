@@ -82,5 +82,6 @@ export function initTypeAheadSelect(input) {
 }
 
 export function changePerPageNumber() {
- $('#per_page').parentsUntil('.form').submit();
+  showSpinner();
+  $('#per_page').parentsUntil('.form').submit();
 }
