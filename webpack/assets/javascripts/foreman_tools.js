@@ -83,5 +83,11 @@ export function initTypeAheadSelect(input) {
 
 export function changePerPageNumber() {
   showSpinner();
-  $('#per_page').parentsUntil('.form').submit();
+  let url = window.location.href;
+  const perPage = $('#pagination').data('per-page');
+
+  //TODO update existing per_page if it exists already in the url.
+  url = url + ((url.indexOf('?') === -1) ? '?' : '&') + 'per_page=' + perPage;
+  // $('#per_page').parentsUntil('.form').submit();
+  Turbolinks.visit(url);
 }

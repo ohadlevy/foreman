@@ -1,19 +1,20 @@
-<div class='form-group'>
-  <%= select_tag('per_page',
-                 options_for_select(per_page_options,
-                                    params[:per_page] || Setting[:entries_per_page].to_i),
-                 label: _('per page'),
-                 onChange: 'tfm.tools.changePerPageNumber()',
-                 class: 'pagination-pf-pagesize without_select2') %>
-  <span><%= _('per page') %></span>
-</div>
+<form
+  class='content-view-pf-pagination table-view-pf-pagination paginate'
+  id='pagination'
+  data-count=<%= collection.total_entries %>
+  data-per-page=<%= per_page(collection) %> >
+  <div class='form-group'>
+    <%= select_tag('per_page',
+                   options_for_select(per_page_options,
+                     params[:per_page] || Setting[:entries_per_page]),
+                   label: _('per page'),
+                   onChange: 'tfm.tools.changePerPageNumber()',
+                   class: 'pagination-pf-pagesize without_select2 per-page') %>
+    <span><%= _('per page') %></span>
+  </div>
 
-<div class='form-group'>
-  <span>
-    <% if collection.total_entries.zero? %>
-      <%= _('No entries found') %>
-      <%# TODO render something better %>
-    <% else %>
+  <div class='form-group'>
+    <span>
       <span class='pagination-pf-items-current'>
         <%= collection.offset + 1 %>-<%= collection.offset + collection.length %>
       </span>
@@ -22,6 +23,6 @@
         <%= collection.total_entries %>
       </span>
     </span>
-  <% end %>
-  <%= will_paginate(collection, options) %>
-</div>
+    <%= will_paginate(collection, options) %>
+  </div>
+</form>

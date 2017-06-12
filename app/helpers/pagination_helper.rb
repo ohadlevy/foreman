@@ -14,13 +14,9 @@ module PaginationHelper
   end
 
   def will_paginate_with_info(collection = nil, options = {})
-    content_tag(:form,
-                id: 'pagination',
-                class: 'content-view-pf-pagination table-view-pf-pagination clearfix',
-                data: {
-                  'count' => collection.total_entries,
-                  'per-page' => per_page(collection)
-                }) do
+    if collection.total_entries.zero?
+      render text: _('No entries found')
+    else
       render('common/pagination', collection: collection, options: options)
     end
   end
