@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import URI from 'urijs';
 
 export function showSpinner() {
   $('#turbolinks-progress').show();
@@ -81,13 +82,14 @@ export function initTypeAheadSelect(input) {
   });
 }
 
-export function changePerPageNumber() {
+export function perPageSelected() {
   showSpinner();
-  let url = window.location.href;
-  const perPage = $('#pagination').data('per-page');
+  const perPage = $('#per_page').val();
+  let uri = new URI(window.location.href);
 
-  //TODO update existing per_page if it exists already in the url.
-  url = url + ((url.indexOf('?') === -1) ? '?' : '&') + 'per_page=' + perPage;
-  // $('#per_page').parentsUntil('.form').submit();
-  Turbolinks.visit(url);
+  if (perPage !== undefined) {
+    uri = uri.setSearch('per_page', perPage);
+  }
+  /* eslint-disable no-undef */
+  Turbolinks.visit(uri);
 }

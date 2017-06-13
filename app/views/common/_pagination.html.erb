@@ -8,7 +8,7 @@
                    options_for_select(per_page_options,
                      params[:per_page] || Setting[:entries_per_page]),
                    label: _('per page'),
-                   onChange: 'tfm.tools.changePerPageNumber()',
+                   onChange: 'tfm.tools.perPageSelected()',
                    class: 'pagination-pf-pagesize without_select2 per-page') %>
     <span><%= _('per page') %></span>
   </div>
