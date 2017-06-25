@@ -12,14 +12,12 @@ var devServerPort = 3808;
 // set TARGETNODE_ENV=production on the environment to add asset fingerprints
 var production = process.env.RAILS_ENV === 'production' || process.env.NODE_ENV === 'production';
 const execSync = require('child_process').execSync;
+var plugins = JSON.parse(execSync('./script/plugin_webpack_directories.rb'));
 
 var config = {
-  entry: {
-    // Sources are expected to live in $app_root/webpack
-    'bundle': './webpack/assets/javascripts/bundle.js'
-    'plugin': execSync('./script/plugin_webpack_directories.rb').toString().split('\n');
-  },
-
+  entry: Object.assign(
+    { bundle: './webpack/assets/javascripts/bundle.js' },
+    plugins ),
   output: {
     // Build assets directly in to public/webpack/, let webpack know
     // that all webpacked assets start with webpack/
