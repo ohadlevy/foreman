@@ -48,9 +48,10 @@ class ChartBox extends React.Component {
       'data-toggle': 'tooltip',
       'data-placement': 'top'
     };
-    const onclickChartClicked = chart.search && chart.search.match(/=$/) ?
-      null :
-      navigateToSearch.bind(null, chart.search);
+    const onclickChartClicked =
+      chart.search && chart.search.match(/=$/)
+        ? null
+        : navigateToSearch.bind(null, chart.search);
 
     const _chart = (
       <PieChart

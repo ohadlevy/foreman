@@ -1,9 +1,9 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import Notifications from './';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
-import {getStore} from '../../redux';
+import { getStore } from '../../redux';
 import {
   emptyState,
   emptyHtml,
@@ -30,7 +30,7 @@ describe('notifications', () => {
 
     $.getJSON = jest.genMockFunction().mockImplementation(url => {
       return {
-        then: function (callback) {
+        then: function(callback) {
           callback(JSON.parse(serverResponse));
         }
       };
@@ -68,7 +68,9 @@ describe('notifications', () => {
   });
 
   it('full flow', () => {
-    const wrapper = mount(<Notifications data={componentMountData} store={getStore()} />);
+    const wrapper = mount(
+      <Notifications data={componentMountData} store={getStore()} />
+    );
 
     wrapper.find('.fa-bell').simulate('click');
     expect(wrapper.find('.panel-group').length).toEqual(1);
@@ -79,7 +81,9 @@ describe('notifications', () => {
   });
 
   it('mark group as read flow', () => {
-    const wrapper = mount(<Notifications data={componentMountData} store={getStore()} />);
+    const wrapper = mount(
+      <Notifications data={componentMountData} store={getStore()} />
+    );
     const matcher = '.drawer-pf-action a.btn-link';
 
     wrapper.find('.fa-bell').simulate('click');
@@ -94,8 +98,8 @@ describe('notifications', () => {
     window.location.replace = jest.fn();
     $.getJSON = jest.genMockFunction().mockImplementation(url => {
       return {
-        then: function (callback, failCallback) {
-          failCallback({status: 401});
+        then: function(callback, failCallback) {
+          failCallback({ status: 401 });
         }
       };
     });

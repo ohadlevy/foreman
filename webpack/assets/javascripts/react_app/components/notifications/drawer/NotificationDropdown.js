@@ -8,15 +8,15 @@ const NotificationDropdown = ({ links, id, onClickedLink }) => {
         <Glyphicon bsClass="fa" glyph="ellipsis-v" />
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        {
-          links.map((link, i) =>
-            <MenuItem key={i}
-                      id={ `notification-kebab-${i}` }
-                      onClick={ onClickedLink.bind(this, link) }>
-                {link.title}
-            </MenuItem>
-          )
-        }
+        {links.map((link, i) =>
+          <MenuItem
+            key={i}
+            id={`notification-kebab-${i}`}
+            onClick={onClickedLink.bind(this, link)}
+          >
+            {link.title}
+          </MenuItem>
+        )}
       </Dropdown.Menu>
     </Dropdown>
   );

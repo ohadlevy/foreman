@@ -4,8 +4,7 @@ const users = require('./foreman_users');
 
 describe('initInheritedRoles', () => {
   it('updates the button text and role list on click', () => {
-    document.body.innerHTML =
-      `<div id="inherited-roles">
+    document.body.innerHTML = `<div id="inherited-roles">
         <div class="dropdown">
           <button class="btn btn-default dropdown-toggle" type="button"
                   id="usergroupsDropdownMenuBtn" data-toggle="dropdown">
@@ -44,8 +43,7 @@ describe('initInheritedRoles', () => {
 describe('taxonomyAdded', () => {
   window.users = users; // so the callback knows about it
   it('updates the default organization selection according to selected taxonomies', () => {
-    document.body.innerHTML =
-    `<select multiple id='user_organization_ids'
+    document.body.innerHTML = `<select multiple id='user_organization_ids'
              onchange='users.taxonomyAdded(this, "organization")'>
        <option value="1">aaa</option>
        <option value="2">bbb</option>

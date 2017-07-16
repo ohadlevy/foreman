@@ -4,8 +4,14 @@ const $ = require('jquery');
 
 describe('checkForUnavailablePuppetclasses', () => {
   beforeEach(() => {
-    window.Jed = { sprintf: function (input) { return input; } };
-    window.__ = function (input) { return input; };
+    window.Jed = {
+      sprintf: function(input) {
+        return input;
+      }
+    };
+    window.__ = function(input) {
+      return input;
+    };
 
     document.body.innerHTML = `<div>
         <ul class="nav-tabs">
@@ -30,7 +36,9 @@ describe('checkForUnavailablePuppetclasses', () => {
   });
 
   it('adds a warning if an unavailable class is found', () => {
-    $('#selected_classes').append('<li class="unavailable">Unavailable Class</li>');
+    $('#selected_classes').append(
+      '<li class="unavailable">Unavailable Class</li>'
+    );
 
     hostgroups.checkForUnavailablePuppetclasses();
     expect($('#puppetclasses_unavailable_warning').size()).toBe(1);
@@ -45,7 +53,9 @@ describe('checkForUnavailablePuppetclasses', () => {
   });
 
   it('adds a warning sign to the tab if unavailable classes are found', () => {
-    $('#selected_classes').append('<li class="unavailable">Unavailable Class</li>');
+    $('#selected_classes').append(
+      '<li class="unavailable">Unavailable Class</li>'
+    );
     hostgroups.checkForUnavailablePuppetclasses();
     setTimeout(() => {
       expect($('a .pficon').size()).toBe(1);

@@ -13,6 +13,8 @@ describe('Icon', () => {
   it('can receive additionl css classes', () => {
     const wrapper = shallow(<Icon type="ok" className="pull-left" />);
 
-    expect(wrapper.html()).toEqual('<span class="pficon pficon-ok pull-left"></span>');
+    expect(wrapper.html()).toEqual(
+      '<span class="pficon pficon-ok pull-left"></span>'
+    );
   });
 });

@@ -4,10 +4,10 @@ export const initialState = Immutable({
 });
 
 export const request = {
-    id: 'operatingsystem',
-    title: 'OS Distribution',
-    url: 'statistics/operatingsystem',
-    search: '/hosts?search=os_title=~VAL~'
+  id: 'operatingsystem',
+  title: 'OS Distribution',
+  url: 'statistics/operatingsystem',
+  search: '/hosts?search=os_title=~VAL~'
 };
 
 export const response = {

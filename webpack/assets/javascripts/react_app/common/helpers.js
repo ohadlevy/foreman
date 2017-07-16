@@ -1,5 +1,5 @@
 export default {
-  bindMethods: function (context, methods) {
+  bindMethods: function(context, methods) {
     methods.forEach(method => {
       context[method] = context[method].bind(context);
     });

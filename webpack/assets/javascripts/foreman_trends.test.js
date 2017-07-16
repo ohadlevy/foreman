@@ -4,8 +4,7 @@ const $ = require('jquery');
 
 describe('selecting trend type', () => {
   it('should disable fields on non-fact trend', () => {
-    document.body.innerHTML =
-    `<select id="trendable_type" onchange="trends.trendTypeSelected(this)">
+    document.body.innerHTML = `<select id="trendable_type" onchange="trends.trendTypeSelected(this)">
       <option value="FactName">Facts</option>
       <option value="Hostgroup">Host group</option>
     </select>
@@ -20,8 +19,7 @@ describe('selecting trend type', () => {
   });
 
   it('should enable fields on non-fact trend', () => {
-    document.body.innerHTML =
-    `<select id="trendable_type" onchange="trends.trendTypeSelected(this)">
+    document.body.innerHTML = `<select id="trendable_type" onchange="trends.trendTypeSelected(this)">
       <option value="Evironment">Environment</option>
       <option value="FactName">Facts</option>
     </select>
@@ -34,5 +32,4 @@ describe('selecting trend type', () => {
     expect($('#trend_trendable_id').is(':disabled')).toBeFalsy();
     expect($('#trend_name').is(':disabled')).toBeFalsy();
   });
-
 });

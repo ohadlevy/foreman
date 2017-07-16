@@ -5,8 +5,7 @@ import { shallow } from 'enzyme';
 import MessageBox from './MessageBox';
 
 function setup(msg, type) {
-  return shallow(<MessageBox msg={msg}
-                             icontype={type}></MessageBox>);
+  return shallow(<MessageBox msg={msg} icontype={type} />);
 }
 
 describe('MessageBox', () => {

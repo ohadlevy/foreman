@@ -10,9 +10,9 @@ global.patternfly = {
 };
 
 describe('renders pieChart', () => {
-  c3.generate = jest.fn().mockReturnValue({destroy: ''});
+  c3.generate = jest.fn().mockReturnValue({ destroy: '' });
   it('render', () => {
-    mount(<PieChart data={ chartData } />);
+    mount(<PieChart data={chartData} />);
 
     expect(c3.generate).toHaveBeenCalled();
   });

@@ -22,27 +22,24 @@ export default (state = initialState, action) => {
     case NOTIFICATIONS_POLLING_STARTED:
       return state.set('isPolling', true);
     case NOTIFICATIONS_GET_NOTIFICATIONS:
-      return state.set(
-        'notifications', payload.notifications
-      );
+      return state.set('notifications', payload.notifications);
     case NOTIFICATIONS_TOGGLE_DRAWER:
       return state.set('isDrawerOpen', payload.value);
     case NOTIFICATIONS_SET_EXPANDED_GROUP:
       return state.set('expandedGroup', payload.group);
     case NOTIFICATIONS_MARK_AS_READ:
-    return state.set(
-      'notifications',
-      state.notifications.map(
-        n => n.id === payload.id ?
-          Object.assign({}, n, {seen: true}) : n
-      )
-    );
+      return state.set(
+        'notifications',
+        state.notifications.map(
+          n => (n.id === payload.id ? Object.assign({}, n, { seen: true }) : n)
+        )
+      );
     case NOTIFICATIONS_MARK_GROUP_AS_READ:
       return state.set(
         'notifications',
         state.notifications.map(
-          n => n.group === payload.group ?
-            Object.assign({}, n, {seen: true}) : n
+          n =>
+            n.group === payload.group ? Object.assign({}, n, { seen: true }) : n
         )
       );
     default:

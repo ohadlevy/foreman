@@ -20,7 +20,7 @@ export function iconText(name, innerText, iconClass) {
 
 export function activateDatatables() {
   $('[data-table=inline]').not('.dataTable').DataTable({
-      dom: "<'row'<'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>"
+    dom: "<'row'<'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>"
   });
 
   $('[data-table=server]').not('.dataTable').each((i, el) => {
@@ -39,18 +39,23 @@ export function activateDatatables() {
 export function activateTooltips(el = 'body') {
   el = $(el);
   el.find('[rel="twipsy"]').tooltip({ container: 'body' });
-  el.find('.ellipsis').tooltip({ container: 'body', title: function () {
-                                   return (this.scrollWidth > this.clientWidth ?
-                                           this.textContent : null);
-                                   }
-                              });
+  el.find('.ellipsis').tooltip({
+    container: 'body',
+    title: function() {
+      return this.scrollWidth > this.clientWidth ? this.textContent : null;
+    }
+  });
   el.find('*[title]').not('*[rel]').tooltip({ container: 'body' });
-  $(document).on('page:restore', () => {$('.tooltip.in').remove();});
+  $(document).on('page:restore', () => {
+    $('.tooltip.in').remove();
+  });
 }
 
 /* eslint-disable no-console, max-len */
 export function deprecate(oldMethod, newMethod, version = '1.17') {
-  console.warn(`DEPRECATION WARNING: you are using deprecated ${oldMethod}, it will be removed in Foreman ${version}. Use ${newMethod} instead.`);
+  console.warn(
+    `DEPRECATION WARNING: you are using deprecated ${oldMethod}, it will be removed in Foreman ${version}. Use ${newMethod} instead.`
+  );
 }
 
 export function initTypeAheadSelect(input) {
@@ -63,18 +68,20 @@ export function initTypeAheadSelect(input) {
         q: term,
         scope: input.data('scope')
       }),
-      results: (data) => ({results: data.map(({id, name}) => ({id, text: name}))}),
+      results: data => ({
+        results: data.map(({ id, name }) => ({ id, text: name }))
+      }),
       cache: true
     },
-    initSelection: function (element, callback) {
+    initSelection: function(element, callback) {
       $.ajax(input.data('url'), {
         data: {
           scope: input.data('scope')
         },
         dataType: 'json'
-      }).done((data) => {
+      }).done(data => {
         if (data.length > 0) {
-          callback({id: data[0].id, text: data[0].name});
+          callback({ id: data[0].id, text: data[0].name });
         }
       });
     },

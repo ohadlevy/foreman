@@ -10,16 +10,17 @@ let pluginEditAttributes = {
 export function registerPluginAttributes(componentType, attributes) {
   if (pluginEditAttributes[componentType] !== undefined) {
     pluginEditAttributes[componentType] = _.uniq(
-      pluginEditAttributes[componentType].concat(attributes));
+      pluginEditAttributes[componentType].concat(attributes)
+    );
   }
 }
 
 export function getAttributesToPost(componentType) {
   const defaultAttributes = {
-    'architecture': ['architecture_id', 'organization_id', 'location_id'],
-    'os': ['operatingsystem_id', 'organization_id', 'location_id'],
-    'medium': ['medium_id', 'operatingsystem_id', 'architecture_id'],
-    'image': ['medium_id', 'operatingsystem_id', 'architecture_id', 'model_id']
+    architecture: ['architecture_id', 'organization_id', 'location_id'],
+    os: ['operatingsystem_id', 'organization_id', 'location_id'],
+    medium: ['medium_id', 'operatingsystem_id', 'architecture_id'],
+    image: ['medium_id', 'operatingsystem_id', 'architecture_id', 'model_id']
   };
   let attrsToPost = defaultAttributes[componentType];
 
@@ -27,7 +28,7 @@ export function getAttributesToPost(componentType) {
     return [];
   }
   if (pluginEditAttributes[componentType] !== undefined) {
-      attrsToPost = attrsToPost.concat(pluginEditAttributes[componentType]);
+    attrsToPost = attrsToPost.concat(pluginEditAttributes[componentType]);
   }
   return _.uniq(attrsToPost);
 }

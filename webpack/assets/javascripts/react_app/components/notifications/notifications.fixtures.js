@@ -23,7 +23,7 @@ export const stateWithNotifications = immutable({
         seen: true,
         level: 'info',
         text: null,
-        'created_at': '2017-02-23T05:00:28.715Z',
+        created_at: '2017-02-23T05:00:28.715Z',
         group: 'React devs',
         actions: {}
       },
@@ -32,7 +32,7 @@ export const stateWithNotifications = immutable({
         seen: true,
         level: 'info',
         text: 'Hi! This is a notification message',
-        'created_at': '2017-03-14T11:25:07.138Z',
+        created_at: '2017-03-14T11:25:07.138Z',
         group: 'React devs2',
         actions: {
           links: [
@@ -57,7 +57,7 @@ export const stateWithUnreadNotifications = immutable({
         seen: true,
         level: 'info',
         text: null,
-        'created_at': '2017-02-23T05:00:28.715Z',
+        created_at: '2017-02-23T05:00:28.715Z',
         group: 'React devs',
         actions: {}
       },
@@ -66,7 +66,7 @@ export const stateWithUnreadNotifications = immutable({
         seen: false,
         level: 'info',
         text: 'Hi! This is a notification message',
-        'created_at': '2017-03-14T11:25:07.138Z',
+        created_at: '2017-03-14T11:25:07.138Z',
         group: 'React devs2',
         actions: {
           links: [

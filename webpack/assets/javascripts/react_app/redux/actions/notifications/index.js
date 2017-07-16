@@ -6,15 +6,13 @@ import {
   NOTIFICATIONS_MARK_GROUP_AS_READ,
   NOTIFICATIONS_POLLING_STARTED
 } from '../../consts';
-import {
-  notificationsDrawer as sessionStorage
-} from '../../../common/sessionStorage';
+import { notificationsDrawer as sessionStorage } from '../../../common/sessionStorage';
 import API from '../../../API';
 import { isNil } from 'lodash';
 const defaultNotificationsPollingInterval = 10000;
-const notificationsInterval = isNil(process.env.NOTIFICATIONS_POLLING) ?
-  defaultNotificationsPollingInterval :
-  process.env.NOTIFICATIONS_POLLING;
+const notificationsInterval = isNil(process.env.NOTIFICATIONS_POLLING)
+  ? defaultNotificationsPollingInterval
+  : process.env.NOTIFICATIONS_POLLING;
 
 const getNotifications = url => dispatch => {
   const isDocumentVisible =

@@ -12,29 +12,29 @@ export default ({
   link,
   message
 }) => {
-  const linkMarkup = (title, href) => (
+  const linkMarkup = (title, href) =>
     <div className="pull-right toast-pf-action">
       <a href={href}>
         {title}
       </a>
-    </div>
-  );
+    </div>;
 
-  const CloseButton = ({onClick}) => (
+  const CloseButton = ({ onClick }) =>
     <button className="close" aria-hidden="true" onClick={onClick}>
       <Icon type="close" />
-    </button>
-  );
+    </button>;
 
   return (
     <div
-      className={`${getAlertClass(type, onClose)}${className ? ' ' + className : ''}`}
+      className={`${getAlertClass(type, onClose)}${className ?
+        ' ' + className :
+        ''}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       {onClose && <CloseButton onClick={onClose} />}
       {link && linkMarkup(link.title, link.href)}
-      <span dangerouslySetInnerHTML={{__html: message}} />
+      <span dangerouslySetInnerHTML={{ __html: message }} />
       <Icon type={type} />
     </div>
   );

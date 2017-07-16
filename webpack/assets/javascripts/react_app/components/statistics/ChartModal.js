@@ -16,7 +16,9 @@ const ChartModal = ({ show, config, onHide, title }) => {
   return (
     <Modal show={show} enforceFocus={true} onHide={onHide} onEnter={onEnter}>
       <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
+        <Modal.Title>
+          {title}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div data-id={config.id} />

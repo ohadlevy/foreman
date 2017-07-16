@@ -37,7 +37,7 @@ describe('statistics reducer', () => {
     expect(
       reducer(stateBeforeResponse, {
         type: types.STATISTICS_DATA_FAILURE,
-        payload: { error, id: request.id}
+        payload: { error, id: request.id }
       })
     ).toEqual(stateAfterFailure);
   });

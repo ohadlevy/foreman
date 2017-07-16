@@ -15,27 +15,27 @@ require('brace/keybinding/emacs');
 
 let Editor;
 
-$(document).on('ContentLoad', function () {
+$(document).on('ContentLoad', function() {
   onEditorLoad();
 });
 
-$(document).on('click', '#editor_submit', function () {
+$(document).on('click', '#editor_submit', function() {
   if ($('.diffMode').exists()) {
     setEditMode($('.editor_source'));
   }
 });
 
-$(document).on('change', '.editor_file_source', function (e) {
+$(document).on('change', '.editor_file_source', function(e) {
   if ($('.editor_file_source').val() !== '') {
     editorFileSource(e);
   }
 });
 
-$(document).on('change', '#keybinding', function () {
+$(document).on('change', '#keybinding', function() {
   setKeybinding();
 });
 
-$(document).on('change', '#mode', function () {
+$(document).on('change', '#mode', function() {
   setMode();
 });
 
@@ -89,7 +89,11 @@ function setMode(mode) {
 /* eslint-disable max-statements, no-alert */
 function editorFileSource(evt) {
   if (window.File && window.FileList && window.FileReader) {
-    if (!confirm(__('You are about to override the editor content, are you sure?'))) {
+    if (
+      !confirm(
+        __('You are about to override the editor content, are you sure?')
+      )
+    ) {
       $('.editor_file_source').val('');
       return;
     }
@@ -100,9 +104,10 @@ function editorFileSource(evt) {
       let reader = new FileReader();
       // Closure to capture the file information.
 
-      reader.onloadend = function (evt) {
-        if (evt.target.readyState === FileReader.DONE) { // DONE == 2
-          $('#new').val((evt.target.result));
+      reader.onloadend = function(evt) {
+        if (evt.target.readyState === FileReader.DONE) {
+          // DONE == 2
+          $('#new').val(evt.target.result);
           setEditMode($('.editor_source'));
         }
       };
@@ -140,7 +145,7 @@ function createEditor() {
   Editor.setShowPrintMargin(false);
   Editor.renderer.setShowGutter(false);
   setMode('ace/mode/ruby');
-  $(document).on('resize', editorId, function () {
+  $(document).on('resize', editorId, function() {
     Editor.resize();
   });
   if ($editorSource.is(':disabled')) {
@@ -156,7 +161,8 @@ export function setPreview() {
     return;
   }
   $('#preview_host_selector').hide();
-  if ($('.editor_source').hasClass('renderMode')) { // coming from renderMode, don't store code
+  if ($('.editor_source').hasClass('renderMode')) {
+    // coming from renderMode, don't store code
     $('.editor_source').removeClass('renderMode');
   } else {
     $('#new').val(Editor.getSession().getValue());
@@ -176,7 +182,8 @@ export function setRender() {
     return;
   }
   $('#preview_host_selector').show();
-  if ($('.editor_source').hasClass('diffMode')) { // coming from diffMode, don't store code
+  if ($('.editor_source').hasClass('diffMode')) {
+    // coming from diffMode, don't store code
     $('.editor_source').removeClass('diffMode');
   } else {
     $('#new').val(Editor.getSession().getValue());
@@ -199,7 +206,7 @@ function setEditMode(item) {
   let session = Editor.getSession();
 
   session.setValue($('#new').val());
-  session.on('change', function () {
+  session.on('change', function() {
     item.text(session.getValue());
   });
 }
@@ -211,7 +218,11 @@ function setDiffMode(item) {
 
   session.setMode('ace/mode/diff');
   const JsDiff = require('diff');
-  let patch = JsDiff.createPatch(item.attr('data-file-name'), $('#old').val(), $('#new').val());
+  let patch = JsDiff.createPatch(
+    item.attr('data-file-name'),
+    $('#old').val(),
+    $('#new').val()
+  );
 
   patch = patch.replace(/^(.*\n){0,4}/, '');
   if (patch.length === 0) {
@@ -233,8 +244,7 @@ function setRenderMode() {
 }
 
 export function getRenderedTemplate() {
-  let
-    session = Editor.getSession(),
+  let session = Editor.getSession(),
     hostId = $('#preview_host_id').select2('val'),
     url = $('.editor_source').data('render-path'),
     template = $('#new').val(),
@@ -248,16 +258,18 @@ export function getRenderedTemplate() {
   }
 
   session.setValue(__('Rendering the template, please wait...'));
-  $.post(url, params, function (response) {
+  $.post(url, params, function(response) {
     $('div#preview_error').hide();
     $('div#preview_error span.text').html('');
     session.setValue(response);
-  }).fail(function (response) {
+  }).fail(function(response) {
     $('div#preview_error span.text').html(response.responseText);
     $('div#preview_error').show();
-    session.setValue(__(
-      'There was an error during rendering, return to the Code tab to edit the template.'
-    ));
+    session.setValue(
+      __(
+        'There was an error during rendering, return to the Code tab to edit the template.'
+      )
+    );
   });
 }
 
@@ -269,7 +281,13 @@ export function submitCode() {
 
 /* eslint-disable max-len */
 export function revertTemplate(item) {
-  if (!confirm(__('You are about to override the editor content with a previous version, are you sure?'))) {
+  if (
+    !confirm(
+      __(
+        'You are about to override the editor content with a previous version, are you sure?'
+      )
+    )
+  ) {
     return;
   }
 
@@ -280,13 +298,16 @@ export function revertTemplate(item) {
     type: 'get',
     url: url,
     data: 'version=' + version,
-    complete: function (res) {
+    complete: function(res) {
       $('#primary_tab').click();
       if ($('#new').length) {
         $('#new').val(res.responseText);
         setEditMode($('.editor_source'));
       }
-      let time = $(item).closest('div.row').find('h6 span').attr('data-original-title');
+      let time = $(item)
+        .closest('div.row')
+        .find('h6 span')
+        .attr('data-original-title');
 
       $('#provisioning_template_audit_comment').text(
         /* eslint-disable no-undef */
