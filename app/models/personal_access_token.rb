@@ -2,6 +2,12 @@ class PersonalAccessToken < ActiveRecord::Base
   include Authorizable
   include Expirable
 
+  #validate :add_error
+
+  def add_error
+    errors.add(:name, 'is stupid')
+  end
+
   belongs_to :user
 
   audited :except => [:token], :associated_with => :user
@@ -15,6 +21,8 @@ class PersonalAccessToken < ActiveRecord::Base
 
   scope :active, -> { where(revoked: false).where("expires_at >= ? OR expires_at IS NULL", Time.current) }
   scope :inactive, -> { where(revoked: true).or(where("expires_at < ?", Time.current)) }
+
+  attr_accessor :token_value
 
   def self.authenticate_user(user, token)
     tokens = self.active.where(:user => user, :token => encrypt_token(user, token))
@@ -32,7 +40,7 @@ class PersonalAccessToken < ActiveRecord::Base
   end
 
   def generate_token
-    token_value = SecureRandom.urlsafe_base64(nil, false)
+    self.token_value = SecureRandom.urlsafe_base64(nil, false)
     self.token = self.class.encrypt_token(user, token_value)
     token_value
   end

@@ -5,6 +5,7 @@ import NotificationContainer from '../components/notifications/';
 import ToastsList from '../components/toastNotifications/';
 import PieChart from '../components/common/charts/PieChart/';
 import StorageContainer from '../components/hosts/storage/vmware/';
+import PersonalAccessToken from '../components/users/personalAccessTokens/';
 import ReactDOM from 'react-dom';
 import store from '../redux';
 
@@ -33,6 +34,10 @@ export function mount(component, selector, data) {
     StorageContainer: {
       type: StorageContainer,
       markup: <StorageContainer store={store} data={data} />
+    },
+    PersonalAccessToken: {
+      type: PersonalAccessToken,
+      markup: <PersonalAccessToken store={store} data={data} />
     }
   };
 

@@ -69,6 +69,7 @@
     "react-numeric-input": "^2.0.7",
     "react-redux": "^5.0.2",
     "redux": "^3.6.0",
+    "redux-form": "^7.0.3",
     "redux-logger": "^2.8.1",
     "redux-thunk": "^2.2.0",
     "seamless-immutable": "^7.0.1",
