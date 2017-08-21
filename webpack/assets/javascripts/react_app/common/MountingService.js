@@ -5,8 +5,10 @@ import NotificationContainer from '../components/notifications/';
 import ToastsList from '../components/toastNotifications/';
 import PieChart from '../components/common/charts/PieChart/';
 import StorageContainer from '../components/hosts/storage/vmware/';
+import PersonalAccessToken from '../components/users/personalAccessTokens/';
 import ReactDOM from 'react-dom';
 import store from '../redux';
+import { Provider } from 'react-redux';
 
 export function mount(component, selector, data) {
   const components = {
@@ -33,6 +35,10 @@ export function mount(component, selector, data) {
     StorageContainer: {
       type: StorageContainer,
       markup: <StorageContainer store={store} data={data} />
+    },
+    PersonalAccessToken: {
+      type: PersonalAccessToken,
+      markup: <PersonalAccessToken data={data} />
     }
   };
 
@@ -40,7 +46,13 @@ export function mount(component, selector, data) {
 
   if (reactNode) {
     ReactDOM.unmountComponentAtNode(reactNode);
-    ReactDOM.render(components[component].markup, reactNode);
+    ReactDOM.render(
+      (
+      <Provider store={store}>
+      {components[component].markup}
+      </Provider>
+      )
+      , reactNode);
   } else {
     const componentName = components[component].type.name;
 

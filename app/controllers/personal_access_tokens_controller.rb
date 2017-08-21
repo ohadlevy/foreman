@@ -1,6 +1,6 @@
 class PersonalAccessTokensController < ApplicationController
   include Foreman::Controller::Parameters::PersonalAccessToken
-  include Foreman::Controller::SshKeysCommon
+  include Foreman::Controller::UserAware
   include Foreman::Controller::ActionPermissionDsl
 
   before_action :find_resource, :only => [:revoke]

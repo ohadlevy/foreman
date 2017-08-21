@@ -11,14 +11,13 @@
   <div class="row">
     <div class="col-md-12">
   <p><%= _("Personal Access Tokens allow you to authenticate API requests without using your password.") %></p>
-  <% if authorized_for(hash_for_new_user_ssh_key_path(:user_id => @user)) %>
-    <p>
-    <%= link_to(_("Create Personal Access Token"),
-                hash_for_new_user_personal_access_token_path(:user_id => @user),
-                { :class => 'btn btn-success'}
-               ) %>
-    </p>
-  <% end %>
+  <% #if authorized_for(hash_for_new_user_personal_access_token_path(:user_id => @user)) %>
+  <div id="personal_access_token_create"></div>
+  <%= mount_react_component('PersonalAccessToken', '#personal_access_token_create', {
+    'user_id': @user.id,
+    'csrf-token': form_authenticity_token
+  }.to_json) %>
+  <% #end %>
     </div>
   </div>
   <div class="row">

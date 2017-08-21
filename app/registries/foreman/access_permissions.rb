@@ -810,10 +810,12 @@ Foreman::AccessControl.map do |permission_set|
 
   permission_set.security_block :personal_access_tokens do |map|
     map.permission :view_personal_access_tokens,
-                   :personal_access_tokens => []
+                   :"api/v2/personal_access_tokens" => [:index, :show]
     map.permission :create_personal_access_tokens,
-                   :personal_access_tokens => [:new, :create]
+                   :personal_access_tokens => [:new, :create],
+                   :"api/v2/personal_access_tokens" => [:create]
     map.permission :revoke_personal_access_tokens,
-                   :personal_access_tokens => [:revoke]
+                   :personal_access_tokens => [:revoke],
+                   :"api/v2/personal_access_tokens" => [:destroy]
   end
 end

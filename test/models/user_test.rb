@@ -1068,6 +1068,8 @@ class UserTest < ActiveSupport::TestCase
       assert_nil User.try_to_login(user.login, token_value, false)
     end
 
+     # TODO: Update login timestamp
+
     test 'token is validated' do
       token
       assert_nil User.try_to_login(user.login, 'invalid', true)

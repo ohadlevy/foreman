@@ -391,6 +391,9 @@ class User < ApplicationRecord
     options[:controller].to_s == 'api/v2/ssh_keys' &&
       options[:action] =~ /show|destroy|index|create/ &&
       options[:user_id].to_i == self.id ||
+    options[:controller].to_s == 'api/v2/personal_access_tokens' &&
+      options[:action] =~ /show|destroy|index|create/ &&
+      options[:user_id].to_i == self.id ||
     options[:controller].to_s == 'personal_access_tokens' &&
       options[:user_id].to_i == self.id &&
       options[:action] =~ /new|create|revoke/

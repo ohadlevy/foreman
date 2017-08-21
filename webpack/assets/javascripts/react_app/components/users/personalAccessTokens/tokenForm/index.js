@@ -1,29 +1,44 @@
 import React from 'react';
-import TextInput from '../../../common/forms/TextInput';
-import Submit from '../../../common/forms/Submit';
+import { reduxForm } from 'redux-form';
+import Form from '../../../common/forms/Form';
+import TextField from '../../../common/forms/TextField';
 
 class TokenForm extends React.Component {
-  render() {
-    const { name, updateForm } = this.props;
-    // TODO this needs to be extracted somewhere
-    // more complicated than it should.
-    const getEventValue = e => {
-    if (!e.target) {
-      return e;
-    }
-    return e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-  };
+  submit(values, dispatch, props) {
+    return props.submitForm(
+      props.data.user_id,
+      values.name,
+      values.expires_at,
+      props.data['csrf-token']
+    );
+  }
 
-  const _updateForm = (attribute, e) => {
-    updateForm({ [attribute]: getEventValue(e) });
-  };
+  render() {
+    const { handleSubmit, submitting, error } = this.props;
 
     return (
-      <form className="form-horizontal well">
-        <TextInput label={__('name')} value={name} onChange={_updateForm.bind(this, 'name')} />
-        <Submit />
-      </form>
+      <Form
+        onSubmit={handleSubmit(this.submit)}
+        onCancel={this.props.hideForm}
+        disabled={submitting}
+        submitting={submitting}
+        error={error}
+      >
+      <TextField
+        name="name"
+        type="text"
+        required="true"
+        label={__('Name')}
+      />
+      <TextField
+        name="expires_at"
+        type="date"
+        label={__('Expires at')}
+      />
+      </Form>
     );
   }
 }
-export default TokenForm;
+export default reduxForm({
+  form: 'personal_access_token_create'
+})(TokenForm);
