@@ -1,7 +1,12 @@
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import reducer from './reducers';
+import throttle from 'lodash/throttle';
+
+import { loadState, saveState } from '../common/sessionStorage';
+
+const persistentState = loadState();
 
 let middleware = [thunk];
 
@@ -9,12 +14,22 @@ if (process.env.NODE_ENV !== 'production' && !global.__testing__) {
   middleware = [...middleware, createLogger()];
 }
 
-const _getStore = () => createStore(
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
   reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  applyMiddleware(...middleware)
+  persistentState,
+  composeEnhancers(applyMiddleware(...middleware))
 );
 
-export default _getStore();
+store.subscribe(
+  throttle(() => {
+    saveState({
+      // Initially caching only notification state, to avoid unplanned side effects
+      notifications: store.getState().notifications
+    });
+  }),
+  1000
+);
 
-export const getStore = _getStore;
+export default store;

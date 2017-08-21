@@ -6,9 +6,6 @@ import {
   NOTIFICATIONS_MARK_GROUP_AS_READ,
   NOTIFICATIONS_POLLING_STARTED
 } from '../../consts';
-import {
-  notificationsDrawer as sessionStorage
-} from '../../../common/sessionStorage';
 import API from '../../../API';
 import { isNil } from 'lodash';
 const defaultNotificationsPollingInterval = 10000;
@@ -18,14 +15,13 @@ const notificationsInterval = isNil(process.env.NOTIFICATIONS_POLLING) ?
 
 const getNotifications = url => dispatch => {
   const isDocumentVisible =
-    document.visibilityState === 'visible' ||
-    document.visibilityState === 'prerender';
+    document.visibilityState === 'visible' || document.visibilityState === 'prerender';
 
   if (isDocumentVisible) {
     API.get(url)
-    .done(onGetNotificationsSuccess)
-    .fail(onGetNotificationsFailed)
-    .always(triggerPolling);
+      .done(onGetNotificationsSuccess)
+      .fail(onGetNotificationsFailed)
+      .always(triggerPolling);
   } else {
     // document is not visible, keep polling without api call
     triggerPolling();
@@ -89,7 +85,6 @@ export const expandGroup = group => (dispatch, getState) => {
 
   const getNewExpandedGroup = () => (currentExpanded === group ? '' : group);
 
-  sessionStorage.setExpandedGroup(getNewExpandedGroup());
   dispatch({
     type: NOTIFICATIONS_SET_EXPANDED_GROUP,
     payload: {
@@ -101,7 +96,6 @@ export const expandGroup = group => (dispatch, getState) => {
 export const toggleDrawer = () => (dispatch, getState) => {
   const isDrawerOpened = getState().notifications.isDrawerOpen;
 
-  sessionStorage.setIsOpened(!isDrawerOpened);
   dispatch({
     type: NOTIFICATIONS_TOGGLE_DRAWER,
     payload: {

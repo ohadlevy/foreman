@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { vmwareData, hiddenFieldValue } from './StorageContainer.fixtures';
-import { getStore } from '../../../../redux';
+import store from '../../../../redux';
 import StorageContainer from './';
 
 let wrapper = null;
@@ -10,7 +10,7 @@ describe('StorageContainer', () => {
   beforeEach(() => {
     global.__ = str => str;
     wrapper = mount(
-      <StorageContainer store={getStore()} data={vmwareData} />
+      <StorageContainer store={store} data={vmwareData} />
     );
   });
 

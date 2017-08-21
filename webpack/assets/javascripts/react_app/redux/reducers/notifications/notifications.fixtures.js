@@ -1,11 +1,8 @@
 /* eslint-disable camelcase */
 import Immutable from 'seamless-immutable';
-export const initialState = Immutable(
-  {
-    expandedGroup: null,
-    isDrawerOpen: null,
-    isPolling: false
-  });
+export const initialState = Immutable({
+  isPolling: false
+});
 
 export const stateWithNotifications = Immutable(
   {

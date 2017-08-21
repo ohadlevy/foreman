@@ -1,9 +1,9 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import Notifications from './';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
-import {getStore} from '../../redux';
+import store from '../../redux';
 import {
   emptyState,
   emptyHtml,
@@ -21,11 +21,11 @@ let failResponse = { status: 200 };
 
 function mockjqXHR() {
   return {
-    done: (callback) => {
+    done: callback => {
       callback(JSON.parse(serverResponse));
       return mockjqXHR();
     },
-    fail: (failCallback) => {
+    fail: failCallback => {
       failCallback(failResponse);
       return mockjqXHR();
     },
@@ -80,7 +80,7 @@ describe('notifications', () => {
   });
 
   it('full flow', () => {
-    const wrapper = mount(<Notifications data={componentMountData} store={getStore()} />);
+    const wrapper = mount(<Notifications data={componentMountData} store={store} />);
 
     wrapper.find('.fa-bell').simulate('click');
     expect(wrapper.find('.panel-group').length).toEqual(1);
@@ -91,7 +91,7 @@ describe('notifications', () => {
   });
 
   it('mark group as read flow', () => {
-    const wrapper = mount(<Notifications data={componentMountData} store={getStore()} />);
+    const wrapper = mount(<Notifications data={componentMountData} store={store} />);
     const matcher = '.drawer-pf-action a.btn-link';
 
     wrapper.find('.fa-bell').simulate('click');
@@ -104,14 +104,13 @@ describe('notifications', () => {
 
   it('should redirect to login when 401', () => {
     window.location.replace = jest.fn();
-    failResponse = {status: 401};
+    failResponse = { status: 401 };
 
-    mount(<Notifications data={componentMountData} store={getStore()} />);
+    mount(<Notifications data={componentMountData} store={store} />);
     expect(global.location.replace).toBeCalled();
   });
 
   it('should avoid multiple polling on re-mount', () => {
-    const store = getStore();
     const spy = jest.spyOn(API, 'get');
 
     mount(<Notifications data={componentMountData} store={store} />);
