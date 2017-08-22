@@ -12,7 +12,6 @@ export default ({ onSubmit, onCancel, disabled = false }) => {
         <Button className="btn-primary" disabled={disabled} onSubmit={onSubmit}>
           {__('Submit')}
         </Button>
-
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ const initialState = Immutable({
   isOpen: false,
   isSuccessful: false,
   body: '',
-  attributes: {name: ''}
+  attributes: { name: '' }
 });
 
 export default (state = initialState, action) => {
@@ -25,9 +25,8 @@ export default (state = initialState, action) => {
     }
 
     case USERS_PERSONAL_ACCESS_TOKEN_FORM_UPDATE: {
-
       // newAttributes[payload.key] = payload.newValues;
-      return state.set('attributes', ...state.attributes, payload.key: payload.newValues);
+      return state.set('attributes', ...state.attributes, (payload.key: payload.newValues));
     }
 
     default: {

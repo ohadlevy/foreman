@@ -17,15 +17,15 @@ const renderField = ({ input, label, type, meta: { touched, error } }) =>
     </div>
   </div>;
 
-const checkErrors = (response) => {
+const checkErrors = response => {
   if (response.ok) {
     return response;
   }
   if (response.status === 422) {
     // Handle invalid form data
-    return response.json().then(body => {
+    return response.json().then(({ error }) => {
       throw new SubmissionError({
-        name: body.error.errors.name.join(', '), // TODO: improve
+        name: error.errors.name.join(', '), // TODO: improve
         _error: __('Form is invalid.')
       });
     });
@@ -36,10 +36,10 @@ const checkErrors = (response) => {
 };
 
 class TokenForm extends React.Component {
-  submit(values, dispatch, props) {
+  submit({ name }, dispatch, props) {
     let userId = props.data.user_id;
     let data = {
-      name: values.name
+      name: name
     };
     let url = `/api/users/${userId}/personal_access_tokens`;
 
@@ -48,13 +48,15 @@ class TokenForm extends React.Component {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'X-CSRF-Token': props.data['csrf-token']
       },
       body: JSON.stringify(data)
-    }).then(checkErrors).then(response => {
-      return response.json().then(props.showFormSuccess);
-    });
+    })
+      .then(checkErrors)
+      .then(response => {
+        return response.json().then(props.showFormSuccess);
+      });
   }
 
   render() {
@@ -62,18 +64,13 @@ class TokenForm extends React.Component {
 
     return (
       <form className="form-horizontal well" onSubmit={handleSubmit(this.submit)}>
-      {error &&
-        <strong>
-          {error}
-        </strong>}
-      <Field
-        name="name"
-        type="text"
-        component={renderField}
-        label={__('Name')}
-      />
-      <button type="submit" disabled={submitting}>
-         {__('Create')}
+        {error &&
+          <strong>
+            {error}
+          </strong>}
+        <Field name="name" type="text" component={renderField} label={__('Name')} />
+        <button type="submit" disabled={submitting}>
+          {__('Create')}
         </button>
       </form>
     );
