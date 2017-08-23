@@ -1,5 +1,5 @@
 import {
-  USERS_PERSONAL_ACCESS_TOKEN_FORM_UPDATE,
+  USERS_PERSONAL_ACCESS_TOKEN_FORM_SUBMIT,
   USERS_PERSONAL_ACCESS_TOKEN_FORM_SUCCESS,
   USERS_PERSONAL_ACCESS_TOKEN_FORM_OPENED
 } from '../../../consts';
@@ -24,9 +24,8 @@ export default (state = initialState, action) => {
       return state.set('isSuccessful', payload.isSuccessful).set('body', payload.body);
     }
 
-    case USERS_PERSONAL_ACCESS_TOKEN_FORM_UPDATE: {
-      // newAttributes[payload.key] = payload.newValues;
-      return state.set('attributes', ...state.attributes, (payload.key: payload.newValues));
+    case USERS_PERSONAL_ACCESS_TOKEN_FORM_SUBMIT: {
+      return state.set('attributes', ...state.attributes, payload);
     }
 
     default: {

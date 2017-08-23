@@ -1,8 +1,10 @@
 import {
   USERS_PERSONAL_ACCESS_TOKEN_FORM_OPENED,
   USERS_PERSONAL_ACCESS_TOKEN_FORM_SUCCESS,
-  USERS_PERSONAL_ACCESS_TOKEN_FORM_UPDATE
+  USERS_PERSONAL_ACCESS_TOKEN_FORM_SUBMIT,
+  USERS_PERSONAL_ACCESS_TOKEN_FORM_SUBMIT_FAILED
 } from '../../../consts';
+import API from '../../../../API';
 
 export const showForm = personalAccessToken => {
   return {
@@ -18,12 +20,24 @@ export const showFormSuccess = body => {
   };
 };
 
-export const updateForm = (key, newValues) => {
-  return {
-    type: USERS_PERSONAL_ACCESS_TOKEN_FORM_UPDATE,
-    payload: {
-      key,
-      newValues
-    }
-  };
+export const submitForm = (values, userId) => {
+  // TODO: maybe just pass the URL instead.
+  const url = `/api/users/${userId}/personal_access_tokens`;
+
+  API.post(url, values).done(formSubmitDone).fail(checkErrors);
+  return {};
 };
+
+function formSubmitDone({ tokens }) {
+  return {
+    type: USERS_PERSONAL_ACCESS_TOKEN_FORM_SUBMIT,
+    payload: tokens // check this
+  };
+}
+
+function checkErrors({ jqXHR, textStatus, errorThrown }) {
+  return {
+    type: USERS_PERSONAL_ACCESS_TOKEN_FORM_SUBMIT_FAILED,
+    payload: { jqXHR, textStatus, errorThrown } // check this
+  };
+}

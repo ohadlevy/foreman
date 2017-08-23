@@ -2,21 +2,30 @@ import $ from 'jquery';
 
 export default {
   get(url) {
-    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+    $.ajaxPrefilter((options, originalOptions, jqXHR) => {
       jqXHR.originalRequestOptions = originalOptions;
     });
     return $.getJSON(url);
   },
+  post(url, data) {
+    return $.ajax({
+      url,
+      contentType: 'application/json',
+      type: 'post',
+      dataType: 'json',
+      data
+    });
+  },
   markNotificationAsRead(id) {
-    const data = JSON.stringify({'seen': true});
+    const data = JSON.stringify({ seen: true });
 
     $.ajax({
       url: `/notification_recipients/${id}`,
       contentType: 'application/json',
       type: 'put',
       dataType: 'json',
-      data: data,
-      error: function (jqXHR, textStatus, errorThrown) {
+      data,
+      error(jqXHR, textStatus, errorThrown) {
         /* eslint-disable no-console */
         console.log(jqXHR);
       }
@@ -27,7 +36,7 @@ export default {
       url: `/notification_recipients/group/${group}`,
       contentType: 'application/json',
       type: 'PUT',
-      error: function (jqXHR, textStatus, errorThrown) {
+      error(jqXHR, textStatus, errorThrown) {
         /* eslint-disable no-console */
         console.log(jqXHR);
       }

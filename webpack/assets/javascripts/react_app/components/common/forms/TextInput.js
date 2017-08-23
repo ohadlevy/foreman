@@ -1,9 +1,16 @@
 import React from 'react';
 import CommonForm from './CommonForm';
-const TextInput = ({ label, className = '', value, onChange }) => {
+import { Field } from 'redux-form';
+
+const TextInput = ({ label, className = '', touched, error }) => {
   return (
-    <CommonForm label={label} className={`common-textInput ${className}`}>
-      <input type="text" className="form-control" value={value} onChange={onChange} />
+    <CommonForm label={label} className={className}>
+      <Field name={label} type="text" component="input" />
+      {touched &&
+        error &&
+        <span>
+          {error}
+        </span>}
     </CommonForm>
   );
 };

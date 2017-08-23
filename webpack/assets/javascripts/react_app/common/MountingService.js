@@ -45,7 +45,11 @@ export function mount(component, selector, data) {
 
   if (reactNode) {
     ReactDOM.unmountComponentAtNode(reactNode);
-    ReactDOM.render(components[component].markup, reactNode);
+    ReactDOM.render(
+      <Provider store={store}>
+        components[component].markup
+      </Provider>
+      , reactNode);
   } else {
     const componentName = components[component].type.name;
 
