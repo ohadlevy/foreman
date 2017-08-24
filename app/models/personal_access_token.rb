@@ -2,7 +2,7 @@ class PersonalAccessToken < ActiveRecord::Base
   include Authorizable
   include Expirable
 
-  validate :add_error
+  # validate :add_error
 
   def add_error
     errors.add(:base, 'this is a warning')
@@ -18,7 +18,8 @@ class PersonalAccessToken < ActiveRecord::Base
 
   validates_lengths_from_database
 
-  validates :name, :user_id, :token, :presence => true
+  validates :token, :user_id, :token, presence: true
+  validates :name, presence: true, uniqueness: {scope: :user_id}
 
   scope :active, -> { where(revoked: false).where("expires_at >= ? OR expires_at IS NULL", Time.current) }
   scope :inactive, -> { where(revoked: true).or(where("expires_at < ?", Time.current)) }
