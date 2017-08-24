@@ -1,9 +1,13 @@
 import {
   USERS_PERSONAL_ACCESS_TOKEN_FORM_OPENED,
   USERS_PERSONAL_ACCESS_TOKEN_FORM_SUCCESS,
-  USERS_PERSONAL_ACCESS_TOKEN_FORM_BUTTON
+  USERS_PERSONAL_ACCESS_TOKEN_FORM_BUTTON,
+  USERS_PERSONAL_ACCESS_GET_REQUEST,
+  USERS_PERSONAL_ACCESS_GET_SUCCESS,
+  USERS_PERSONAL_ACCESS_GET_FAILURE
 } from '../../../consts';
 import { SubmissionError } from 'redux-form';
+import { ajaxRequestAction } from '../../common';
 
 const fieldErrors = ({ error }) => {
 
@@ -42,7 +46,7 @@ export const submitForm = (userId, name, expiresAt, csrfToken) => {
     // eslint-disable-next-line camelcase
     expires_at: expiresAt
   };
-  let url = `/api/users/${userId}/personal_access_tokens`;
+  const url = `/api/users/${userId}/personal_access_tokens`;
 
   return dispatch => {
     // TODO: extract into generic API handler once there are more use cases
@@ -80,3 +84,13 @@ export const hideForm = () => {
     payload: {}
   };
 };
+
+export const getTokens = userId => dispatch =>
+  ajaxRequestAction({
+    dispatch,
+    requestAction: USERS_PERSONAL_ACCESS_GET_REQUEST,
+    successAction: USERS_PERSONAL_ACCESS_GET_SUCCESS,
+    failedAction: USERS_PERSONAL_ACCESS_GET_FAILURE,
+    url: `/api/users/${userId}/personal_access_tokens`,
+    item: { userId }
+  });

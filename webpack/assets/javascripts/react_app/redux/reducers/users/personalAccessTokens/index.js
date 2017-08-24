@@ -1,14 +1,19 @@
 import {
   USERS_PERSONAL_ACCESS_TOKEN_FORM_BUTTON,
   USERS_PERSONAL_ACCESS_TOKEN_FORM_SUCCESS,
-  USERS_PERSONAL_ACCESS_TOKEN_FORM_OPENED
+  USERS_PERSONAL_ACCESS_TOKEN_FORM_OPENED,
+  USERS_PERSONAL_ACCESS_GET_REQUEST,
+  USERS_PERSONAL_ACCESS_GET_SUCCESS,
+  USERS_PERSONAL_ACCESS_GET_FAILURE
+
 } from '../../../consts';
 import Immutable from 'seamless-immutable';
 
 const initialState = Immutable({
   isOpen: false,
   isSuccessful: false,
-  body: ''
+  body: '',
+  tokens: []
 });
 
 export default (state = initialState, action) => {
@@ -25,6 +30,18 @@ export default (state = initialState, action) => {
 
     case USERS_PERSONAL_ACCESS_TOKEN_FORM_SUCCESS: {
       return state.set('isSuccessful', true).set('body', payload.body);
+    }
+
+    case USERS_PERSONAL_ACCESS_GET_REQUEST:
+    case USERS_PERSONAL_ACCESS_GET_SUCCESS: {
+      return state.set('tokens', payload.results);
+    }
+
+    case USERS_PERSONAL_ACCESS_GET_FAILURE: {
+      return state.set(
+        payload.id,
+        { error: payload.error }
+      );
     }
 
     default: {

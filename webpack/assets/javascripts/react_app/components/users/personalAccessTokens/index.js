@@ -4,10 +4,18 @@ import AlertPanel from '../../common/AlertPanel';
 import TokenForm from './tokenForm/';
 import * as PersonalAccessTokenActions from '../../../redux/actions/users/personalAccessTokens';
 import ClipboardButton from 'react-clipboard.js';
+import ActiveTokens from './ActiveTokens';
 
 import { connect } from 'react-redux';
 
 class PersonalAccessToken extends React.Component {
+  componentDidMount() {
+    // eslint-disable-next-line camelcase
+    const { data: { user_id }, getTokens } = this.props;
+
+    getTokens(user_id);
+  }
+
   render() {
     const {
       attributes,
@@ -17,6 +25,7 @@ class PersonalAccessToken extends React.Component {
       hideForm,
       showForm,
       data,
+      tokens,
       body
     } = this.props;
 
@@ -52,7 +61,14 @@ class PersonalAccessToken extends React.Component {
       );
     }
 
-    return isOpen ? form : button;
+     const top = isOpen ? form : button;
+
+     return (
+       <div>
+         {top}
+         <ActiveTokens tokens={tokens} />
+       </div>
+     );
   }
 }
 
@@ -60,7 +76,8 @@ const mapStateToProps = ({ users }) => ({
   isOpen: users.personalAccessTokens.isOpen,
   isSuccessful: users.personalAccessTokens.isSuccessful,
   body: users.personalAccessTokens.body,
-  attributes: users.personalAccessTokens.attributes
+  attributes: users.personalAccessTokens.attributes,
+  tokens: users.personalAccessTokens.tokens
 });
 
 export default connect(mapStateToProps, PersonalAccessTokenActions)(PersonalAccessToken);
