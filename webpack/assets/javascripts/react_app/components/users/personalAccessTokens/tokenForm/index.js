@@ -34,7 +34,7 @@ class TokenForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, submitting, error, anyTouched } = this.props;
+    const { handleSubmit, submitting, error } = this.props;
 
     return (
       <Form
@@ -42,7 +42,6 @@ class TokenForm extends React.Component {
         onCancel={this.props.hideForm}
         disabled={submitting}
         submitting={submitting}
-        touched={anyTouched}
         error={error}
       >
         <TextField name="name" type="text" required="true" label={__('Name')} />
