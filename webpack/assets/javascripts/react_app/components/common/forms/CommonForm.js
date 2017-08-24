@@ -21,7 +21,7 @@ const CommonForm = ({
         error &&
         <span className="help-block help-inline">
           <span className="error-message">
-            {error}
+            {error.join(', ')}
           </span>
         </span>}
     </div>

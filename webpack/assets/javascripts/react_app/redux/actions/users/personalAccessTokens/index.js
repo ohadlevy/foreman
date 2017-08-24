@@ -6,17 +6,11 @@ import {
 import { SubmissionError } from 'redux-form';
 
 const fieldErrors = ({ error }) => {
-  let errors = {};
 
-  error.errors.forEach(key => {
-    if (error.errors.hasOwnProperty(key)) {
-      if (key === 'base') {
-        errors._error = error.errors.base;
-      } else {
-        errors[key] = error.errors[key].join(', ');
-      }
-    }
-  });
+  let errors = error.errors;
+
+  errors._error = errors.base;
+  delete errors.base;
   return new SubmissionError(errors);
 };
 
