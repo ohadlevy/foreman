@@ -25,5 +25,5 @@ export default ({
         </span>
       </AlertPanel>}
     {children}
-    <Actions onCancel={onCancel} disabled={disabled} submitting={submitting} />
+    <Actions onCancel={onCancel} disabled={disabled} submitting={submitting} touched={touched} />
   </form>;
