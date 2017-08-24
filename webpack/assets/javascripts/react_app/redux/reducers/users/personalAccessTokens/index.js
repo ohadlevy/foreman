@@ -8,8 +8,7 @@ import Immutable from 'seamless-immutable';
 const initialState = Immutable({
   isOpen: false,
   isSuccessful: false,
-  body: '',
-  attributes: { name: '' }
+  body: ''
 });
 
 export default (state = initialState, action) => {
