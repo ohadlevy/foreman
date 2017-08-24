@@ -4,11 +4,12 @@ import Form from '../../../common/forms/Form';
 import TextField from '../../../common/forms/TextField';
 
 class TokenForm extends React.Component {
-  submit(values, dispatch, props) {
+  // eslint-disable-next-line camelcase
+  submit({name, expires_at}, dispatch, props) {
     return props.submitForm(
       props.data.user_id,
-      values.name,
-      values.expires_at,
+      name,
+      expires_at,
       props.data['csrf-token']
     );
   }

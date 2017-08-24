@@ -18,7 +18,7 @@ export default ({
 
   return (
     <div
-      className={`${getAlertClass(type, onClose)}${className ? ' ' + className : ''}`}
+      className={`${getAlertClass(type, onClose)}${className ? ` ${className}` : ''}`}
     >
       {onClose && <CloseButton onClick={onClose} />}
       <Icon type={type} />

@@ -5,22 +5,22 @@ import {
 } from '../../../consts';
 import { SubmissionError } from 'redux-form';
 
-const fieldErrors = (body) => {
+const fieldErrors = ({ error }) => {
   let errors = {};
 
-  for (let key in body.error.errors) {
-    if (body.error.errors.hasOwnProperty(key)) {
+  error.errors.forEach(key => {
+    if (error.errors.hasOwnProperty(key)) {
       if (key === 'base') {
-        errors._error = body.error.errors.base;
+        errors._error = error.errors.base;
       } else {
-        errors[key] = body.error.errors[key].join(', ');
+        errors[key] = error.errors[key].join(', ');
       }
     }
-  }
+  });
   return new SubmissionError(errors);
 };
 
-const checkErrors = (response) => {
+const checkErrors = response => {
   if (response.ok) {
     return response;
   }
@@ -43,9 +43,9 @@ export const showForm = personalAccessToken => {
 };
 
 export const submitForm = (userId, name, expiresAt, csrfToken) => {
-  /* eslint-disable camelcase */
   let data = {
     name,
+    // eslint-disable-next-line camelcase
     expires_at: expiresAt
   };
   let url = `/api/users/${userId}/personal_access_tokens`;
@@ -57,20 +57,26 @@ export const submitForm = (userId, name, expiresAt, csrfToken) => {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'X-CSRF-Token': csrfToken
       },
       body: JSON.stringify(data)
-    }).then(checkErrors).then(response => {
-      return response.json().then(body => ({
-        type: USERS_PERSONAL_ACCESS_TOKEN_FORM_SUCCESS,
-        payload: { body }
-      })).then(dispatch);
-    }).catch(error => {
-      /* eslint-disable no-console */
-      console.log(error);
-      throw error;
-    });
+    })
+      .then(checkErrors)
+      .then(response => {
+        return response
+          .json()
+          .then(body => ({
+            type: USERS_PERSONAL_ACCESS_TOKEN_FORM_SUCCESS,
+            payload: { body }
+          }))
+          .then(dispatch);
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+        throw error;
+      });
   };
 };
 

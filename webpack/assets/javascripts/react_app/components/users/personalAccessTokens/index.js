@@ -22,27 +22,32 @@ class PersonalAccessToken extends React.Component {
 
     const button = (
       <p>
-      <Button className="btn-success" onClick={showForm.bind(this)}>
-        {__('Create Personal Access Token')}
-      </Button>
+        <Button className="btn-success" onClick={showForm.bind(this)}>
+          {__('Create Personal Access Token')}
+        </Button>
       </p>
     );
 
     const form = (
-      <TokenForm {...attributes} hideForm={hideForm}
-      data={data} submitForm={submitForm}/>
+      <TokenForm {...attributes} hideForm={hideForm} data={data} submitForm={submitForm} />
     );
 
     if (isSuccessful) {
       return (
         <AlertPanel type="success" onClose={hideForm} title={__('Your New Personal Access Token')}>
-          <code style={{fontSize: '120%'}}>{body.token_value}</code>
+          <code style={{ fontSize: '120%' }}>{body.token_value}</code>
           &nbsp;
-          <ClipboardButton data-clipboard-text={body.token_value} component="a" title={__('Copy to clipboard!')}>
-            <i className="fa fa-clipboard" aria-hidden="true"></i>
+          <ClipboardButton
+            data-clipboard-text={body.token_value}
+            component="a"
+            title={__('Copy to clipboard!')}
+          >
+            <i className="fa fa-clipboard" aria-hidden="true" />
           </ClipboardButton>
-          <br/>
-          {__('Make sure to copy your new personal access token now. You won’t be able to see it again!')}
+          <br />
+          {__(
+            'Make sure to copy your new personal access token now. You won’t be able to see it again!'
+          )}
         </AlertPanel>
       );
     }
@@ -51,11 +56,11 @@ class PersonalAccessToken extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  isOpen: state.users.personalAccessTokens.isOpen,
-  isSuccessful: state.users.personalAccessTokens.isSuccessful,
-  body: state.users.personalAccessTokens.body,
-  attributes: state.users.personalAccessTokens.attributes
+const mapStateToProps = ({ users }) => ({
+  isOpen: users.personalAccessTokens.isOpen,
+  isSuccessful: users.personalAccessTokens.isSuccessful,
+  body: users.personalAccessTokens.body,
+  attributes: users.personalAccessTokens.attributes
 });
 
 export default connect(mapStateToProps, PersonalAccessTokenActions)(PersonalAccessToken);

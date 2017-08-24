@@ -49,7 +49,7 @@ export function mount(component, selector, data) {
     ReactDOM.render(
       (
       <Provider store={store}>
-      {components[component].markup}
+        {components[component].markup}
       </Provider>
       )
       , reactNode);

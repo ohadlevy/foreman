@@ -9,7 +9,7 @@ const initialState = Immutable({
   isOpen: false,
   isSuccessful: false,
   body: '',
-  attributes: {name: ''}
+  attributes: { name: '' }
 });
 
 export default (state = initialState, action) => {

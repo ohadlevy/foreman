@@ -11,11 +11,11 @@ const renderField = ({
   meta: { touched, error }
 }) => (
     <CommonForm
-    label={label}
-    className={className}
-    touched={touched}
-    required={required}
-    error={error}>
+      label={label}
+      className={className}
+      touched={touched}
+      required={required}
+      error={error}>
       <input {...input} type={type} className="form-control" />
     </CommonForm>
 );

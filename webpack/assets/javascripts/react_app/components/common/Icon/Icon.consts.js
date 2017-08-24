@@ -21,6 +21,6 @@ export default type => {
     case 'close':
       return closeIcon;
     default:
-      throw { error: 'unknown icon type ' + type };
+      throw { error: `unknown icon type ${type}` };
   }
 };

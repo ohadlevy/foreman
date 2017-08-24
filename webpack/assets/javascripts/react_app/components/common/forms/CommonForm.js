@@ -11,17 +11,19 @@ const CommonForm = ({
   return (
     <div className={`form-group ${className} ${error ? 'has-error' : ''}`}>
       <label className="col-md-2 control-label">
-        {label}{required && ' *'}
+        {label}
+        {required && ' *'}
       </label>
       <div className="col-md-4">
         {children}
       </div>
-    {touched &&
-      error &&
-      <span className="help-block help-inline">
-      <span className="error-message">
-      {error}
-      </span></span>}
+      {touched &&
+        error &&
+        <span className="help-block help-inline">
+          <span className="error-message">
+            {error}
+          </span>
+        </span>}
     </div>
   );
 };

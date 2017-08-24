@@ -1,11 +1,8 @@
 import React from 'react';
 import Button from '../../common/forms/Button';
+import { SimpleLoader } from '../Loader';
 
-export default ({
-  onCancel,
-  disabled = false,
-  submitting = false
-}) => {
+export default ({ onCancel, disabled = false, submitting = false }) => {
   return (
     <div className="clearfix">
       <div className="form-actions">
@@ -14,10 +11,9 @@ export default ({
         </Button>
 
         <Button className="btn-primary" type="submit" disabled={disabled || submitting}>
-         {__('Submit')} &nbsp;
-         {submitting && <span className="spinner spinner-sm spinner-inline pull-right"></span>}
+          {__('Submit')} &nbsp;
+          {submitting && <SimpleLoader size="sm" className="spinner-inline pull-right" />}
         </Button>
-
       </div>
     </div>
   );

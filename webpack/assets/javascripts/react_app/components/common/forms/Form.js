@@ -10,19 +10,20 @@ export default ({
   error = false,
   touched,
   disabled = false,
-  submitting = false
+  submitting = false,
+  title = __('Unable to save')
 }) =>
   <form className={className} onSubmit={onSubmit}>
-  {error &&
-    <AlertPanel
-      className="base in fade"
-      type="danger"
-      title={__('Unable to save')}
-    >
-    <span className="text">
-    {error.map((e, idx) => <li key={idx}>{e}</li>)}
-    </span>
-    </AlertPanel>}
-  {children}
-  <Actions onCancel={onCancel} disabled={disabled} submitting={submitting} />
-</form>;
+    {error &&
+      <AlertPanel className="base in fade" type="danger" title={title}>
+        <span className="text">
+          {error.map((e, idx) =>
+            <li key={idx}>
+              {e}
+            </li>
+          )}
+        </span>
+      </AlertPanel>}
+    {children}
+    <Actions onCancel={onCancel} disabled={disabled} submitting={submitting} />
+  </form>;
