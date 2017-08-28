@@ -1,17 +1,18 @@
 import React from 'react';
+import Token from './Token';
 
 export default ({ tokens }) =>
-  <table>
+  <table className="table table-bordered table-striped table-fixed">
     <thead>
       <tr>
         <th>
           {__('Name')}
         </th>
         <th>
-          {__('Created At')}
+          {__('Created')}
         </th>
         <th>
-          {__('Expires At')}
+          {__('Expires')}
         </th>
         <th>
           {__('Last Used')}
@@ -22,8 +23,6 @@ export default ({ tokens }) =>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        {tokens.length}
-      </tr>
+      {tokens && tokens.map(token => <Token key={token.id} {...token} />)}
     </tbody>
   </table>;

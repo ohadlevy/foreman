@@ -4,7 +4,7 @@ import AlertPanel from '../../common/AlertPanel';
 import TokenForm from './tokenForm/';
 import * as PersonalAccessTokenActions from '../../../redux/actions/users/personalAccessTokens';
 import ClipboardButton from 'react-clipboard.js';
-import ActiveTokens from './ActiveTokens';
+import TokenList from './TokenList';
 
 import { connect } from 'react-redux';
 
@@ -61,14 +61,12 @@ class PersonalAccessToken extends React.Component {
       );
     }
 
-     const top = isOpen ? form : button;
-
-     return (
-       <div>
-         {top}
-         <ActiveTokens tokens={tokens} />
-       </div>
-     );
+    return (
+      <div>
+        {isOpen ? form : button}
+        <TokenList tokens={tokens} />
+      </div>
+    );
   }
 }
 
