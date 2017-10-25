@@ -5,7 +5,6 @@ import TokenForm from './tokenForm/';
 import * as PersonalAccessTokenActions from '../../../redux/actions/users/personalAccessTokens';
 import ClipboardButton from 'react-clipboard.js';
 import TokenList from './TokenList';
-
 import { connect } from 'react-redux';
 
 class PersonalAccessTokens extends React.Component {
@@ -17,17 +16,7 @@ class PersonalAccessTokens extends React.Component {
   }
 
   render() {
-    const {
-      attributes,
-      isOpen,
-      isSuccessful,
-      submitForm,
-      hideForm,
-      showForm,
-      data,
-      tokens,
-      body
-    } = this.props;
+    const { attributes, isOpen, isSuccessful, hideForm, showForm, data, tokens, body } = this.props;
 
     const button = (
       <p>
@@ -37,9 +26,7 @@ class PersonalAccessTokens extends React.Component {
       </p>
     );
 
-    const form = (
-      <TokenForm {...attributes} hideForm={hideForm} data={data} submitForm={submitForm} />
-    );
+    const form = <TokenForm {...attributes} hideForm={hideForm} url={data.url} />;
 
     let headerActions;
 
@@ -68,17 +55,23 @@ class PersonalAccessTokens extends React.Component {
     return (
       <div className="row">
         <div className="col-md-12">
-         <p>{__('Personal Access Tokens allow you to authenticate API requests without using your password.')}</p>
-         {headerActions}
-         <TokenList tokens={tokens ? tokens.filter(token => token['active?']) : undefined}
-           title={__('Active Personal Access Tokens')}
-           emptyText={__('This user does not have any active Personal Access Tokens.')}
-           revocable="true"
+          <p>
+            {__(
+              'Personal Access Tokens allow you to authenticate API requests without using your password.'
+            )}
+          </p>
+          {headerActions}
+          <TokenList
+            tokens={tokens ? tokens.filter(token => token['active?']) : undefined}
+            title={__('Active Personal Access Tokens')}
+            emptyText={__('This user does not have any active Personal Access Tokens.')}
+            revocable="true"
           />
-         <TokenList tokens={tokens ? tokens.filter(token => !token['active?']) : undefined}
-           title={__('Inactive Personal Access Tokens')}
-           emptyText={__('This user does not have any inactive Personal Access Tokens.')}
-         />
+          <TokenList
+            tokens={tokens ? tokens.filter(token => !token['active?']) : undefined}
+            title={__('Inactive Personal Access Tokens')}
+            emptyText={__('This user does not have any inactive Personal Access Tokens.')}
+          />
         </div>
       </div>
     );

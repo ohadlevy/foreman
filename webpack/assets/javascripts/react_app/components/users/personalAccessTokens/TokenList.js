@@ -7,36 +7,29 @@ import PanelBody from '../../common/Panel/PanelBody';
 
 export default ({ tokens, title, emptyText, revocable = false }) => (
   <Panel>
-  <PanelHeading>
-  <PanelTitle text={`${title} (${tokens ? tokens.length : ''})`} />
-  </PanelHeading>
-  <PanelBody>
-  {tokens && tokens.length > 0 &&
-  <table className="table table-bordered table-striped table-fixed">
-    <thead>
-      <tr>
-        <th>
-          {__('Name')}
-        </th>
-        <th>
-          {__('Created')}
-        </th>
-        <th>
-          {revocable ? __('Expires') : __('Expired')}
-        </th>
-        <th>
-          {__('Last Used')}
-        </th>
-        <th>
-          {__('Actions')}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      {tokens && tokens.map(token => <Token key={token.id} {...token} revocable={revocable} />)}
-    </tbody>
-  </table> || emptyText
-  }
-  </PanelBody>
+    <PanelHeading>
+      <PanelTitle text={`${title} (${tokens ? tokens.length : ''})`} />
+    </PanelHeading>
+    <PanelBody>
+      {(tokens &&
+        tokens.length > 0 && (
+          <table className="table table-bordered table-striped table-fixed">
+            <thead>
+              <tr>
+                <th>{__('Name')}</th>
+                <th>{__('Created')}</th>
+                <th>{revocable ? __('Expires') : __('Expired')}</th>
+                <th>{__('Last Used')}</th>
+                <th>{__('Actions')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tokens &&
+                tokens.map(token => <Token key={token.id} {...token} revocable={revocable} />)}
+            </tbody>
+          </table>
+        )) ||
+        emptyText}
+    </PanelBody>
   </Panel>
 );
