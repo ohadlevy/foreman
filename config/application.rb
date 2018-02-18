@@ -281,7 +281,7 @@ module Foreman
           dynflow.initialize!
         end
       end
-    end
+    end unless Foreman.in_rake?
   end
 
   def self.setup_console
