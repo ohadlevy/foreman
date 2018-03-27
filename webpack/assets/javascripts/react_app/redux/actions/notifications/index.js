@@ -4,6 +4,8 @@ import {
   NOTIFICATIONS_SET_EXPANDED_GROUP,
   NOTIFICATIONS_MARK_AS_READ,
   NOTIFICATIONS_MARK_GROUP_AS_READ,
+  NOTIFICATIONS_MARK_AS_CLEAR,
+  NOTIFICATIONS_MARK_GROUP_AS_CLEARED,
   NOTIFICATIONS_POLLING_STARTED,
 } from '../../consts';
 import { notificationsDrawer as sessionStorage } from '../../../common/sessionStorage';
@@ -81,6 +83,29 @@ export const onMarkGroupAsRead = group => (dispatch) => {
   });
   const url = `/notification_recipients/group/${group}`;
   API.put(url);
+};
+
+export const onClear = (group, id) => (dispatch) => {
+  dispatch({
+    type: NOTIFICATIONS_MARK_AS_CLEAR,
+    payload: {
+      group,
+      id,
+    },
+  });
+  const url = `/notification_recipients/${id}`;
+  API.delete(url);
+};
+
+export const onMarkGroupAsClear = group => (dispatch) => {
+  dispatch({
+    type: NOTIFICATIONS_MARK_GROUP_AS_CLEARED,
+    payload: {
+      group,
+    },
+  });
+  const url = `/notification_recipients/group/${group}`;
+  API.delete(url);
 };
 
 export const expandGroup = group => (dispatch, getState) => {
