@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BreadcrumbBar rendering renders breadcrumb-bar 1`] = `
+<div
+  className="breadcrumb-bar"
+>
+  <Breadcrumb
+    isTitle={false}
+    items={
+      Array [
+        Object {
+          "caption": "root",
+          "url": "/some-url",
+        },
+        Object {
+          "caption": "child",
+        },
+      ]
+    }
+    title={true}
+  />
+  <hr
+    className="breadcrumb-line"
+  />
+</div>
+`;
+
+exports[`BreadcrumbBar rendering renders switchable breadcrumb-bar 1`] = `
+<div
+  className="breadcrumb-bar"
+>
+  <Breadcrumb
+    isTitle={false}
+    items={
+      Array [
+        Object {
+          "caption": "root",
+          "url": "/some-url",
+        },
+        Object {
+          "caption": "child",
+        },
+      ]
+    }
+    title={true}
+  >
+    <BreadcrumbSwitcher
+      currentPage={1}
+      hasError={false}
+      isLoadingResources={false}
+      onNextPageClick={[Function]}
+      onOverlayEnter={[Function]}
+      onOverlayHide={[Function]}
+      onPrevPageClick={[Function]}
+      onTogglerClick={[Function]}
+      open={false}
+      resources={Array []}
+      totalPages={1}
+    />
+  </Breadcrumb>
+  <hr
+    className="breadcrumb-line"
+  />
+</div>
+`;
+
+exports[`loadSwitcherResourcesByResource calls 1`] = `
+Array [
+  Array [
+    Object {
+      "nameField": "name",
+      "reosurceUrl": "some/url",
+      "switcherItemUrl": "some/url/:id",
+    },
+  ],
+  Array [
+    Object {
+      "nameField": "name",
+      "reosurceUrl": "some/url",
+      "switcherItemUrl": "some/url/:id",
+    },
+    Object {
+      "page": 2,
+    },
+  ],
+  Array [
+    Object {
+      "nameField": "name",
+      "reosurceUrl": "some/url",
+      "switcherItemUrl": "some/url/:id",
+    },
+    Object {
+      "page": 0,
+    },
+  ],
+]
+`;

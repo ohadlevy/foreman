@@ -1,0 +1,651 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BreadcrumbSwitcher rendering render closed 1`] = `
+<div
+  className="breadcrumb-switcher"
+  style={
+    Object {
+      "position": "relative",
+    }
+  }
+>
+  <BreadcrumbSwitcherToggler
+    onClick={[Function]}
+  />
+  <Overlay
+    animation={[Function]}
+    container={
+      BreadcrumbSwitcher {
+        "context": Object {},
+        "props": Object {
+          "currentPage": 1,
+          "hasError": false,
+          "isLoadingResources": false,
+          "onNextPageClick": [Function],
+          "onOverlayEnter": [Function],
+          "onOverlayHide": [Function],
+          "onPrevPageClick": [Function],
+          "onTogglerClick": [Function],
+          "open": false,
+          "resources": Array [],
+          "totalPages": 1,
+        },
+        "refs": Object {},
+        "state": null,
+        "updater": Updater {
+          "_callbacks": Array [],
+          "_renderer": ReactShallowRenderer {
+            "_context": Object {},
+            "_element": <BreadcrumbSwitcher
+              currentPage={1}
+              hasError={false}
+              isLoadingResources={false}
+              onNextPageClick={[Function]}
+              onOverlayEnter={[Function]}
+              onOverlayHide={[Function]}
+              onPrevPageClick={[Function]}
+              onTogglerClick={[Function]}
+              open={false}
+              resources={Array []}
+              totalPages={1}
+      />,
+            "_forcedUpdate": false,
+            "_instance": [Circular],
+            "_newState": null,
+            "_rendered": <div
+              className="breadcrumb-switcher"
+              style={
+                      Object {
+                              "position": "relative",
+                            }
+              }
+      >
+              <BreadcrumbSwitcherToggler
+                      onClick={[Function]}
+              />
+              <Overlay
+                      animation={[Function]}
+                      container={[Circular]}
+                      onEnter={[Function]}
+                      onHide={[Function]}
+                      placement="bottom"
+                      rootClose={true}
+                      show={false}
+                      target={[Function]}
+              >
+                      <BreadcrumbSwitcherPopover
+                              currentPage={1}
+                              hasError={false}
+                              id="breadcrumb-switcher-popover"
+                              loading={false}
+                              onNextPageClick={[Function]}
+                              onPrevPageClick={[Function]}
+                              resources={Array []}
+                              totalPages={1}
+                      />
+              </Overlay>
+      </div>,
+            "_rendering": false,
+            "_updater": [Circular],
+          },
+        },
+      }
+    }
+    onEnter={[Function]}
+    onHide={[Function]}
+    placement="bottom"
+    rootClose={true}
+    show={false}
+    target={[Function]}
+  >
+    <BreadcrumbSwitcherPopover
+      currentPage={1}
+      hasError={false}
+      id="breadcrumb-switcher-popover"
+      loading={false}
+      onNextPageClick={[Function]}
+      onPrevPageClick={[Function]}
+      resources={Array []}
+      totalPages={1}
+    />
+  </Overlay>
+</div>
+`;
+
+exports[`BreadcrumbSwitcher rendering render loading state 1`] = `
+<div
+  className="breadcrumb-switcher"
+  style={
+    Object {
+      "position": "relative",
+    }
+  }
+>
+  <BreadcrumbSwitcherToggler
+    onClick={[Function]}
+  />
+  <Overlay
+    animation={[Function]}
+    container={
+      BreadcrumbSwitcher {
+        "context": Object {},
+        "props": Object {
+          "currentPage": 1,
+          "hasError": false,
+          "isLoadingResources": false,
+          "loading": true,
+          "onNextPageClick": [Function],
+          "onOverlayEnter": [Function],
+          "onOverlayHide": [Function],
+          "onPrevPageClick": [Function],
+          "onTogglerClick": [Function],
+          "open": true,
+          "resources": Array [],
+          "totalPages": 1,
+        },
+        "refs": Object {},
+        "state": null,
+        "updater": Updater {
+          "_callbacks": Array [],
+          "_renderer": ReactShallowRenderer {
+            "_context": Object {},
+            "_element": <BreadcrumbSwitcher
+              currentPage={1}
+              hasError={false}
+              isLoadingResources={false}
+              loading={true}
+              onNextPageClick={[Function]}
+              onOverlayEnter={[Function]}
+              onOverlayHide={[Function]}
+              onPrevPageClick={[Function]}
+              onTogglerClick={[Function]}
+              open={true}
+              resources={Array []}
+              totalPages={1}
+      />,
+            "_forcedUpdate": false,
+            "_instance": [Circular],
+            "_newState": null,
+            "_rendered": <div
+              className="breadcrumb-switcher"
+              style={
+                      Object {
+                              "position": "relative",
+                            }
+              }
+      >
+              <BreadcrumbSwitcherToggler
+                      onClick={[Function]}
+              />
+              <Overlay
+                      animation={[Function]}
+                      container={[Circular]}
+                      onEnter={[Function]}
+                      onHide={[Function]}
+                      placement="bottom"
+                      rootClose={true}
+                      show={true}
+                      target={[Function]}
+              >
+                      <BreadcrumbSwitcherPopover
+                              currentPage={1}
+                              hasError={false}
+                              id="breadcrumb-switcher-popover"
+                              loading={false}
+                              onNextPageClick={[Function]}
+                              onPrevPageClick={[Function]}
+                              resources={Array []}
+                              totalPages={1}
+                      />
+              </Overlay>
+      </div>,
+            "_rendering": false,
+            "_updater": [Circular],
+          },
+        },
+      }
+    }
+    onEnter={[Function]}
+    onHide={[Function]}
+    placement="bottom"
+    rootClose={true}
+    show={true}
+    target={[Function]}
+  >
+    <BreadcrumbSwitcherPopover
+      currentPage={1}
+      hasError={false}
+      id="breadcrumb-switcher-popover"
+      loading={false}
+      onNextPageClick={[Function]}
+      onPrevPageClick={[Function]}
+      resources={Array []}
+      totalPages={1}
+    />
+  </Overlay>
+</div>
+`;
+
+exports[`BreadcrumbSwitcher rendering render resources list 1`] = `
+<div
+  className="breadcrumb-switcher"
+  style={
+    Object {
+      "position": "relative",
+    }
+  }
+>
+  <BreadcrumbSwitcherToggler
+    onClick={[Function]}
+  />
+  <Overlay
+    animation={[Function]}
+    container={
+      BreadcrumbSwitcher {
+        "context": Object {},
+        "props": Object {
+          "currentPage": 1,
+          "hasError": false,
+          "isLoadingResources": false,
+          "loading": false,
+          "onNextPageClick": [Function],
+          "onOverlayEnter": [Function],
+          "onOverlayHide": [Function],
+          "onPrevPageClick": [Function],
+          "onTogglerClick": [Function],
+          "open": true,
+          "resources": Array [
+            Object {
+              "name": "Host 1",
+              "url": "#",
+            },
+            Object {
+              "name": "Host 2",
+              "url": "#",
+            },
+            Object {
+              "name": "Host 3 with a very long name",
+              "url": "#",
+            },
+            Object {
+              "name": "Host 4",
+              "onClick": [Function],
+              "url": undefined,
+            },
+            Object {
+              "name": "Host 5",
+              "onClick": undefined,
+              "url": "#",
+            },
+          ],
+          "totalPages": 1,
+        },
+        "refs": Object {},
+        "state": null,
+        "updater": Updater {
+          "_callbacks": Array [],
+          "_renderer": ReactShallowRenderer {
+            "_context": Object {},
+            "_element": <BreadcrumbSwitcher
+              currentPage={1}
+              hasError={false}
+              isLoadingResources={false}
+              loading={false}
+              onNextPageClick={[Function]}
+              onOverlayEnter={[Function]}
+              onOverlayHide={[Function]}
+              onPrevPageClick={[Function]}
+              onTogglerClick={[Function]}
+              open={true}
+              resources={
+                      Array [
+                              Object {
+                                "name": "Host 1",
+                                "url": "#",
+                              },
+                              Object {
+                                "name": "Host 2",
+                                "url": "#",
+                              },
+                              Object {
+                                "name": "Host 3 with a very long name",
+                                "url": "#",
+                              },
+                              Object {
+                                "name": "Host 4",
+                                "onClick": [Function],
+                                "url": undefined,
+                              },
+                              Object {
+                                "name": "Host 5",
+                                "onClick": undefined,
+                                "url": "#",
+                              },
+                            ]
+              }
+              totalPages={1}
+      />,
+            "_forcedUpdate": false,
+            "_instance": [Circular],
+            "_newState": null,
+            "_rendered": <div
+              className="breadcrumb-switcher"
+              style={
+                      Object {
+                              "position": "relative",
+                            }
+              }
+      >
+              <BreadcrumbSwitcherToggler
+                      onClick={[Function]}
+              />
+              <Overlay
+                      animation={[Function]}
+                      container={[Circular]}
+                      onEnter={[Function]}
+                      onHide={[Function]}
+                      placement="bottom"
+                      rootClose={true}
+                      show={true}
+                      target={[Function]}
+              >
+                      <BreadcrumbSwitcherPopover
+                              currentPage={1}
+                              hasError={false}
+                              id="breadcrumb-switcher-popover"
+                              loading={false}
+                              onNextPageClick={[Function]}
+                              onPrevPageClick={[Function]}
+                              resources={
+                                      Array [
+                                              Object {
+                                                "name": "Host 1",
+                                                "url": "#",
+                                              },
+                                              Object {
+                                                "name": "Host 2",
+                                                "url": "#",
+                                              },
+                                              Object {
+                                                "name": "Host 3 with a very long name",
+                                                "url": "#",
+                                              },
+                                              Object {
+                                                "name": "Host 4",
+                                                "onClick": [Function],
+                                                "url": undefined,
+                                              },
+                                              Object {
+                                                "name": "Host 5",
+                                                "onClick": undefined,
+                                                "url": "#",
+                                              },
+                                            ]
+                              }
+                              totalPages={1}
+                      />
+              </Overlay>
+      </div>,
+            "_rendering": false,
+            "_updater": [Circular],
+          },
+        },
+      }
+    }
+    onEnter={[Function]}
+    onHide={[Function]}
+    placement="bottom"
+    rootClose={true}
+    show={true}
+    target={[Function]}
+  >
+    <BreadcrumbSwitcherPopover
+      currentPage={1}
+      hasError={false}
+      id="breadcrumb-switcher-popover"
+      loading={false}
+      onNextPageClick={[Function]}
+      onPrevPageClick={[Function]}
+      resources={
+        Array [
+          Object {
+            "name": "Host 1",
+            "url": "#",
+          },
+          Object {
+            "name": "Host 2",
+            "url": "#",
+          },
+          Object {
+            "name": "Host 3 with a very long name",
+            "url": "#",
+          },
+          Object {
+            "name": "Host 4",
+            "onClick": [Function],
+            "url": undefined,
+          },
+          Object {
+            "name": "Host 5",
+            "onClick": undefined,
+            "url": "#",
+          },
+        ]
+      }
+      totalPages={1}
+    />
+  </Overlay>
+</div>
+`;
+
+exports[`BreadcrumbSwitcher rendering render resources list with pagination 1`] = `
+<div
+  className="breadcrumb-switcher"
+  style={
+    Object {
+      "position": "relative",
+    }
+  }
+>
+  <BreadcrumbSwitcherToggler
+    onClick={[Function]}
+  />
+  <Overlay
+    animation={[Function]}
+    container={
+      BreadcrumbSwitcher {
+        "context": Object {},
+        "props": Object {
+          "currentPage": 2,
+          "hasError": false,
+          "isLoadingResources": false,
+          "loading": false,
+          "onNextPageClick": [Function],
+          "onOverlayEnter": [Function],
+          "onOverlayHide": [Function],
+          "onPrevPageClick": [Function],
+          "onTogglerClick": [Function],
+          "open": true,
+          "resources": Array [
+            Object {
+              "name": "Host 1",
+              "url": "#",
+            },
+            Object {
+              "name": "Host 2",
+              "url": "#",
+            },
+            Object {
+              "name": "Host 3 with a very long name",
+              "url": "#",
+            },
+            Object {
+              "name": "Host 4",
+              "onClick": [Function],
+              "url": undefined,
+            },
+            Object {
+              "name": "Host 5",
+              "onClick": undefined,
+              "url": "#",
+            },
+          ],
+          "totalPages": 3,
+        },
+        "refs": Object {},
+        "state": null,
+        "updater": Updater {
+          "_callbacks": Array [],
+          "_renderer": ReactShallowRenderer {
+            "_context": Object {},
+            "_element": <BreadcrumbSwitcher
+              currentPage={2}
+              hasError={false}
+              isLoadingResources={false}
+              loading={false}
+              onNextPageClick={[Function]}
+              onOverlayEnter={[Function]}
+              onOverlayHide={[Function]}
+              onPrevPageClick={[Function]}
+              onTogglerClick={[Function]}
+              open={true}
+              resources={
+                      Array [
+                              Object {
+                                "name": "Host 1",
+                                "url": "#",
+                              },
+                              Object {
+                                "name": "Host 2",
+                                "url": "#",
+                              },
+                              Object {
+                                "name": "Host 3 with a very long name",
+                                "url": "#",
+                              },
+                              Object {
+                                "name": "Host 4",
+                                "onClick": [Function],
+                                "url": undefined,
+                              },
+                              Object {
+                                "name": "Host 5",
+                                "onClick": undefined,
+                                "url": "#",
+                              },
+                            ]
+              }
+              totalPages={3}
+      />,
+            "_forcedUpdate": false,
+            "_instance": [Circular],
+            "_newState": null,
+            "_rendered": <div
+              className="breadcrumb-switcher"
+              style={
+                      Object {
+                              "position": "relative",
+                            }
+              }
+      >
+              <BreadcrumbSwitcherToggler
+                      onClick={[Function]}
+              />
+              <Overlay
+                      animation={[Function]}
+                      container={[Circular]}
+                      onEnter={[Function]}
+                      onHide={[Function]}
+                      placement="bottom"
+                      rootClose={true}
+                      show={true}
+                      target={[Function]}
+              >
+                      <BreadcrumbSwitcherPopover
+                              currentPage={2}
+                              hasError={false}
+                              id="breadcrumb-switcher-popover"
+                              loading={false}
+                              onNextPageClick={[Function]}
+                              onPrevPageClick={[Function]}
+                              resources={
+                                      Array [
+                                              Object {
+                                                "name": "Host 1",
+                                                "url": "#",
+                                              },
+                                              Object {
+                                                "name": "Host 2",
+                                                "url": "#",
+                                              },
+                                              Object {
+                                                "name": "Host 3 with a very long name",
+                                                "url": "#",
+                                              },
+                                              Object {
+                                                "name": "Host 4",
+                                                "onClick": [Function],
+                                                "url": undefined,
+                                              },
+                                              Object {
+                                                "name": "Host 5",
+                                                "onClick": undefined,
+                                                "url": "#",
+                                              },
+                                            ]
+                              }
+                              totalPages={3}
+                      />
+              </Overlay>
+      </div>,
+            "_rendering": false,
+            "_updater": [Circular],
+          },
+        },
+      }
+    }
+    onEnter={[Function]}
+    onHide={[Function]}
+    placement="bottom"
+    rootClose={true}
+    show={true}
+    target={[Function]}
+  >
+    <BreadcrumbSwitcherPopover
+      currentPage={2}
+      hasError={false}
+      id="breadcrumb-switcher-popover"
+      loading={false}
+      onNextPageClick={[Function]}
+      onPrevPageClick={[Function]}
+      resources={
+        Array [
+          Object {
+            "name": "Host 1",
+            "url": "#",
+          },
+          Object {
+            "name": "Host 2",
+            "url": "#",
+          },
+          Object {
+            "name": "Host 3 with a very long name",
+            "url": "#",
+          },
+          Object {
+            "name": "Host 4",
+            "onClick": [Function],
+            "url": undefined,
+          },
+          Object {
+            "name": "Host 5",
+            "onClick": undefined,
+            "url": "#",
+          },
+        ]
+      }
+      totalPages={3}
+    />
+  </Overlay>
+</div>
+`;

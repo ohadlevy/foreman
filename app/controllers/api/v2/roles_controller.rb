@@ -12,7 +12,7 @@ module Api
 
       def index
         params[:order] ||= 'name'
-        @roles = resource_scope_for_index
+        @roles = params[:thin] ? resource_scope.search_for(*search_options).select {|role| !role.locked?} : resource_scope_for_index
       end
 
       api :GET, "/roles/:id/", N_("Show a role")

@@ -1,7 +1,7 @@
-<% title _('Add SSH Key for %s') % @user.name %>
 <%= breadcrumbs do %>
-  <% [{caption: _("Users"), url: (url_for(users_path) if authorized_for(hash_for_users_path))},
+  <% { breadcrumbItems: [{caption: _("Users"), url: (url_for(users_path) if authorized_for(hash_for_users_path))},
       {caption: @user.name, url: (edit_user_path(@user) if authorized_for(hash_for_edit_user_path(@user)))},
-      {caption: _('Add SSH Key')}] %>
+      {caption: _('Add SSH Key')}], reosurceUrl: "/api/v2/users/", isSwitchable: true,
+         switcherItemUrl: "/users/:id/ssh_keys/new" } %>
 <% end %>
 <%= render :partial => 'form' %>
