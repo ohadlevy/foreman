@@ -19,7 +19,9 @@ export const breadcrumbTitleItems = {
 };
 
 export const resource = {
-  reosurceUrl: 'some/url', nameField: 'name', switcherItemUrl: 'some/url/:id',
+  resourceUrl: 'some/url',
+  nameField: 'name',
+  switcherItemUrl: 'some/url/:id',
 };
 
 export const resourceList = [

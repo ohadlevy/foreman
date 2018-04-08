@@ -81,7 +81,7 @@ class User < ApplicationRecord
   before_validation :normalize_locale
 
   def self.title_name
-    "login"
+    "login".freeze
   end
 
   def self.name_format

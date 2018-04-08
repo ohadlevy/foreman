@@ -1,5 +1,3 @@
 <% title _("Edit %s") % @template.to_s %>
-<%= breadcrumbs do
-      {switcherItemUrl: "/templates/provisioning_templates/:id/edit" }
-    end %>
+<%= breadcrumbs(switcher_item_url: "/templates/provisioning_templates/:id/edit" ) %>
 <%= render :partial => 'form' %>

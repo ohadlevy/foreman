@@ -1,5 +1,9 @@
 import API from '../../../API';
-import { toggleSwitcher, closeSwitcher, loadSwitcherResourcesByResource } from '../BreadcrumbBarActions';
+import {
+  toggleSwitcher,
+  closeSwitcher,
+  loadSwitcherResourcesByResource,
+} from '../BreadcrumbBarActions';
 import { resource, serverResourceListResponse } from '../BreadcrumbBar.fixtures';
 
 jest.mock('../../../API');

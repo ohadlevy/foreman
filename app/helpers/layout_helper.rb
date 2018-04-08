@@ -16,34 +16,15 @@ module LayoutHelper
     content_for(:search_bar) { elements.join(" ").html_safe }
   end
 
-  def mount_breadcrumbs(&block)
-    consumer_override_params = block_given? ? yield : {}
+  def mount_breadcrumbs(options = {}, &block)
+    options = BreadcrumOptions.new(@page_header, controller_name, action_name, block_given? ? yield : options)
 
-    breadcrumb_index_item = {caption: _(controller_name.humanize), url: try("#{controller_name}_path")}
-    breadcrumb_page_item = {caption: @page_header, url: '#' }
-
-    breadcrumb_items = [
-      (breadcrumb_index_item unless action_name == 'index'),
-      (breadcrumb_page_item)
-    ].compact
-
-    breadcrumb_bar_props = {
-      isSwitchable: consumer_override_params[:isSwitchable].nil? ? breadcrumb_switchable? : consumer_override_params[:isSwitchable],
-      breadcrumbItems: consumer_override_params[:breadcrumbItems] || breadcrumb_items
-    }
-
-    breadcrumb_bar_props[:resource] = {
-      switcherItemUrl:  consumer_override_params[:switcherItemUrl] || switcher_url_template,
-      reosurceUrl: consumer_override_params[:reosurceUrl] || "/api/v2/#{controller_name}?thin=true",
-      nameField: consumer_override_params[:nameField] || model_name_field || 'name'
-    } if breadcrumb_bar_props[:isSwitchable]
-
-    mount_react_component("BreadcrumbBar", "#breadcrumb", breadcrumb_bar_props.to_json)
+    mount_react_component("BreadcrumbBar", "#breadcrumb", options.bar_props.to_json)
   end
 
-  def breadcrumbs(&block)
+  def breadcrumbs(options = {}, &block)
     content_for(:breadcrumbs) do
-      mount_breadcrumbs(&block)
+      mount_breadcrumbs(options, &block)
     end
   end
 
@@ -194,18 +175,5 @@ module LayoutHelper
 
   def table_css_classes(classes = '')
     "table table-bordered table-striped table-hover " + classes
-  end
-
-  def breadcrumb_switchable?
-    ['edit', 'show'].include? action_name
-  end
-
-  def switcher_url_template
-    actual_action_name = (action_name == 'show') ? '' : action_name
-    "/#{controller_name}/:id/#{actual_action_name}"
-  end
-
-  def model_name_field
-    controller_name.camelize.singularize.try(:constantize).try(:title_name)
   end
 end

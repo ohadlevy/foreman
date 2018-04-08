@@ -69,14 +69,14 @@ Array [
   Array [
     Object {
       "nameField": "name",
-      "reosurceUrl": "some/url",
+      "resourceUrl": "some/url",
       "switcherItemUrl": "some/url/:id",
     },
   ],
   Array [
     Object {
       "nameField": "name",
-      "reosurceUrl": "some/url",
+      "resourceUrl": "some/url",
       "switcherItemUrl": "some/url/:id",
     },
     Object {
@@ -86,7 +86,7 @@ Array [
   Array [
     Object {
       "nameField": "name",
-      "reosurceUrl": "some/url",
+      "resourceUrl": "some/url",
       "switcherItemUrl": "some/url/:id",
     },
     Object {

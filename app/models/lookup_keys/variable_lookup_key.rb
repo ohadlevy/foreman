@@ -13,7 +13,7 @@ class VariableLookupKey < LookupKey
   end
 
   def self.title_name
-    "variable"
+    "variable".freeze
   end
 
   def audit_class

@@ -8,4 +8,5 @@ const fixtures = {
   },
 };
 
-describe('BreadcrumbSwitcherToggler', () => testComponentSnapshotsWithFixtures(BreadcrumbSwitcherToggler, fixtures));
+describe('BreadcrumbSwitcherToggler', () =>
+  testComponentSnapshotsWithFixtures(BreadcrumbSwitcherToggler, fixtures));

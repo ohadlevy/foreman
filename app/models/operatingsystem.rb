@@ -76,7 +76,7 @@ class Operatingsystem < ApplicationRecord
   end
 
   def self.title_name
-    "title"
+    "title".freeze
   end
 
   def self.inherited(child)

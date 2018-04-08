@@ -31,7 +31,7 @@ exports[`BreadcrumbSwitcher rendering render closed 1`] = `
           "totalPages": 1,
         },
         "refs": Object {},
-        "state": null,
+        "state": Object {},
         "updater": Updater {
           "_callbacks": Array [],
           "_renderer": ReactShallowRenderer {
@@ -144,7 +144,7 @@ exports[`BreadcrumbSwitcher rendering render loading state 1`] = `
           "totalPages": 1,
         },
         "refs": Object {},
-        "state": null,
+        "state": Object {},
         "updater": Updater {
           "_callbacks": Array [],
           "_renderer": ReactShallowRenderer {
@@ -281,7 +281,7 @@ exports[`BreadcrumbSwitcher rendering render resources list 1`] = `
           "totalPages": 1,
         },
         "refs": Object {},
-        "state": null,
+        "state": Object {},
         "updater": Updater {
           "_callbacks": Array [],
           "_renderer": ReactShallowRenderer {
@@ -493,7 +493,7 @@ exports[`BreadcrumbSwitcher rendering render resources list with pagination 1`] 
           "totalPages": 3,
         },
         "refs": Object {},
-        "state": null,
+        "state": Object {},
         "updater": Updater {
           "_callbacks": Array [],
           "_renderer": ReactShallowRenderer {

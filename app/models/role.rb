@@ -76,6 +76,8 @@ class Role < ApplicationRecord
   scoped_search :on => :builtin, :complete_value => { :true => true, :false => false }
   scoped_search :on => :description, :complete_value => false
   scoped_search :relation => :permissions, :on => :name, :complete_value => true, :rename => :permission, :only_explicit => true, :ext_method => :search_by_permission
+  # TODO: does not really work yet.
+  scoped_search :on => :locked, :complete_value => { :true => true, :false => false }
 
   class << self
     attr_accessor :modify_locked

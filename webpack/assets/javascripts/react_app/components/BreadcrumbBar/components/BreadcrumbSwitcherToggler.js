@@ -5,7 +5,7 @@ class BreadcrumbSwitcherToggler extends React.Component {
   render() {
     return (
       <Button {...this.props}>
-          <Icon type="fa" name="exchange" />
+        <Icon type="fa" name="exchange" />
       </Button>
     );
   }

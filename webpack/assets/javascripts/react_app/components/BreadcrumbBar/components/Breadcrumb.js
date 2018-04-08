@@ -15,17 +15,17 @@ const Breadcrumb = ({
   }
 
   return (
-      <PfBreadcrumb title={title} {...props}>
-        {items.map((item, index) => (
-          <PfBreadcrumb.Item
-            key={index}
-            active={index === items.length - 1}
-            href={item.url}
-            dangerouslySetInnerHTML={{ __html: item.caption }}
-          />
-        ))}
-        {children}
-      </PfBreadcrumb>
+    <PfBreadcrumb title={title} {...props}>
+      {items.map((item, index) => (
+        <PfBreadcrumb.Item
+          key={index}
+          active={index === items.length - 1}
+          href={item.url}
+          dangerouslySetInnerHTML={{ __html: item.caption }}
+        />
+      ))}
+      {children}
+    </PfBreadcrumb>
   );
 };
 

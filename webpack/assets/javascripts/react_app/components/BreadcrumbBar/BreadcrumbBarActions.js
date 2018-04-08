@@ -17,9 +17,7 @@ export const closeSwitcher = () => ({
 });
 
 export const loadSwitcherResourcesByResource = (resource, options = {}) => (dispatch) => {
-  const {
-    reosurceUrl, nameField, switcherItemUrl,
-  } = resource;
+  const { resourceUrl, nameField, switcherItemUrl } = resource;
   const { page = 1 } = options;
 
   const beforeRequest = () =>
@@ -36,9 +34,9 @@ export const loadSwitcherResourcesByResource = (resource, options = {}) => (disp
 
   const formatResults = ({ data }) => {
     const switcherItems = Object.values(data.results).map((x, i) =>
-      (data.results instanceof Array ?
-        { name: x[nameField], url: switcherItemUrl.replace(':id', x.id) } :
-        { name: x[i][nameField], url: switcherItemUrl.replace(':id', x[i].id) }));
+      (data.results instanceof Array
+        ? { name: x[nameField], url: switcherItemUrl.replace(':id', x.id) }
+        : { name: x[i][nameField], url: switcherItemUrl.replace(':id', x[i].id) }));
     return {
       items: switcherItems,
       page: data.page,
@@ -47,5 +45,5 @@ export const loadSwitcherResourcesByResource = (resource, options = {}) => (disp
   };
   beforeRequest();
 
-  return API.get(reosurceUrl, {}, { page }).then(onRequestSuccess, onRequestFail);
+  return API.get(resourceUrl, {}, { page }).then(onRequestSuccess, onRequestFail);
 };

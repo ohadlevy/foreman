@@ -64,7 +64,7 @@ class SshKey < ApplicationRecord
   end
 
   def self.title_name
-    'login'
+    'login'.freeze
   end
 
   private

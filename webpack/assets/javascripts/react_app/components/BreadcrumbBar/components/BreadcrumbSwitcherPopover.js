@@ -23,7 +23,11 @@ const BreadcrumbSwitcherPopover = ({
       </div>
     );
   } else if (hasError) {
-    popoverBody = (<div className="breadcrumb-switcher-popover-error">{__('Error: Unable to load resources.')}</div>);
+    popoverBody = (
+      <div className="breadcrumb-switcher-popover-error">
+        {__('Error: Unable to load resources.')}
+      </div>
+    );
   } else {
     popoverBody = (
       <React.Fragment>

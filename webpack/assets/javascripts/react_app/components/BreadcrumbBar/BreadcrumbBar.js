@@ -34,9 +34,11 @@ class BreadcrumbBar extends React.Component {
               onOverlayHide={() => closeSwitcher()}
               onOverlayEnter={() => loadSwitcherResourcesByResource(resource)}
               onNextPageClick={() =>
-                 loadSwitcherResourcesByResource(resource, { page: Number(currentPage) + 1 }) }
+                loadSwitcherResourcesByResource(resource, { page: Number(currentPage) + 1 })
+              }
               onPrevPageClick={() =>
-                 loadSwitcherResourcesByResource(resource, { page: Number(currentPage) - 1 }) }
+                loadSwitcherResourcesByResource(resource, { page: Number(currentPage) - 1 })
+              }
               currentPage={currentPage}
               totalPages={totalPages}
             />
@@ -53,7 +55,7 @@ BreadcrumbBar.propTypes = {
     isSwitchable: PropTypes.bool,
     resource: PropTypes.shape({
       nameField: PropTypes.string,
-      reosurceUrl: PropTypes.string,
+      resourceUrl: PropTypes.string,
       switcherItemUrl: PropTypes.string,
     }),
     breadcrumbItems: Breadcrumb.propTypes.items,

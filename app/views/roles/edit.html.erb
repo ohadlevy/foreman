@@ -1,3 +1,4 @@
 <% title _("Edit %s") % @role.to_s %>
+<% breadcrumbs(resource_url: "/api/v2/roles?search='locked=true'") %>
 
 <%= render 'form' %>

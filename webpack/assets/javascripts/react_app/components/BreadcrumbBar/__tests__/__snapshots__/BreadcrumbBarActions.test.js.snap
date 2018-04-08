@@ -14,7 +14,7 @@ Array [
         "options": Object {},
         "resource": Object {
           "nameField": "name",
-          "reosurceUrl": "some/url",
+          "resourceUrl": "some/url",
           "switcherItemUrl": "some/url/:id",
         },
       },
@@ -38,7 +38,7 @@ Array [
         "options": Object {},
         "resource": Object {
           "nameField": "name",
-          "reosurceUrl": "some/url",
+          "resourceUrl": "some/url",
           "switcherItemUrl": "some/url/:id",
         },
       },
