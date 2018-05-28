@@ -1,24 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-restricted-globals */
-/* eslint-disable import/first */
 import $ from 'jquery';
-import ace from 'brace';
-
-require('brace/mode/javascript');
-require('brace/mode/ruby');
-require('brace/mode/html_ruby');
-require('brace/mode/json');
-require('brace/mode/sh');
-require('brace/mode/xml');
-require('brace/mode/yaml');
-require('brace/mode/diff');
-require('brace/theme/twilight');
-require('brace/theme/clouds');
-require('brace/keybinding/vim');
-require('brace/keybinding/emacs');
-require('brace/ext/searchbox');
-
 import { initTypeAheadSelect } from './foreman_tools';
 
 let Editor;
@@ -144,7 +127,22 @@ export function snippetChanged(item) {
   $('#association').toggle(!checked);
 }
 
-function createEditor() {
+async function createEditor() {
+  const ace = await import(/* webpackChunkName: "brace" */ 'brace');
+  await import(/* webpackChunkName: "brace" */ 'brace/mode/javascript');
+  await import(/* webpackChunkName: "brace" */ 'brace/mode/ruby');
+  await import(/* webpackChunkName: "brace" */ 'brace/mode/html_ruby');
+  await import(/* webpackChunkName: "brace" */ 'brace/mode/json');
+  await import(/* webpackChunkName: "brace" */ 'brace/mode/sh');
+  await import(/* webpackChunkName: "brace" */ 'brace/mode/xml');
+  await import(/* webpackChunkName: "brace" */ 'brace/mode/yaml');
+  await import(/* webpackChunkName: "brace" */ 'brace/mode/diff');
+  await import(/* webpackChunkName: "brace" */ 'brace/theme/twilight');
+  await import(/* webpackChunkName: "brace" */ 'brace/theme/clouds');
+  await import(/* webpackChunkName: "brace" */ 'brace/keybinding/vim');
+  await import(/* webpackChunkName: "brace" */ 'brace/keybinding/emacs');
+  await import(/* webpackChunkName: "brace" */ 'brace/ext/searchbox');
+
   const editorId = `editor-${Math.random()}`;
   const $editorContainer = $('.editor-container');
   const $editorSource = $editorContainer.find('.editor_source');

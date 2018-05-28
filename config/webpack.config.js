@@ -63,7 +63,8 @@ module.exports = env => {
       // must match config.webpack.output_dir
       path: outputPath,
       publicPath: '/webpack/',
-      filename: jsFilename
+      filename: jsFilename,
+      chunkFilename: '[name].bundle.js'
     },
 
     resolve: {
@@ -92,7 +93,8 @@ module.exports = env => {
               path.join(__dirname, '..', 'node_modules/babel-plugin-transform-class-properties'),
               path.join(__dirname, '..', 'node_modules/babel-plugin-transform-object-rest-spread'),
               path.join(__dirname, '..', 'node_modules/babel-plugin-transform-object-assign'),
-              path.join(__dirname, '..', 'node_modules/babel-plugin-lodash')
+              path.join(__dirname, '..', 'node_modules/babel-plugin-lodash'),
+              path.join(__dirname, '..', 'node_modules/babel-plugin-syntax-dynamic-import')
             ]
           }
         },

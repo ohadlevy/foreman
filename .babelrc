@@ -4,6 +4,7 @@
     "transform-class-properties",
     "transform-object-rest-spread",
     "transform-object-assign",
-    "lodash"
+    "lodash",
+    "syntax-dynamic-import"
   ]
 }
