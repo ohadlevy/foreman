@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchButton should match snapshot 1`] = `
+<SearchButton
+  searchQuery="name"
+>
+  <Button
+    active={false}
+    block={false}
+    bsClass="btn"
+    bsStyle="default"
+    disabled={false}
+    onClick={[Function]}
+  >
+    <button
+      className="btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      <Icon
+        name="search"
+        type="fa"
+      >
+        <FontAwesome
+          name="search"
+        >
+          <span
+            aria-hidden={true}
+            className="fa fa-search"
+          />
+        </FontAwesome>
+      </Icon>
+       Search
+    </button>
+  </Button>
+</SearchButton>
+`;

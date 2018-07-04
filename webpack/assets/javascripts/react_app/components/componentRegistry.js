@@ -10,6 +10,8 @@ import BookmarkContainer from './bookmarks';
 import PasswordStrength from './PasswordStrength';
 import BreadcrumbBar from './BreadcrumbBar';
 import FactChart from './factCharts';
+import AutoCompleteSearch from './AutoCompleteSearch';
+import SearchButton from './SearchButton';
 
 const componentRegistry = {
   registry: {},
@@ -68,6 +70,8 @@ const coreComponets = [
   { name: 'PasswordStrength', type: PasswordStrength },
   { name: 'BreadcrumbBar', type: BreadcrumbBar },
   { name: 'FactChart', type: FactChart },
+  { name: 'AutoCompleteSearch', type: AutoCompleteSearch },
+  { name: 'SearchButton', type: SearchButton },
 ];
 
 componentRegistry.registerMultiple(coreComponets);

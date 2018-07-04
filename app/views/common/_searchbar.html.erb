@@ -3,14 +3,25 @@
             id: 'search-form',
             onsubmit: 'return tfm.tools.updateTable(this);' do %>
   <div class="input-group">
+  <% if controller_name == "models" %>
+    <span id="auto-complete"></span>
+    <%= mount_react_component('AutoCompleteSearch', '#auto-complete', {:search => request.query_parameters['search']}.to_json) %>
+  <% else %>
     <%= auto_complete_search(:search, params[:search].try(:squeeze," "), :placeholder => _("Filter") + ' ...').html_safe %>
+  <% end %>
     <span class="input-group-btn">
+    <% if controller_name == "models" %>
+      <span id="search-button"></span>
+      <%= mount_react_component('SearchButton', '#search-button', {}.to_json) %>
+    <% else %>
       <button class="btn btn-default" type="submit">
         <%= icon_text("search", content_tag(:span,_("Search"), :class=>"hidden-xs")) %>
       </button>
+    <% end %>
       <span class="dropdown" id="bookmark-form"></span>
     </span>
   </div>
+  <div id="auto-complete"></div>
 <% end %>
 
 <%= mount_react_component('BookmarkContainer', '#bookmark-form', {

@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AutoCompleteSearch reducer should handle AUTO_COMPLETION_FAILURE 1`] = `
+Object {
+  "error": [Error: Oops],
+  "options": Array [],
+  "searchQuery": "",
+  "status": "ERROR",
+}
+`;
+
+exports[`AutoCompleteSearch reducer should handle AUTO_COMPLETION_REQUEST 1`] = `
+Object {
+  "error": null,
+  "options": Array [],
+  "searchQuery": "",
+  "status": "PENDING",
+}
+`;
+
+exports[`AutoCompleteSearch reducer should handle AUTO_COMPLETION_SUCCESS 1`] = `
+Object {
+  "error": null,
+  "options": Array [
+    Array [
+      Object {
+        "category": "",
+        "completed": "",
+        "label": " hardware_model ",
+        "part": " hardware_model ",
+      },
+      Object {
+        "category": "",
+        "completed": "",
+        "label": " info ",
+        "part": " info ",
+      },
+      Object {
+        "category": "",
+        "completed": "",
+        "label": " name ",
+        "part": " name ",
+      },
+      Object {
+        "category": "",
+        "completed": "",
+        "label": " vendor_class ",
+        "part": " vendor_class ",
+      },
+      Object {
+        "category": "Operators",
+        "completed": "",
+        "label": " not",
+        "part": " not",
+      },
+      Object {
+        "category": "Operators",
+        "completed": "",
+        "label": " has",
+        "part": " has",
+      },
+    ],
+    "",
+    null,
+    "RESOLVED",
+  ],
+  "searchQuery": undefined,
+  "status": "RESOLVED",
+}
+`;
+
+exports[`AutoCompleteSearch reducer should return the initial state 1`] = `
+Object {
+  "error": null,
+  "options": Array [],
+  "searchQuery": "",
+  "status": "PENDING",
+}
+`;
