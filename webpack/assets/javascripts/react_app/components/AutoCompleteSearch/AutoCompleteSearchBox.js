@@ -1,55 +1,47 @@
 import React from 'react';
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
 import { TypeAheadSelect } from 'patternfly-react';
 import { Menu, MenuItem, Highlighter } from 'react-bootstrap-typeahead';
 import './auto-complete.scss';
 import { STATUS } from '../../constants';
 
-class AutoCompleteSearchBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleInputChange = _.debounce(this.handleInputChange, 250);
-    this.handleInputFocus = _.debounce(this.handleInputFocus, 250);
-    this.handleClear = this.handleClear.bind(this);
-    this.filterResult = this.filterResult.bind(this);
-    this.groupBy = this.groupBy.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleItemSelect = this.handleItemSelect.bind(this);
-    this.handleInputFocus = this.handleInputFocus.bind(this);
-    this.handleClear = this.handleClear.bind(this);
-    this.renderMenu = this.renderMenu.bind(this);
-  }
+const AutoCompleteSearchBox = (props) => {
+  let _typeahead = null;
+  const TYPE_DELAY = 250;
 
-  handleInputChange(query) {
-    this.props.getOptions(query);
-  }
+  const inputChanged = (input) => {
+    debounce(() => {
+      props.getOptions(input);
+    }, TYPE_DELAY);
+  };
+  const handleInputChange = (query) => {
+    inputChanged(query);
+  };
 
-  handleItemSelect(selectedOptions) {
-    const query = `${selectedOptions[0]} `;
-    if (query) {
-      this.props.getOptions(query);
-      /**
-       *  HACK: I had no choice but to call to an inner function,
-       * due to lack of design in react-bootstrap-typeahead.
-       */
-      this._typeahead.getInstance()._showMenu();
-    }
-  }
+  const handleInputFocus = ({ target }) => {
+    inputChanged(target.value);
+  };
 
-  handleInputFocus({ target }) {
-    this.props.getOptions(target.value);
-  }
+  const handleItemSelect = (selectedOptions) => {
+    // adds additional whitespace to query
+    const query = `${selectedOptions[0].trim()} `;
+    props.getOptions(query);
+    /**
+    *  HACK: I had no choice but to call to an inner function,
+    * due to lack of design in react-bootstrap-typeahead.
+    */
+    _typeahead.getInstance()._showMenu();
+  };
 
-  handleClear() {
-    this._typeahead.getInstance().clear();
-    this.props.getOptions('');
-  }
+  const handleClear = () => {
+    _typeahead.getInstance().clear();
+    props.getOptions('');
+  };
 
-  filterResult({ label }, { text }) {
-    return label.replace(/\s/g, '').includes(text.replace(/\s/g, ''));
-  }
+  const filterResult = ({ label }, { text }) =>
+    label.replace(/\s/g, '').includes(text.replace(/\s/g, ''));
 
-  groupBy(list, keyGetter) {
+  const groupBy = (list, keyGetter) => {
     const map = new Map();
     list.forEach((item) => {
       const key = keyGetter(item);
@@ -61,11 +53,11 @@ class AutoCompleteSearchBox extends React.Component {
       }
     });
     return map;
-  }
+  };
 
-  renderMenu(results, menuProps) {
+  const renderMenu = (results, menuProps) => {
     let idx = 0;
-    const grouped = this.groupBy(results, ({ category }) => category);
+    const grouped = groupBy(results, ({ category }) => category);
     const items = [...grouped.entries()].sort().map(category => [
       !!idx && <Menu.Divider key={`${category}-divider`} />,
       <Menu.Header key={`${category}-header`}>{category[0]}</Menu.Header>,
@@ -80,33 +72,31 @@ class AutoCompleteSearchBox extends React.Component {
       }),
     ]);
     return <Menu {...menuProps}>{items}</Menu>;
-  }
+  };
 
-  render() {
-    return (
-      <div>
-        <TypeAheadSelect
-          placeholder={__('Filter ...')}
-          options={this.props.options}
-          isLoading={this.props.status === STATUS.PENDING}
-          filterBy={this.filterResult}
-          onInputChange={this.handleInputChange}
-          onChange={this.handleItemSelect}
-          onFocus={this.handleInputFocus}
-          renderMenu={this.renderMenu}
-          defaultInputValue={this.props.data.search ? this.props.data.search : ''}
-          emptyLabel={null}
-          highlightOnlyResult={true}
-          ref={(ref) => {
-            this._typeahead = ref;
-          }}
-        />
-        <a className="clear-button" onClick={this.handleClear} title="" data-original-title="Clear">
-          ×
-        </a>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <TypeAheadSelect
+        placeholder={__('Filter ...')}
+        options={props.options}
+        isLoading={props.status === STATUS.PENDING}
+        filterBy={filterResult}
+        onInputChange={handleInputChange}
+        onChange={handleItemSelect}
+        onFocus={handleInputFocus}
+        renderMenu={renderMenu}
+        defaultInputValue={props.data.search ? props.data.search : ''}
+        emptyLabel={null}
+        highlightOnlyResult={true}
+        ref={(ref) => {
+          _typeahead = ref;
+        }}
+      />
+      <a className="clear-button" onClick={handleClear} title="" data-original-title="Clear">
+        &times;
+      </a>
+    </div>
+  );
+};
 
 export default AutoCompleteSearchBox;
