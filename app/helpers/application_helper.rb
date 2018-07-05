@@ -439,6 +439,11 @@ module ApplicationHelper
     select
   end
 
+  # TODO: remove this method once moving all search to react components.
+  def using_react_search?
+    !@using_react_search.nil?
+  end
+
   private
 
   def edit_inline(object, property, options = {})

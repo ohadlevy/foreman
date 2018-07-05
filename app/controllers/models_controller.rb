@@ -5,6 +5,7 @@ class ModelsController < ApplicationController
   before_action :find_resource, :only => [:edit, :update, :destroy]
 
   def index
+    @using_react_search = true
     @models = resource_base_search_and_page
   end
 

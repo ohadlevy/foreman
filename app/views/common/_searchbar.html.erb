@@ -1,32 +1,32 @@
-<%= form_tag send("#{auto_complete_controller_name}_path"),
-            method: 'get',
-            id: 'search-form',
-            onsubmit: 'return tfm.tools.updateTable(this);' do %>
-  <div class="input-group">
-  <% if controller_name == "models" %>
-    <span id="auto-complete"></span>
-    <%= mount_react_component('AutoCompleteSearch', '#auto-complete', {:search => request.query_parameters['search']}.to_json) %>
-  <% else %>
-    <%= auto_complete_search(:search, params[:search].try(:squeeze," "), :placeholder => _("Filter") + ' ...').html_safe %>
+<% unless using_react_search? %>
+  <%= form_tag send("#{auto_complete_controller_name}_path"),
+              method: 'get',
+              id: 'search-form',
+              onsubmit: 'return tfm.tools.updateTable(this);' do %>
+    <div class="input-group">
+      <%= auto_complete_search(:search, params[:search].try(:squeeze," "), :placeholder => _("Filter") + ' ...').html_safe %>
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+          <%= icon_text("search", content_tag(:span,_("Search"), :class=>"hidden-xs")) %>
+        </button>
+        <span class="dropdown" id="bookmark-form"></span>
+      </span>
+    </div>
   <% end %>
-    <span class="input-group-btn">
-    <% if controller_name == "models" %>
-      <span id="search-button"></span>
-      <%= mount_react_component('SearchButton', '#search-button', {}.to_json) %>
-    <% else %>
-      <button class="btn btn-default" type="submit">
-        <%= icon_text("search", content_tag(:span,_("Search"), :class=>"hidden-xs")) %>
-      </button>
-    <% end %>
-      <span class="dropdown" id="bookmark-form"></span>
-    </span>
-  </div>
-  <div id="auto-complete"></div>
-<% end %>
 
-<%= mount_react_component('BookmarkContainer', '#bookmark-form', {
-  controller: auto_complete_controller_name,
-  url: api_bookmarks_path,
-  canCreate: authorizer.can?(:create_bookmarks),
-  documentationUrl: documentation_url("4.1.5Searching")
-}.to_json) %>
+  <%= mount_react_component('BookmarkContainer', '#bookmark-form', {
+    controller: auto_complete_controller_name,
+    url: api_bookmarks_path,
+    canCreate: authorizer.can?(:create_bookmarks),
+    documentationUrl: documentation_url("4.1.5Searching")
+  }.to_json) %>
+<% else %>
+  <div id="search-form"></div>
+  <%= mount_react_component('AutoCompleteSearch', '#search-form', {
+    search: request.query_parameters['search'],
+    controller: auto_complete_controller_name,
+    bookmarkUrl: api_bookmarks_path,
+    canCreateBookmarks: authorizer.can?(:create_bookmarks),
+    documentationUrl: documentation_url("4.1.5Searching")
+  }.to_json) %>
+<% end %>
