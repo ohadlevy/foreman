@@ -8,7 +8,7 @@ import {
 
 const initialState = Immutable({
   options: [],
-  status: 'PENDING',
+  status: STATUS.RESOLVED,
   error: null,
   searchQuery: '',
 });
