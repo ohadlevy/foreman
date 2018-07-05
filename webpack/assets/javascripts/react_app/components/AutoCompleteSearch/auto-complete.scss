@@ -85,16 +85,18 @@ $color-pf-white: #fff;
 
 @import '~patternfly-react/dist/sass/_type-ahead-select.scss';
 
-#auto-complete .clear-button {
-  position: absolute;
-  z-index: 10;
-  top: 0;
-  font-size: 16px;
-  right: 115px;
-  color: $color-pf-black-600;
+.search-form {
+  .clear-button {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    font-size: 16px;
+    right: 115px;
+    color: $color-pf-black-600;
 
-  &:hover {
-    color: $color-pf-blue-500;
-    text-decoration: none;
+    &:hover {
+      color: $color-pf-blue-500;
+      text-decoration: none;
+    }
   }
 }
