@@ -9,11 +9,10 @@ const handleClick = (searchQuery) => {
 };
 
 const SearchButton = ({ searchQuery }) => (
-    <Button
-        onClick={() => handleClick(searchQuery)}>
-        <Icon name="search" />
-        {' Search'}
-    </Button>
+  <Button onClick={() => handleClick(searchQuery)}>
+    <Icon name="search" />
+    {' Search'}
+  </Button>
 );
 
 export default SearchButton;

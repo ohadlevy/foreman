@@ -1,7 +1,7 @@
 import toJson from 'enzyme-to-json';
 import { mount } from 'enzyme';
 import React from 'react';
-import SearchButton from './SearchButton';
+import SearchButton from '../SearchButton';
 
 const URL = 'http://localhost';
 const SEARCH_QUERY = 'name';
@@ -28,7 +28,9 @@ describe('SearchButton', () => {
 describe('SearchButton', () => {
   it('should create a link with the search query', () => {
     setupTurbolinksMock();
-    wrapper().find('button').simulate('click');
+    wrapper()
+      .find('button')
+      .simulate('click');
     expect(global.Turbolinks.visit).toBeCalled();
     expect(global.Turbolinks.visit).toHaveBeenLastCalledWith(`${URL}/?search=${SEARCH_QUERY}`);
   });

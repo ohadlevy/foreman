@@ -31,13 +31,13 @@ class AutoCompleteSearchBox extends React.Component {
       /**
        *  HACK: I had no choice but to call to an inner function,
        * due to lack of design in react-bootstrap-typeahead.
-        */
+       */
       this._typeahead.getInstance()._showMenu();
     }
   }
 
-  handleInputFocus(e) {
-    this.props.getOptions(e.target.value);
+  handleInputFocus({ target }) {
+    this.props.getOptions(target.value);
   }
 
   handleClear() {
@@ -45,8 +45,8 @@ class AutoCompleteSearchBox extends React.Component {
     this.props.getOptions('');
   }
 
-  filterResult(option, props) {
-    return option.label.replace(/\s/g, '').includes(props.text.replace(/\s/g, ''));
+  filterResult({ label }, { text }) {
+    return label.replace(/\s/g, '').includes(text.replace(/\s/g, ''));
   }
 
   groupBy(list, keyGetter) {
@@ -65,51 +65,46 @@ class AutoCompleteSearchBox extends React.Component {
 
   renderMenu(results, menuProps) {
     let idx = 0;
-    const grouped = this.groupBy(results, r => r.category);
+    const grouped = this.groupBy(results, ({ category }) => category);
     const items = [...grouped.entries()].sort().map(category => [
       !!idx && <Menu.Divider key={`${category}-divider`} />,
-            <Menu.Header key={`${category}-header`}>
-                {category[0]}
-            </Menu.Header>,
-            category[1].map((option) => {
-              const item =
-                    <MenuItem key={idx} option={option.label} position={idx}>
-                        <Highlighter search={menuProps.text}>
-                            {option.label}
-                        </Highlighter>
-                    </MenuItem>;
-              idx += 1;
-              return item;
-            }),
+      <Menu.Header key={`${category}-header`}>{category[0]}</Menu.Header>,
+      category[1].map(({ label }) => {
+        const item = (
+          <MenuItem key={idx} option={label} position={idx}>
+            <Highlighter search={menuProps.text}>{label}</Highlighter>
+          </MenuItem>
+        );
+        idx += 1;
+        return item;
+      }),
     ]);
     return <Menu {...menuProps}>{items}</Menu>;
   }
 
   render() {
     return (
-            <div>
-                <TypeAheadSelect
-                    placeholder={__('Filter ...')}
-                    options={this.props.options}
-                    isLoading={this.props.status === STATUS.PENDING}
-                    filterBy={this.filterResult}
-                    onInputChange={this.handleInputChange}
-                    onChange={this.handleItemSelect}
-                    onFocus={this.handleInputFocus}
-                    renderMenu={this.renderMenu}
-                    defaultInputValue={this.props.data.search ? this.props.data.search : ''}
-                    emptyLabel={null}
-                    highlightOnlyResult={true}
-                    ref={(ref) => { this._typeahead = ref; }}
-                />
-                <a
-                    className="clear-button"
-                    onClick={this.handleClear}
-                    title=""
-                    data-original-title="Clear">
-                    ×
-                </a>
-            </div>
+      <div>
+        <TypeAheadSelect
+          placeholder={__('Filter ...')}
+          options={this.props.options}
+          isLoading={this.props.status === STATUS.PENDING}
+          filterBy={this.filterResult}
+          onInputChange={this.handleInputChange}
+          onChange={this.handleItemSelect}
+          onFocus={this.handleInputFocus}
+          renderMenu={this.renderMenu}
+          defaultInputValue={this.props.data.search ? this.props.data.search : ''}
+          emptyLabel={null}
+          highlightOnlyResult={true}
+          ref={(ref) => {
+            this._typeahead = ref;
+          }}
+        />
+        <a className="clear-button" onClick={this.handleClear} title="" data-original-title="Clear">
+          ×
+        </a>
+      </div>
     );
   }
 }
