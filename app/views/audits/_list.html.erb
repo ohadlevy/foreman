@@ -1,4 +1,10 @@
 <% javascript 'audit' %>
+
+<h1>React</h1>
+<div id='audit-list'></div>
+<%= mount_react_component('AuditsList','#audit-list', {audits: audits}.to_json) %>
+
+<h1>Rails</h1>
 <div id="pf-list-simple-expansion" class="list-group list-view-pf list-view-pf-view">
   <% audits.each do |audit| %>
     <% tmplt = audit_template?(audit)
