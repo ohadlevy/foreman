@@ -1,24 +1,128 @@
-<% audits.each do |audit| %>
-  <div class='row'>
-    <div class='col-md-1'>&nbsp;<%= icon_text('play') if @audit && @audit.version == audit.version %></div>
-    <div class='col-md-3'><%= audited_icon audit %></div>
-    <div class='col-md-offset-4 col-md-2 ra'><h4><small><%= audit_time audit %></small></h4></div>
-  </div>
-  <div class='row'>
-    <div class='col-md-offset-2 col-md-8 audit-content'>
-      <b>
-        <% if audit_login? audit %>
-          <%= audit_user(audit)%> <%= link_to(_("Logged-in"), audit_path(audit))  %>
-        <% else %>
-          <%= audit_details(audit) %>
-        <% end %>
-      </b>
-      <ul>
-        <% details(audit).each do |item| %>
-          <% next if item.nil? or item.to_s.empty? %>
-          <li><%= item %></li>
-        <% end %>
-      </ul>
+<% javascript 'audit' %>
+<div id="pf-list-simple-expansion" class="list-group list-view-pf list-view-pf-view">
+  <% audits.each do |audit| %>
+    <% tmplt = audit_template?(audit)
+       action_display_name = audit_action_name(audit)
+    %>
+    <div class="list-group-item">
+      <div class="list-group-item-header">
+        <div class="list-view-pf-expand">
+          <span class="fa fa-angle-right"></span>
+        </div>
+        <div class="list-view-pf-actions list-group-item-date-col">
+          <%= audit_time(audit) %>
+        </div>
+        <div class="list-view-pf-main-info">
+          <div class="list-view-pf-body">
+            <div class="list-view-pf-description">
+              <div class="list-group-item-heading">
+                <% if audit_login? audit %>
+                  <%= audit_user(audit)%> <%= link_to(_("Logged-in"), audit_path(audit))  %>
+                <% else %>
+                  <%= audit_details(audit) %>
+                <% end %>
+              </div>
+              <div class="list-group-item-text">
+                <%= action_display_name %>
+              </div>
+            </div>
+            <div class="list-view-pf-additional-info">
+              <div class="list-view-pf-additional-info-item audit-type-col">
+                <%= audited_type(audit) %>
+              </div>
+              <div class="list-view-pf-additional-info-item">
+                <a href="#"><%= audit_title(audit) %></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="list-group-item-container container-fluid hidden">
+        <div class="row">
+          <div class="col-md-10">
+            <% if Taxonomy.organizations_enabled %>
+              <div class="row">
+                <span class="col-md-2"><%= _("Affected Organizations:")%></span>
+                <div class="col-md-10"><strong><%= audit_affected_organizations(audit) %></strong></div>
+              </div>
+            <% end %>
+            <% if Taxonomy.locations_enabled %>
+              <div class="row">
+                <span class="col-md-2"><%= _("Affected Locations:")%></span>
+                <div class="col-md-10"><strong><%= audit_affected_locations(audit) %></strong></div>
+              </div>
+            <% end %>
+          </div>
+          <div class="col-md-2 actions-btns">
+            <% if tmplt && audit.auditable_type == 'ProvisioningTemplate' && audit.auditable %>
+              <% template_obj = audit.auditable %>
+              <% if authorized_for(hash_for_edit_provisioning_template_path(:id => template_obj.to_param).
+                                           merge(:auth_object => template_obj, :authorizer => authorizer,
+                                           :permission => 'edit_provisioning_templates')) %>
+                <%= link_to_function(_("Revert"), "revert_template_changes(this, #{audit.to_json})",
+                                     :class => 'btn btn-default',
+                                     :data => { :flink => url_for(hash_for_provisioning_template_path(
+                                                                :id => template_obj.to_param)),
+                                                :id => template_obj.to_param
+                                              })%>
+              <% end %>
+            <% end %>
+            <%= link_to_if_authorized(_("Host details"),
+                                        hash_for_host_path(:id => audit.auditable.to_param).merge(:auth_object => audit.auditable, :auth_action => 'view'),
+                                        :title => _("Host details"),
+                                        :class => 'btn btn-default') if audit.auditable_type == 'Host::Base' && audit.auditable %>
+            <%= link_to_if_authorized(_("Associated Host"),
+                                        hash_for_host_path(:id => audit.associated.to_param).merge(:auth_object => audit.associated, :auth_action => 'view'),
+                                        :title => _("Host details"),
+                                        :class => 'btn btn-default') if audit.auditable_type.match(/^Nic/) && audit.associated_type == 'Host::Base' && audit.associated %>
+
+          </div>
+        </div>
+        <div class="grid-container">
+          <% if tmplt %>
+            <div>
+              <%= render 'provisioning_templates/diff', :templates => audit.audited_changes["template"], :file_name => audit_title(audit) %>
+            </div>
+          <% end %>
+
+          <% if %[added removed].include?(action_display_name) %>
+            <div class="details-row change-list <%= action_display_name.eql?('added') ? 'show-new' : 'show-old' %>">
+              <ul>
+                <% details(audit).each do |item| %>
+                  <% next if item.nil? or item.to_s.empty? %>
+                  <li><%= item %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% else %>
+            <table class="table-changes table table-bordered table-hover">
+              <tbody>
+              <% audit.audited_changes.each do |name, change| %>
+                <% next if change.nil? or change.to_s.empty? %>
+                <% next if name == "template" %>
+                <tr>
+                  <td><div><p><%= name.humanize %></p></div></td>
+                  <% if audit.action == 'update' %>
+                    <% change.each_with_index do |v, i| %>
+                      <% css_class_name = (i == 0 ? 'show-old' : 'show-new') %>
+                      <td><div class="<%= css_class_name %>"><p><%= id_to_label(name,v,false) %></p></div></td>
+                    <% end %>
+                  <% else %>
+                    <td><div class='show-new'><p><%= id_to_label(name,change,false) %></p></div></td>
+                  <% end %>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          <% end %>
+          <% unless audit.comment.blank? %>
+            <div class="details-row comment-section">
+              <p class='comment-title'><strong><%= _('Comments') %></strong></p>
+              <p class='comment-desc'><%= audit.comment %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>

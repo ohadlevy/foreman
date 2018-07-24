@@ -113,7 +113,7 @@ module AuditsHelper
   def audit_user(audit)
     return if audit.username.nil?
     login = audit.user.login rescue nil # aliasing the user method sometimes yields strings
-    link_to(icon_text('user', audit.username.gsub(_('User'), '')), hash_for_audits_path(:search => login ? "user = #{login}" : "username = \"#{audit.username}\""))
+    link_to(audit.username.gsub(_('User'), ''), hash_for_audits_path(:search => login ? "user = #{login}" : "username = \"#{audit.username}\""))
   end
 
   def audit_time(audit)
@@ -198,13 +198,13 @@ module AuditsHelper
 
   def audit_remote_address(audit)
     return if audit.remote_address.empty?
-    content_tag :span, :style => 'color:#999;' do
+    content_tag :p, :style => 'color:#999;' do
       "(" + audit.remote_address + ")"
     end
   end
 
   def audit_details(audit)
-    "#{audit_user(audit)} #{audit_remote_address audit} #{audit_action_name audit} #{audited_type audit}: #{link_to(audit_title(audit), audit_path(audit))}".html_safe
+    "#{audit_user(audit)} #{audit_remote_address audit}".html_safe
   end
 
   def nested_host_audit_breadcrumbs

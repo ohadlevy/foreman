@@ -1,0 +1,78 @@
+#pf-list-simple-expansion {
+  .list-group-item-date-col {
+    color: #999;
+  }
+
+  .audit-type-col {
+    text-transform: uppercase;
+    margin-right: 10px;
+  }
+
+  .list-group-item-container {
+    padding-top: 20px;
+
+    .actions-btns {
+      padding-bottom: 30px;
+
+      .btn {
+        float: right;
+        margin-left: 10px;
+      }
+    }
+
+    .grid-container {
+
+      .details-row {
+        border: 1px solid #d1d1d1;
+        margin-top: 15px;
+      }
+
+      .change-list {
+        ul {
+          margin-top: 10px;
+
+          li {
+            list-style-type: none;
+          }
+        }
+      }
+
+      .table-changes {
+        margin-top: 15px;
+
+        td {
+          padding: 5px;
+          background-color: #edf8ff;
+
+          p {
+            margin: 0px 15px;
+          }
+        }
+      }
+
+      .table-hover > tbody > tr:hover > td,
+      .table-hover > tbody > tr:hover > th {
+        border: 1px solid #d1d1d1;
+      }
+
+      .show-old {
+        background-color: #ffeef0;
+      }
+
+      .show-new {
+        background-color: #e6ffed;
+      }
+
+      .comment-section {
+        p {
+          margin-left: 10px;
+          margin-right: 15px;
+        }
+
+        .comment-title {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}

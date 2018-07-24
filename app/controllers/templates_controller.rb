@@ -54,11 +54,16 @@ class TemplatesController < ApplicationController
   end
 
   def update
-    if @template.update(resource_params)
-      process_success :object => @template
+    result = @template.update(resource_params)
+    if ajax?
+      ajax_response_for_update(result, @template)
     else
-      load_history
-      process_error :object => @template
+      if result
+        process_success :object => @template
+      else
+        load_history
+        process_error :object => @template
+      end
     end
   end
 
@@ -122,6 +127,23 @@ class TemplatesController < ApplicationController
     end
 
     render :plain => text, :status => :internal_server_error
+  end
+
+  def ajax_response_for_update(result, template)
+    if result
+      render :json => {
+        :status => 'success',
+        :message => _("Successfully updated %s.") % template.to_s,
+        :success_redirect => request.referer }, :status => :ok
+    else
+      logger.error "Failed to save: #{template.errors.full_messages.join(', ')}" if template.respond_to?(:errors)
+      message ||= [template.errors[:base] + template.errors[:conflict].map{|e| _("Conflict - %s") % e}].flatten
+      message = [message].flatten.to_sentence
+      render :json => {
+        :status => 'failure',
+        :message => message,
+        :success_redirect => request.referer }, :status => :unprocessable_entity
+    end
   end
 
   def set_locked(locked)
