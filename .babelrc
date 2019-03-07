@@ -1,5 +1,6 @@
 {
   "presets": [
+    "@theforeman/vendor-dev/babel.preset.js",
     "env",
     "react"
   ],
@@ -7,7 +8,6 @@
     "transform-class-properties",
     "transform-object-rest-spread",
     "transform-object-assign",
-    "lodash",
     "syntax-dynamic-import"
   ],
   "env": {

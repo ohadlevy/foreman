@@ -14,7 +14,7 @@ require('../assets/javascripts/bundle');
 require('../../app/assets/javascripts/application');
 require('../../app/assets/stylesheets/base.scss');
 
-require('patternfly/dist/js/patternfly');
+// require('patternfly/dist/js/patternfly');
 
 require('./index.scss');
 
