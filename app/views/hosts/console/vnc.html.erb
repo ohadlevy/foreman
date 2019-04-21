@@ -17,3 +17,6 @@
 
   <div id="noVNC_screen" class="console-screen"></div>
 </div>
+
+<div id='console'><%= @console.to_json %></div>
+<%= mount_react_component('Console', '#console', @console.to_json) %>

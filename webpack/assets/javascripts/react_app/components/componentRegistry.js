@@ -28,6 +28,7 @@ import { WrapperFactory } from './wrapperFactory';
 import ModelsTable from './ModelsTable';
 import TemplateGenerator from './TemplateGenerator';
 import TemplateInput from './Template/TemplateInput';
+import Console from './Console';
 
 // Pages
 import AuditsPage from '../pages/AuditsPage/AuditsPage';
@@ -119,6 +120,7 @@ const coreComponets = [
   { name: 'ConfigReports', type: ConfigReports },
   { name: 'DiffModal', type: DiffModal },
   { name: 'TemplateInput', type: TemplateInput },
+  { name: 'Console', type: Console },
 
   {
     name: 'RelativeDateTime',
