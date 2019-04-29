@@ -32,7 +32,8 @@ services:
     links:
       - db
     ports:
-      - 3000
+      - "${MY_DOCKER_IP:-127.0.0.1}:3000:3000"
+      - "${MY_DOCKER_IP:-127.0.0.1}:5910-5930:5910-5930"
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "nc -z 127.0.0.1 3000 || exit 1"]
@@ -43,6 +44,8 @@ services:
     <<: *app_base
     command: bundle exec rake dynflow:executor
     hostname: worker.docker-rails.my-site.com
+    ports:
+      - 9999
     healthcheck:
       test: "ps ax | grep -v grep | grep dynflow_executor"
       interval: 1m
