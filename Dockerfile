@@ -70,9 +70,6 @@ RUN date -u > BUILD_TIME
 # Start the main process.
 CMD "bundle exec bin/rails server"
 
-# Foreman UID
-EXPOSE 3000/tcp
-
 FROM base
 
 ENV RAILS_ENV="production"
@@ -96,3 +93,4 @@ RUN date -u > BUILD_TIME
 CMD "bundle exec bin/rails server"
 
 EXPOSE 3000/tcp
+EXPOSE 5910-5930/tcp
