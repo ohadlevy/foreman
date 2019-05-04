@@ -1,17 +1,15 @@
 # Base container that is used for both building and running the app
-FROM centos:latest as base
-ENV RUBY_SCL="rh-ruby25"
-ENV NODEJS_SCL="rh-nodejs8"
+FROM fedora:30 as base
+ENV RUBY_MODULE="ruby:2.6"
+ENV NODEJS_MODULE="nodejs:11"
 
 RUN \
-  echo "tsflags=nodocs" >> /etc/yum.conf && \
-  yum -y upgrade && \
-  yum -y install centos-release-scl epel-release && \
-  yum -y install ${RUBY_SCL} ${NODEJS_SCL}-nodejs \
-     mariadb-libs postgresql-libs \
-    ${RUBY_SCL}-ruby{,gems} ${RUBY_SCL}-rubygem-{rdoc,rake,bundler} nc && \
-  yum clean all && \
-  rm -rf /var/cache/yum/
+  echo "tsflags=nodocs" >> /etc/dnf/dnf.conf && \
+  dnf -y upgrade && \
+  dnf -y module install ${RUBY_MODULE} ${NODEJS_MODULE} && \
+  dnf -y install mysql-libs mariadb-connector-c postgresql-libs ruby{,gems} rubygem-{rake,bundler} nc hostname && \
+  dnf clean all && \
+  rm -rf /var/cache/dnf/
 
 ENV HOME=/home/foreman
 WORKDIR $HOME
@@ -29,12 +27,12 @@ ENTRYPOINT ["entrypoint.sh"]
 FROM base as builder
 
 RUN \
-  yum -y install redhat-rpm-config git \
+  dnf -y install redhat-rpm-config git \
     gcc-c++ make bzip2 \
-    libxml2-devel libcurl-devel ${RUBY_SCL}-ruby-devel \
-    mariadb-devel postgresql-devel libsq3-devel && \
-  yum clean all && \
-  rm -rf /var/cache/yum/
+    libxml2-devel libcurl-devel ruby-devel \
+    mysql-devel postgresql-devel libsq3-devel && \
+  dnf clean all && \
+  rm -rf /var/cache/dnf/
 
 ENV RAILS_ENV="production"
 ENV FOREMAN_APIPIE_LANGS="en"
@@ -48,6 +46,7 @@ WORKDIR ${HOME}
 RUN mkdir bundler.d && mkdir config
 COPY Gemfile ${HOME}
 COPY bundler.d/* bundler.d/
+RUN echo gem \"rdoc\" > bundler.d/container.rb
 COPY config/boot* config/
 RUN entrypoint.sh bundle install --without "${BUNDLER_SKIPPED_GROUPS}" \
   --path vendor --jobs 5 --retry 3 && \
@@ -63,7 +62,7 @@ RUN entrypoint.sh npm install --no-optional && entrypoint.sh npm rebuild node-sa
 
 RUN entrypoint.sh bundle exec rake assets:clean assets:precompile db:migrate &&  \
  entrypoint.sh bundle exec rake db:seed apipie:cache:index && rm tmp/bootstrap-db.sql
-RUN entrypoint.sh ./node_modules/webpack/bin/webpack.js --config config/webpack.config.js && entrypoint.sh npm run analyze
+RUN entrypoint.sh ./node_modules/webpack/bin/webpack.js --config config/webpack.config.js && entrypoint.sh npm run analyze && rm -rf public/webpack/stats.json
 
 RUN date -u > BUILD_TIME
 
@@ -81,11 +80,13 @@ ENV FOREMAN_APIPIE_LANGS="en"
 USER 1001
 WORKDIR ${HOME}
 COPY --chown=1001:0 . ${HOME}/
+RUN echo gem \"rdoc\" > bundler.d/container.rb
 COPY --from=builder /usr/bin/entrypoint.sh /usr/bin/entrypoint.sh
 COPY --from=builder --chown=1001:0 ${HOME}/.bundle/config ${HOME}/.bundle/config
 COPY --from=builder --chown=1001:0 ${HOME}/Gemfile.lock ${HOME}/Gemfile.lock
 COPY --from=builder ${HOME}/vendor/ruby ${HOME}/vendor/ruby
 COPY --from=builder ${HOME}/public ${HOME}/public
+RUN sed -i 's/\"production.\log\"/STDOUT/' config/logging.yaml
 
 RUN date -u > BUILD_TIME
 
