@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StatisticsPage actions should fetch statisticsData 1`] = `
+Array [
+  Array [
+    Object {
+      "payload": Object {
+        "id": "operatingsystem",
+        "search": "/hosts?search=os_title=~VAL~",
+        "title": "OS Distribution",
+        "url": "statistics/operatingsystem",
+      },
+      "type": "STATISTICS_DATA_REQUEST",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "id": "architecture",
+        "search": "/hosts?search=facts.architecture=~VAL~",
+        "title": "Architecture Distribution",
+        "url": "statistics/architecture",
+      },
+      "type": "STATISTICS_DATA_REQUEST",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "0": Object {
+          "data": Array [
+            Array [
+              "centOS 7.1",
+              6,
+            ],
+          ],
+          "id": "operatingsystem",
+          "search": "/hosts?search=os_title=~VAL~",
+          "title": "OS Distribution",
+          "url": "statistics/operatingsystem",
+        },
+        "id": "operatingsystem",
+        "search": "/hosts?search=os_title=~VAL~",
+        "title": "OS Distribution",
+        "url": "statistics/operatingsystem",
+      },
+      "type": "STATISTICS_DATA_SUCCESS",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "0": Object {
+          "data": Array [
+            Array [
+              "centOS 7.1",
+              6,
+            ],
+          ],
+          "id": "operatingsystem",
+          "search": "/hosts?search=os_title=~VAL~",
+          "title": "OS Distribution",
+          "url": "statistics/operatingsystem",
+        },
+        "id": "architecture",
+        "search": "/hosts?search=facts.architecture=~VAL~",
+        "title": "Architecture Distribution",
+        "url": "statistics/architecture",
+      },
+      "type": "STATISTICS_DATA_SUCCESS",
+    },
+  ],
+]
+`;
+
+exports[`StatisticsPage actions should fetch statisticsData and fail 1`] = `
+Array [
+  Array [
+    Object {
+      "payload": Object {
+        "id": "operatingsystem",
+        "search": "/hosts?search=os_title=~VAL~",
+        "title": "OS Distribution",
+        "url": "statistics/operatingsystem",
+      },
+      "type": "STATISTICS_DATA_REQUEST",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "id": "architecture",
+        "search": "/hosts?search=facts.architecture=~VAL~",
+        "title": "Architecture Distribution",
+        "url": "statistics/architecture",
+      },
+      "type": "STATISTICS_DATA_REQUEST",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "error": [Error: some-error],
+        "item": Object {
+          "id": "operatingsystem",
+          "search": "/hosts?search=os_title=~VAL~",
+          "title": "OS Distribution",
+          "url": "statistics/operatingsystem",
+        },
+      },
+      "type": "STATISTICS_DATA_FAILURE",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "error": [Error: some-error],
+        "item": Object {
+          "id": "architecture",
+          "search": "/hosts?search=facts.architecture=~VAL~",
+          "title": "Architecture Distribution",
+          "url": "statistics/architecture",
+        },
+      },
+      "type": "STATISTICS_DATA_FAILURE",
+    },
+  ],
+]
+`;
+
+exports[`StatisticsPage actions should fetch statisticsMeta 1`] = `
+Array [
+  Array [
+    Object {
+      "type": "STATISTICS_PAGE_HIDE_LOADING",
+    },
+  ],
+  Array [
+    Object {
+      "payload": undefined,
+      "type": "STATISTICS_PAGE_META_RESOLVED",
+    },
+  ],
+]
+`;
+
+exports[`StatisticsPage actions should fetch statisticsMeta and fail 1`] = `
+Array [
+  Array [
+    Object {
+      "type": "STATISTICS_PAGE_HIDE_LOADING",
+    },
+  ],
+  Array [
+    Object {
+      "payload": Object {
+        "hasError": true,
+        "message": Object {
+          "text": "some-error",
+          "type": "error",
+        },
+      },
+      "type": "STATISTICS_PAGE_FETCH_FAILED",
+    },
+  ],
+]
+`;

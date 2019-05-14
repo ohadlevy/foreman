@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StatisticsPage reducer should handle STATISTICS_DATA_FAILURE 1`] = `
+Object {
+  "charts": Object {
+    "operatingsystem": Object {
+      "error": "some-error",
+    },
+  },
+  "hasError": false,
+  "isLoading": true,
+  "message": Object {
+    "text": "",
+    "type": "empty",
+  },
+  "statisticsMeta": Array [],
+}
+`;
+
+exports[`StatisticsPage reducer should handle STATISTICS_DATA_REQUEST 1`] = `
+Object {
+  "charts": Object {
+    "operatingsystem": Object {
+      "id": "operatingsystem",
+      "search": "/hosts?search=os_title=~VAL~",
+      "title": "OS Distribution",
+      "url": "statistics/operatingsystem",
+    },
+  },
+  "hasError": false,
+  "isLoading": true,
+  "message": Object {
+    "text": "",
+    "type": "empty",
+  },
+  "statisticsMeta": Array [],
+}
+`;
+
+exports[`StatisticsPage reducer should handle STATISTICS_DATA_SUCCESS 1`] = `
+Object {
+  "charts": Object {
+    "operatingsystem": Object {
+      "data": Array [
+        Array [
+          "RedHat 3",
+          2,
+        ],
+      ],
+    },
+  },
+  "hasError": false,
+  "isLoading": true,
+  "message": Object {
+    "text": "",
+    "type": "empty",
+  },
+  "statisticsMeta": Array [],
+}
+`;
+
+exports[`StatisticsPage reducer should handle STATISTICS_PAGE_FETCH_META 1`] = `
+Object {
+  "charts": Object {},
+  "hasError": false,
+  "isLoading": true,
+  "message": Object {
+    "text": "",
+    "type": "empty",
+  },
+  "statisticsMeta": Array [],
+}
+`;
+
+exports[`StatisticsPage reducer should handle STATISTICS_PAGE_HIDE_LOADING 1`] = `
+Object {
+  "charts": Object {},
+  "hasError": false,
+  "isLoading": false,
+  "message": Object {
+    "text": "",
+    "type": "empty",
+  },
+  "statisticsMeta": Array [],
+}
+`;
+
+exports[`StatisticsPage reducer should handle STATISTICS_PAGE_SHOW_MESSAGE 1`] = `
+Object {
+  "charts": Object {},
+  "hasError": true,
+  "isLoading": true,
+  "message": Object {
+    "text": "some-error",
+    "type": "error",
+  },
+  "statisticsMeta": Array [],
+}
+`;
+
+exports[`StatisticsPage reducer should return the initial state 1`] = `
+Object {
+  "charts": Object {},
+  "hasError": false,
+  "isLoading": true,
+  "message": Object {
+    "text": "",
+    "type": "empty",
+  },
+  "statisticsMeta": Array [],
+}
+`;

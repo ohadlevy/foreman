@@ -1,9 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import ChartBox from './ChartBox';
-import * as StatisticsChartActions from '../../redux/actions/statistics';
 import { STATUS } from '../../constants';
 import './StatisticsChartsListStyles.scss';
 import { translate as __ } from '../../../react_app/common/I18n';
@@ -61,11 +59,4 @@ StatisticsChartsList.defaultProps = {
   charts: [],
 };
 
-const mapStateToProps = state => ({
-  charts: state.statistics.charts,
-});
-
-export default connect(
-  mapStateToProps,
-  StatisticsChartActions
-)(StatisticsChartsList);
+export default StatisticsChartsList;

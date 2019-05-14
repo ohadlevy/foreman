@@ -1,0 +1,12 @@
+import { foremanUrl } from '../../../foreman_tools';
+
+export const STATISTICS_PAGE_META_RESOLVED = 'STATISTICS_PAGE_META_RESOLVED';
+export const STATISTICS_PAGE_META_FAILED = 'STATISTICS_PAGE_FETCH_FAILED';
+export const STATISTICS_PAGE_HIDE_LOADING = 'STATISTICS_PAGE_HIDE_LOADING';
+export const STATISTICS_DATA_REQUEST = 'STATISTICS_DATA_REQUEST';
+export const STATISTICS_DATA_SUCCESS = 'STATISTICS_DATA_SUCCESS';
+export const STATISTICS_DATA_FAILURE = 'STATISTICS_DATA_FAILURE';
+
+export const STATISTICS_PAGE_URL = foremanUrl
+  ? foremanUrl('/statistics')
+  : '/statistics';
