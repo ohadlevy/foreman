@@ -1,20 +1,21 @@
 
 # Base container that is used for both building and running the app
-FROM fedora:30 as base
-ARG RUBY_MODULE="ruby:2.6"
-ARG NODEJS_MODULE="nodejs:11"
-ARG HOME=/home/foreman
+FROM registry.access.redhat.com/ubi8/ubi as base
+ENV RUBY_MODULE="ruby:2.5"
+ENV NODEJS_MODULE="nodejs:10"
 
 RUN \
   echo "tsflags=nodocs" >> /etc/dnf/dnf.conf && \
   dnf -y upgrade && \
-  dnf -y module install ${RUBY_MODULE} ${NODEJS_MODULE} && \
-  dnf -y install mysql-libs mariadb-connector-c postgresql-libs ruby{,gems} rubygem-{rake,bundler} nc hostname \
-  # needed for VNC/SPICE websockets
-  python python2-numpy && \
+  dnf -y module install $RUBY_MODULE $NODEJS_MODULE && \
+  dnf -y install ruby{,gems} rubygem-rake nc hostname libpq mariadb-connector-c \
+  # needed for VNC/SPICE websockets \
+  python2-numpy && \
   dnf clean all && \
-  rm -rf /var/cache/dnf/
+  rm -rf /var/cache/dnf/ && \
+  gem install bundler
 
+ENV HOME=/home/foreman
 WORKDIR $HOME
 RUN groupadd -r foreman -f -g 1001 && \
     useradd -u 1001 -r -g foreman -d $HOME -s /sbin/nologin \
@@ -28,21 +29,22 @@ ENTRYPOINT ["entrypoint.sh"]
 
 # Temp container that download gems/npms and compile assets etc
 FROM base as builder
-ARG HOME=/home/foreman
 ENV RAILS_ENV=production
 ENV FOREMAN_APIPIE_LANGS=en
 ENV BUNDLER_SKIPPED_GROUPS="test development openid libvirt journald"
 
 RUN \
   dnf -y install redhat-rpm-config git \
-    gcc-c++ make bzip2 \
-    libxml2-devel libcurl-devel ruby-devel \
-    mysql-devel postgresql-devel libsq3-devel && \
+    gcc-c++ make bzip2 gettext \
+    sqlite-devel mariadb-connector-c-devel libpq-devel \
+    libxml2-devel libcurl-devel ruby-devel && \
   dnf clean all && \
   rm -rf /var/cache/dnf/
 
+RUN HOME=/root && npm install -g npm
 ENV DATABASE_URL=sqlite3:tmp/bootstrap-db.sql
 
+ENV HOME=/home/foreman
 USER 1001
 WORKDIR $HOME
 RUN mkdir bundler.d && mkdir config
@@ -71,8 +73,8 @@ CMD "bundle exec bin/rails server"
 
 FROM base
 
-ARG HOME=/home/foreman
-ARG RAILS_ENV=production
+ENV HOME=/home/foreman
+ENV RAILS_ENV=production
 ENV RAILS_SERVE_STATIC_FILES=true
 ENV RAILS_LOG_TO_STDOUT true
 
