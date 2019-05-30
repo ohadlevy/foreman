@@ -153,7 +153,14 @@ module Foreman
 
     # enables in memory cache store with ttl
     # config.cache_store = TimedCachedStore.new
-    config.cache_store = :file_store, Rails.root.join("tmp", "cache")
+    if SETTINGS[:cache_store] == 'redis'
+      args = [:redis_cache_store]
+      Array.wrap(SETTINGS[:redis_hosts]).each { |h| args << h }
+      args << { namespace: 'foreman' }.merge(SETTINGS[:redis_cache_options] || {})
+      config.cache_store = args
+    else
+      config.cache_store = :file_store, Rails.root.join("tmp", "cache")
+    end
 
     # enables JSONP support in the Rack middleware
     config.middleware.use Rack::JSONP if SETTINGS[:support_jsonp]

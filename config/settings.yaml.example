@@ -127,3 +127,18 @@
 #
 # :dynflow:
 #   :pool_size: 5
+
+#
+# Set the cache implementation: file (default), redis
+# :cache_store: redis
+
+#
+# Change Options for the redis cache
+# :redis_cache_options:
+#   namespace: foreman
+#   compress: true
+
+#
+# Configure Connections to Redis
+# :redis_hosts:
+#   - redis://localhost:6379/0/cache
