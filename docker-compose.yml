@@ -31,6 +31,7 @@ services:
     hostname: foreman.example.com
     links:
       - db
+      - redis
     ports:
       - "${MY_DOCKER_IP:-127.0.0.1}:3000:3000"
       - "${MY_DOCKER_IP:-127.0.0.1}:5910-5930:5910-5930"
@@ -50,6 +51,9 @@ services:
       test: "ps ax | grep -v grep | grep dynflow_executor"
       interval: 1m
       start_period: 1m
+
+  redis:
+    image: 'redis'
 
 volumes:
   db:
