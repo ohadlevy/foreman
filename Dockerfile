@@ -1,9 +1,8 @@
-FROM quay.io/foreman/foreman:builder-base as builder
+FROM quay.io/ohadlevy/foreman-builder:6825 as builder
 
 ARG HOME=/home/foreman
 ARG RAILS_ENV=production
-ENV RAILS_SERVE_STATIC_FILES=true
-ENV RAILS_LOG_TO_STDOUT true
+ENV DATABASE_URL=sqlite3:tmp/bootstrap-db.sqlite3
 
 USER 1001
 WORKDIR $HOME
@@ -21,7 +20,7 @@ RUN \
 RUN ./node_modules/webpack/bin/webpack.js --config config/webpack.config.js && npm run analyze && rm -rf public/webpack/stats.json
 RUN rm -rf vendor/ruby/*/cache vendor/ruby/*/gems/*/node_modules
 
-FROM quay.io/foreman/foreman:base
+FROM quay.io/ohadlevy/foreman-base:6825
 
 ARG HOME=/home/foreman
 ARG RAILS_ENV=production
@@ -34,9 +33,9 @@ COPY --chown=1001:1001 . ${HOME}/
 COPY --from=builder /usr/bin/entrypoint.sh /usr/bin/entrypoint.sh
 COPY --from=builder --chown=1001:1001 ${HOME}/.bundle/config ${HOME}/.bundle/config
 COPY --from=builder --chown=1001:1001 ${HOME}/Gemfile.lock ${HOME}/Gemfile.lock
+COPY --from=builder --chown=1001:1001 ${HOME}/bundler.d/container.rb ${HOME}/bundler.d/container.rb
 COPY --from=builder --chown=1001:1001 ${HOME}/vendor/ruby ${HOME}/vendor/ruby
 COPY --from=builder --chown=1001:1001 ${HOME}/public ${HOME}/public
-RUN echo gem '"rdoc"' > bundler.d/container.rb && echo gem '"tzinfo-data"' >> bundler.d/container.rb
 
 RUN date -u > BUILD_TIME
 
