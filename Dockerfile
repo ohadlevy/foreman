@@ -1,7 +1,7 @@
 # Base container that is used for both building and running the app
-FROM registry.fedoraproject.org/fedora-minimal:31 as base
+FROM registry.fedoraproject.org/fedora-minimal:32 as base
 ARG RUBY_VERSION="2.6"
-ARG NODEJS_VERSION="11"
+ARG NODEJS_VERSION="12"
 ENV FOREMAN_FQDN=foreman.example.com
 ENV FOREMAN_DOMAIN=example.com
 
