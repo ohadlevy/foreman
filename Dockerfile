@@ -8,10 +8,11 @@ ENV FOREMAN_DOMAIN=example.com
 RUN \
   echo -e "[nodejs]\nname=nodejs\nstream=${NODEJS_VERSION}\nprofiles=\nstate=enabled\n" > /etc/dnf/modules.d/nodejs.module && \
   echo -e "[ruby]\nname=ruby\nstream=${RUBY_VERSION}\nprofiles=\nstate=enabled\n" > /etc/dnf/modules.d/ruby.module && \
-  microdnf install postgresql-libs ruby{,gems} rubygem-{rake,bundler} npm nc hostname \
+  microdnf -y distro-sync
+  microdnf -y install postgresql-libs ruby{,gems} rubygem-{rake,bundler} npm nc hostname \
   # needed for VNC/SPICE websockets
-  python2-numpy && \
-  microdnf clean all
+  python-numpy && \
+  microdnf -y clean all
 
 ARG HOME=/home/foreman
 WORKDIR $HOME
@@ -33,11 +34,11 @@ ENV FOREMAN_APIPIE_LANGS=en
 ENV BUNDLER_SKIPPED_GROUPS="test development openid libvirt journald facter console"
 
 RUN \
-  microdnf install redhat-rpm-config git \
+  microdnf -y install redhat-rpm-config git \
     gcc-c++ make bzip2 gettext tar \
     libxml2-devel libcurl-devel ruby-devel \
     postgresql-devel && \
-  microdnf clean all
+  microdnf -y clean all
 
 ENV DATABASE_URL=nulldb://nohost
 
@@ -47,8 +48,11 @@ WORKDIR $HOME
 COPY --chown=1001:0 . ${HOME}/
 # Adding missing gems, for tzdata see https://bugzilla.redhat.com/show_bug.cgi?id=1611117
 RUN echo gem '"tzinfo-data"' > bundler.d/container.rb
-RUN bundle install --without "${BUNDLER_SKIPPED_GROUPS}" \
-    --binstubs --clean --path vendor --jobs=5 --retry=3 && \
+RUN bundle config set --local clean 'true' && \
+  bundle config set --local path 'vendor' && \
+  bundle config set --local without "${BUNDLER_SKIPPED_GROUPS}" && \
+  bundle binstubs --all
+RUN bundle install --jobs=5 --retry=3 && \
   rm -rf vendor/ruby/*/cache/*.gem && \
   find vendor/ruby/*/gems -name "*.c" -delete && \
   find vendor/ruby/*/gems -name "*.o" -delete
@@ -61,7 +65,7 @@ RUN npm install --no-optional && \
   ./node_modules/webpack/bin/webpack.js --config config/webpack.config.js && npm run analyze && \
 # cleanups
   rm -rf public/webpack/stats.json ./node_modules vendor/ruby/*/cache vendor/ruby/*/gems/*/node_modules bundler.d/nulldb.rb db/schema.rb && \
-  bundle install --without "${BUNDLER_SKIPPED_GROUPS}" assets
+  bundle install assets
 
 USER 0
 RUN chgrp -R 0 ${HOME} && \
